@@ -1,5 +1,7 @@
 import { getServerSession } from "next-auth";
 import { Footer, Header, Sidebar } from "../components";
+import { authOptions } from "../api/auth/[...nextauth]/route";
+import { redirect } from "next/navigation";
 
 
 export default async function TransparenciaLayout({
@@ -9,8 +11,10 @@ export default async function TransparenciaLayout({
 }) {
 
     
-  const session = await getServerSession();
-  console.log(session)
+  const session = await getServerSession(authOptions);
+  if( !session ) {
+    redirect('/api/auth/signin')
+  }
     return (
         <div className="flex h-screen">
             <div className="flex-1 flex flex-col overflow-hidden">

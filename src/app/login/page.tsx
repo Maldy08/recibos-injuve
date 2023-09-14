@@ -1,5 +1,8 @@
 import Image from "next/image"
 import { FormLogin } from "./FormLogin";
+import { authOptions } from "../api/auth/[...nextauth]/route";
+import { getServerSession } from "next-auth";
+import { redirect } from "next/navigation";
 
 
 export const metadata = {
@@ -8,7 +11,13 @@ export const metadata = {
 };
 
 
-export default function LoginPage() {
+export default async function LoginPage() {
+
+    const session = await getServerSession(authOptions);
+    if( session ) {
+      redirect('/transparencia')
+    }
+    
 
     const sistema = process.env.NOMBRE_SISTEMA;
 

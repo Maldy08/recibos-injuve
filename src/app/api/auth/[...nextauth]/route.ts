@@ -20,9 +20,11 @@ export const authOptions: NextAuthOptions = {
         );
         if (data) {
           return {
-            id: data.id,
-            email: credentials!.email,
-            name: data.user
+            id : data.id,
+            token: data.token,
+            name: data.user,
+            user: data.user,
+          
           };
         }
         return null;
@@ -36,11 +38,16 @@ export const authOptions: NextAuthOptions = {
     strategy: "jwt",
   },
   callbacks: {
-    session: ({ session }) => {
+    session: async({ session, token, user }) => {
+
+      console.log(`callback session: ${ JSON.stringify( session )}`)
+      if( session && session.user) {
+       // session.user = token.user
+      }
       return session;
     },
-    jwt({ token }) {
-
+    async jwt({ token }) {
+      console.log(`callback token: ${ JSON.stringify( token ) }` );
       return token;
     },
   },
