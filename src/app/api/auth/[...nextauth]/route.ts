@@ -11,6 +11,7 @@ export const authOptions: NextAuthOptions = {
         email: { label: "Correo electronico", type: "email" },
         password: { label: "Password", type: "password" },
       },
+
       async authorize(credentials) {
         const { data } = await transparenciaApi.post(
           `/Auth/login?user=${credentials!.email}&password=${
@@ -18,15 +19,31 @@ export const authOptions: NextAuthOptions = {
           }`
         );
         if (data) {
-          return data;
+          return {
+            id: data.id,
+            email: credentials!.email,
+            name: data.user
+          };
         }
         return null;
       },
-      
     }),
   ],
+  pages: {
+    signIn: "/login",
+  },
+  session: {
+    strategy: "jwt",
+  },
+  callbacks: {
+    session: ({ session }) => {
+      return session;
+    },
+    jwt({ token }) {
 
-  
+      return token;
+    },
+  },
 };
 
 const handler = NextAuth(authOptions);
