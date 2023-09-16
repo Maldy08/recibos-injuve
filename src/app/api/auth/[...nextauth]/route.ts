@@ -38,18 +38,19 @@ export const authOptions: NextAuthOptions = {
     strategy: "jwt",
   },
   callbacks: {
-    session: async({ session, token, user }) => {
-
+    session: async({ session, token }) => {
       console.log(`callback session: ${ JSON.stringify( session )}`)
       if( session && session.user) {
+        session.user.token = token.token;
        // session.user = token.user
       }
       return session;
     },
-    async jwt({ token }) {
+    async jwt( { token }) {
       console.log(`callback token: ${ JSON.stringify( token ) }` );
       return token;
     },
+    
   },
 };
 
