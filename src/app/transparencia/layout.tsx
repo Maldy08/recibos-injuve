@@ -25,7 +25,7 @@ export default async function TransparenciaLayout({
                             <Sidebar />
                         </div>
                     </div>
-                    <main className="flex flex-col w-full overflow-x-hidden overflow-y-auto mb-14">
+                    <main className=" overflow-x-hidden overflow-y-auto mb-14">
                         <div className="flex w-full mx-auto px-6 py-8 lg:md:items-center lg:md:justify-center">
                             { children }
                         </div>
