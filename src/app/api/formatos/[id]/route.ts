@@ -10,14 +10,14 @@ interface Segments {
 
 export async function GET(request: Request, { params }: Segments) {
   try {
-    const { data } = await transparenciaApi.get<Formato[]>(
-      `/Bitacora/GetBitacoras?idUsuario=${params.id}`
+    const { data } = await transparenciaApi.get(
+      `/Formato/GetFormatoById?userId=${params.id}`
     );
 
     return NextResponse.json({
-      data: data,
+      idDepto: data[0].idDepto,
+      reporte: data[0].reporte,
     });
-    
   } catch (error) {
     return NextResponse.json({
       data: error,

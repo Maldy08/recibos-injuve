@@ -1,6 +1,5 @@
 import { NextResponse } from "next/server";
 
-
 interface Segments {
   params: {
     id: number;
@@ -8,9 +7,7 @@ interface Segments {
 }
 
 export async function GET(request: Request, { params }: Segments) {
-
-    return NextResponse.json({
-      hola: 'getTodosLosFormatos',
-    });
-  
+  return NextResponse.json({
+    hola: "getTodosLosFormatos",
+  });
 }

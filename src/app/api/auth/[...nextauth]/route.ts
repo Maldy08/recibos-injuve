@@ -23,7 +23,7 @@ export const authOptions: NextAuthOptions = {
             id : data.id,
             token: data.token,
             name: data.user,
-            user: data.user,
+            user: data.id,
           
           };
         }
@@ -39,15 +39,20 @@ export const authOptions: NextAuthOptions = {
   },
   callbacks: {
     session: async({ session, token }) => {
-      console.log(`callback session: ${ JSON.stringify( session )}`)
+     // console.log(`callback session: ${ JSON.stringify( session )}`)
       if( session && session.user) {
         session.user.token = token.token;
+        session.user.id = token.id;
        // session.user = token.user
       }
       return session;
     },
-    async jwt( { token }) {
-      console.log(`callback token: ${ JSON.stringify( token ) }` );
+    async jwt( { token, user }) {
+     // console.log(`callback token: ${ JSON.stringify( token ) }` );
+      if( token &&  user) {
+        token.id = user.id;
+        token.token = user.token
+      }
       return token;
     },
     
