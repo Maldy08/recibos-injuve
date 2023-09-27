@@ -1,8 +1,7 @@
-import { Formato } from "@/interfaces/Formato";
-import { getFormatos } from "./actions/documentos-actions";
-import { SelectFormatos } from "./components/SelectFormatos";
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/app/api/auth/[...nextauth]/route";
+import { getFormatos } from "./actions/documentos-actions";
+import { CrearHipervinculo, SelectFormatos, TablaBitacoras } from "./components";
 
 export const metadata = {
   title: 'CEABC - Repositorio de Transparencia - Documentos',
@@ -11,19 +10,20 @@ export const metadata = {
 
 
 export default async function DocumentosPage() {
+
   const session = await getServerSession(authOptions);
- 
-  
-  const { reporte } = await getFormatos( + (session?.user?.id!));
+  const { reporte } = await getFormatos(+ (session?.user?.id!));
 
   return (
-    <div>
-      <form>
-        <div className="grid gap-2 mb-6 grid-cols-1 ">
-          <SelectFormatos reporte={reporte} />
-        </div>
-      </form>
+    <div className="flex gap-5">
+      <div className=" lg:w-3/5 md:w-full sm:w-full bg-white p-10 rounded-lg">
+        <SelectFormatos reporte={reporte} />
+        <CrearHipervinculo />
+      </div>
 
+      <div className="w-full">
+        <TablaBitacoras />
+      </div>
     </div>
   );
 }
