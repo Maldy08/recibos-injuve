@@ -57,53 +57,61 @@ const estilos = {
 interface Props {
     // idusuario: number;
     // formato:string;
-    loading: boolean;
+    // loading: boolean;
     data: TablaBitacoras[];
+    datos:string;
 }
 
-export const TableBitacoras = ({ data, loading }: Props) => {
+export const TableBitacoras = ({ data, datos }: Props) => {
 
 
 
 
     return (
-        <div className="flex flex-col">
-            <div className="overflow-x-auto sm:-mx-6 lg:-mx-8">
-                <div className="inline-block min-w-full py-2 sm:px-6 lg:px-8">
-                    <div className="overflow-hidden">
-                        <table className="min-w-full text-left text-sm font-light">
-                            <thead
-                                className="border-b bg-white font-medium dark:border-neutral-500 dark:bg-neutral-600">
-                                <tr>
-                                    <th scope="col" className="px-6 py-4">Id</th>
-                                    <th scope="col" className="px-6 py-4">Hipervinculo</th>
-                                    <th scope="col" className="px-6 py-4">Acciones</th>
-                                </tr>
-                            </thead>
-                            <tbody>
+        <>
+        {
+            data.length > 0 ?
+                 data.map( (d) => <p>{ d.id}</p>)
+                : <p>nada</p>
+        }
+        </>
+        // <div className="flex flex-col">
+        //     <div className="overflow-x-auto sm:-mx-6 lg:-mx-8">
+        //         <div className="inline-block min-w-full py-2 sm:px-6 lg:px-8">
+        //             <div className="overflow-hidden">
+        //                 <table className="min-w-full text-left text-sm font-light">
+        //                     <thead
+        //                         className="border-b bg-white font-medium dark:border-neutral-500 dark:bg-neutral-600">
+        //                         <tr>
+        //                             <th scope="col" className="px-6 py-4">Id</th>
+        //                             <th scope="col" className="px-6 py-4">Hipervinculo</th>
+        //                             <th scope="col" className="px-6 py-4">Acciones</th>
+        //                         </tr>
+        //                     </thead>
+        //                     <tbody>
 
-                                {
-                                    !loading ?
-                                    data.map(({ id, nombreReporte, nombre, hipervinculo }) => (
+        //                         {
+        //                             !loading ?
+        //                             data.map(({ id, nombreReporte, nombre, hipervinculo }) => (
 
-                                        <tr key={ id }
-                                            className="border-b bg-white dark:border-neutral-500 dark:bg-neutral-600">
-                                            <td className="whitespace-nowrap px-6 py-4 font-medium">{ id }</td>
-                                            <td className="whitespace-nowrap px-6 py-4">{ hipervinculo }</td>
-                                            <td className="whitespace-nowrap px-6 py-4"></td>
-                                        </tr>
-                                    ))
-                                        :
-                                        <>sin datos</>
+        //                                 <tr key={ id }
+        //                                     className="border-b bg-white dark:border-neutral-500 dark:bg-neutral-600">
+        //                                     <td className="whitespace-nowrap px-6 py-4 font-medium">{ id }</td>
+        //                                     <td className="whitespace-nowrap px-6 py-4">{ hipervinculo }</td>
+        //                                     <td className="whitespace-nowrap px-6 py-4"></td>
+        //                                 </tr>
+        //                             ))
+        //                                 :
+        //                                 <>sin datos</>
 
-                                }
+        //                         }
 
 
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
-            </div>
-        </div>
+        //                     </tbody>
+        //                 </table>
+        //             </div>
+        //         </div>
+        //     </div>
+        // </div>
     )
 }
