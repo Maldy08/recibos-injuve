@@ -4,19 +4,20 @@ import { ChangeEvent, useEffect, useState } from "react";
 
 interface Props {
     reporte: Reporte[];
+    handleChangeFormato(e: ChangeEvent<HTMLSelectElement>): void
 }
 
 
-export const SelectFormatos = ({ reporte }: Props) => {
-    const [selected, setSelected] = useState("");
+export const SelectFormatos = ({ reporte, handleChangeFormato }: Props) => {
+   // const [selected, setSelected] = useState("");
 
     const handleChange = (e: ChangeEvent<HTMLSelectElement>) => {
-        setSelected(e.target.value)
+       handleChangeFormato(e)
     }
 
-    useEffect(() => {
-        console.log(selected)
-    }, [selected])
+    // useEffect(() => {
+    //     console.log(selected)
+    // }, [selected])
 
 
     return (

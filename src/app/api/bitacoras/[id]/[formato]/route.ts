@@ -5,22 +5,24 @@ import transparenciaApi from "@/app/api/transparencia-api";
 interface Segments {
   params: {
     id: number;
+    formato: string;
   };
 }
 
 export async function GET(request: Request, { params }: Segments) {
   try {
     const { data } = await transparenciaApi.get(
-      `/Formato/GetFormatoById?userId=${params.id}`
+      `/Bitacora/GetBitacorasByFormato?idUsuario=${params.id}&formato=${params.formato}`
     );
 
     return NextResponse.json({
-      idDepto: data[0].idDepto,
-      reporte: data[0].reporte,
+        result: data
     });
   } catch (error) {
     return NextResponse.json({
       data: error,
     });
   }
+
+
 }
