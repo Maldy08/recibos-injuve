@@ -3,6 +3,7 @@ import DataTable, { TableColumn } from 'react-data-table-component';
 import { TablaBitacoras } from '@/interfaces'
 import { useEffect, useState } from 'react';
 import { getBitacoras } from '../actions/client/bitacoras-action';
+import { IoCopyOutline, IoPencilOutline, IoTrashBinOutline } from 'react-icons/io5';
 
 
 const columnas: TableColumn<TablaBitacoras>[] = [
@@ -15,15 +16,43 @@ const columnas: TableColumn<TablaBitacoras>[] = [
 
     {
         name: 'Hipervinculo',
-        selector: (row: any) => row.hipervinculo
+        selector: (row: any) => row.hipervinculo,
+        minWidth: "250px",
+        wrap: true
     },
+    {
+        name: 'Acciones',
+        button: true,
+        selector : ( row:any) => row.id,
+        cell: (row:any) =>
+            <>
+            
+                 <button 
+                    type="button"
+                    onClick={ () => alert(row.id)}
+                >
+                    <IoTrashBinOutline className="w-5 h-5 text-gray-700" />
+                    
+                </button> 
+                 <button 
+                    type="button"
+                    onClick={ () => alert(row.id)}
+                >
+                    <IoCopyOutline className="ml-2 w-5 h-5 text-gray-700" />
+                    
+                </button> 
+            </>
+    }
 
 
 ];
 
-
-
-
+const paginacionOpciones = {
+    rowsPerPageText: "Registros por Página",
+    rangeSeparatorText: "de",
+    selectAllRowsItem: true,
+    selectAllRowsItemText: "Todos",
+  };
 
 interface Props {
     idusuario: number;
@@ -53,6 +82,10 @@ export const TableBitacoras = ({ idusuario, formato }: Props) => {
             columns={columnas}
             // customStyles={estilos}
             // conditionalRowStyles={conditionalRowStyles}
+            pagination
+            paginationPerPage={15}
+            paginationRowsPerPageOptions={[15, 30, 45, 60, 75]}
+            paginationComponentOptions={paginacionOpciones}
             data={datos}
             progressPending={loading}
             progressComponent={<p>Cargando....</p>}

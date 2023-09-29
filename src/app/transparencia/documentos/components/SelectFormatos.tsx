@@ -1,17 +1,18 @@
 'use client'
-import { ChangeEvent} from "react";
 import { Reporte } from "@/interfaces/Formato"
+import { ChangeEvent } from "react";
 
 interface Props {
     reporte: Reporte[];
     handleChangeFormato(e: ChangeEvent<HTMLSelectElement>): void
+    value: string;
 }
 
 
-export const SelectFormatos = ({ reporte, handleChangeFormato }: Props) => {
+export const SelectFormatos = ({ value, reporte, handleChangeFormato }: Props) => {
 
     const handleChange = (e: ChangeEvent<HTMLSelectElement>) => {
-       handleChangeFormato(e)
+        handleChangeFormato(e)
     }
 
     return (
@@ -27,15 +28,14 @@ export const SelectFormatos = ({ reporte, handleChangeFormato }: Props) => {
             <select
                 onChange={handleChange}
                 id="countries"
-              //  value={ selected }
-                //defaultValue="Seleccione un formato"
+                value={value}
                 className="bg-gray-50 border border-gray-300 text-gray-900
                  text-md rounded-lg focus:ring-blue-500 focus:border-blue-500 
                  block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 
                  dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500
                   dark:focus:border-blue-500"
             >
-                <option selected  disabled>Seleccione un formato</option>
+                <option disabled>Seleccione un formato</option>
                 {
                     reporte.map((r) => (
                         <option value={r.nombre} key={r.codigo}>{r.nombre}</option>

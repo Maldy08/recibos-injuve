@@ -3,22 +3,20 @@
 import { ChangeEvent, useRef, useState } from "react"
 import Image from "next/image";
 import { IoCloudUploadOutline } from "react-icons/io5";
+import { useCrearHipervinculo } from "./hooks/useCrearHipervinculo";
 
 export const CrearHipervinculo = () => {
 
-    const inputArchivo = useRef<HTMLInputElement>(null);
-    const [archivo, setArchivo] = useState<File | null>(null);
-    const [src, setSrc] = useState("");
+    const {
+        inputArchivo,
+        archivo,
+        src,
+        handleChangeFile,
+        handleChangePeriodo,
+        periodo,
+        trimestre,
+        handleChangeTrimestre, } = useCrearHipervinculo();
 
-
-    const handleChangeFile = (event: ChangeEvent<HTMLInputElement>) => {
-        setArchivo(event.target.files![0]);
-        const regex = new RegExp('[^.]+$');
-        const file = event.target.value
-        const extension = file.match(regex);
-        setSrc(`/assets/${extension![0].toString()}.png`)
-
-    }
 
     return (
 
@@ -34,11 +32,12 @@ export const CrearHipervinculo = () => {
                         </label>
 
                         <input
+                            onChange={handleChangePeriodo}
                             type="number"
                             id="periodo"
                             min={2022}
                             max={2023}
-                            value={2023}
+                            value={periodo}
                             className="bg-gray-50 border border-gray-300 text-gray-900 text-sm 
                              rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5
                              dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 
@@ -55,9 +54,10 @@ export const CrearHipervinculo = () => {
                         >
                             Trimestre
                         </label>
-                    
+
                         <select
-                            // onChange={handleChange}
+                            onChange={handleChangeTrimestre}
+                            value={ trimestre}
                             id="trimestre"
                             className="bg-gray-50 border border-gray-300 text-gray-900
                             text-md rounded-lg focus:ring-blue-500 focus:border-blue-500 
@@ -65,12 +65,12 @@ export const CrearHipervinculo = () => {
                              dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500
                             dark:focus:border-blue-500"
                         >
-                            <option selected disabled>Seleccione un trimestre</option>
+                            <option  disabled>Seleccione un trimestre</option>
                             <option >1er trimestre</option>
                             <option >2do trimestre</option>
                             <option >3er trimestre</option>
                             <option >4to trimestre</option>
-                    
+
                         </select>
                     </div>
                 </div>
