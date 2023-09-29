@@ -4,30 +4,35 @@ import { ChangeEvent, useRef, useState } from "react"
 import Image from "next/image";
 import { IoCloudUploadOutline } from "react-icons/io5";
 
-
 export const CrearHipervinculo = () => {
+
     const inputArchivo = useRef<HTMLInputElement>(null);
     const [archivo, setArchivo] = useState<File | null>(null);
     const [src, setSrc] = useState("");
 
 
     const handleChangeFile = (event: ChangeEvent<HTMLInputElement>) => {
-
         setArchivo(event.target.files![0]);
         const regex = new RegExp('[^.]+$');
         const file = event.target.value
         const extension = file.match(regex);
         setSrc(`/assets/${extension![0].toString()}.png`)
 
-
     }
 
     return (
+
         <div className="mt-12">
             <form className="">
                 <div className=" grid grid-cols-2 gap-2">
                     <div className="">
-                        <label htmlFor="periodo" className="block mb-2 text-md font-medium text-gray-900 dark:text-white">Periodo</label>
+                        <label
+                            htmlFor="periodo"
+                            className="block mb-2 text-md font-medium text-gray-900 dark:text-white"
+                        >
+                            Periodo
+                        </label>
+
                         <input
                             type="number"
                             id="periodo"
@@ -39,7 +44,9 @@ export const CrearHipervinculo = () => {
                              dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 
                              dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                         />
+
                     </div>
+
                     <div>
                         <label
                             htmlFor="trimestre"
@@ -48,6 +55,7 @@ export const CrearHipervinculo = () => {
                         >
                             Trimestre
                         </label>
+                    
                         <select
                             // onChange={handleChange}
                             id="trimestre"
@@ -62,7 +70,7 @@ export const CrearHipervinculo = () => {
                             <option >2do trimestre</option>
                             <option >3er trimestre</option>
                             <option >4to trimestre</option>
-
+                    
                         </select>
                     </div>
                 </div>
@@ -71,7 +79,7 @@ export const CrearHipervinculo = () => {
                     onClick={() => { inputArchivo.current?.click() }}
                     className=" cursor-pointer mt-6 flex flex-col w-full  justify-center items-center
                       h-40 border-4 border-dashed border-gray-600 rounded-lg bg-gray-200
-                       dark:bg-gray-700 ">
+                     dark:bg-gray-700 ">
                     {
                         !archivo
                             ?
@@ -79,7 +87,6 @@ export const CrearHipervinculo = () => {
                                 <>
                                     <IoCloudUploadOutline className=" w-14 h-14" />
                                     <span>Click aquí spanara subir archivo</span>
-
                                 </>
                             )
                             :
@@ -95,6 +102,7 @@ export const CrearHipervinculo = () => {
                                 </>
                             )
                     }
+
                     <label htmlFor="archivos" className="hidden">archivo</label>
                     <input
                         onChange={handleChangeFile}
@@ -106,22 +114,21 @@ export const CrearHipervinculo = () => {
                         className=" hidden"
                     />
                 </section>
-               
+
                 <div className="mt-4">
                     <button
                         type="button"
                         className=" float-right w-52 text-white bg-primary-900 hover:bg-primary-800 
-                        focus:ring-4 focus:outline-none focus:ring-primary-300 font-medium rounded-lg
-                        text-sm px-5 py-2.5 text-center dark:bg-primary-600 dark:hover:bg-primary-700
-                        dark:focus:ring-primary-800 transition-all"
+                            focus:ring-4 focus:outline-none focus:ring-primary-300 font-medium rounded-lg
+                            text-sm px-5 py-2.5 text-center dark:bg-primary-600 dark:hover:bg-primary-700
+                          dark:focus:ring-primary-800 transition-all"
                     >
                         Crear
                     </button>
-                    
                 </div>
 
             </form>
- 
         </div>
+
     )
 }

@@ -1,6 +1,6 @@
 'use client'
+import { ChangeEvent} from "react";
 import { Reporte } from "@/interfaces/Formato"
-import { ChangeEvent, useEffect, useState } from "react";
 
 interface Props {
     reporte: Reporte[];
@@ -9,16 +9,10 @@ interface Props {
 
 
 export const SelectFormatos = ({ reporte, handleChangeFormato }: Props) => {
-   // const [selected, setSelected] = useState("");
 
     const handleChange = (e: ChangeEvent<HTMLSelectElement>) => {
        handleChangeFormato(e)
     }
-
-    // useEffect(() => {
-    //     console.log(selected)
-    // }, [selected])
-
 
     return (
         <div className="flex items-center gap-2">

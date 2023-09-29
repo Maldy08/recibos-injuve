@@ -1,10 +1,9 @@
 'use client'
+import { ChangeEvent, useState } from "react";
 
 import { Reporte } from "@/interfaces/Formato";
 import { CrearHipervinculo, SelectFormatos, TableBitacoras } from "."
-import { ChangeEvent, useEffect, useState } from "react";
-import { TablaBitacoras } from "@/interfaces";
-import { getBitacoras } from "../actions/client/bitacoras-action";
+
 
 interface Props {
     reporte: Reporte[];
@@ -14,35 +13,9 @@ interface Props {
 export const Wrapper = ({ reporte, idusuario }: Props) => {
     const [formato, setFormato] = useState("nada")
 
-    const [data, setData] = useState<TablaBitacoras[]>([ {
-        id : 1,
-        nombre: '',
-        nombreReporte: '',
-        hipervinculo: ''
-    }])
-    // const [loading, setLoading] = useState(true)
-    const handleChangeFormato = (e: ChangeEvent<HTMLSelectElement>) => {
+    const handleChangeFormato = async(e: ChangeEvent<HTMLSelectElement>) => {
         setFormato(e.target.value)
-        // setLoading( true)
-        // console.log( e.target.value )
     }
-
-
-    useEffect(() => {
-        const getData = async () => {
-
-            const data = await getBitacoras(idusuario, formato);
-            console.log(data)
-            setData( data )
-
-        }
-
-        getData();
-
-    }, [formato])
-
-
-
 
     return (
         <>
@@ -52,10 +25,7 @@ export const Wrapper = ({ reporte, idusuario }: Props) => {
             </div>
 
             <div className="w-full">
-
-
-                <TableBitacoras data={data} datos={formato} />
-
+                <TableBitacoras idusuario={idusuario} formato={formato} />
             </div>
         </>
     )

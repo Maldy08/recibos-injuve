@@ -15,6 +15,7 @@ export async function GET(request: Request, { params }: Segments) {
       `/Bitacora/GetBitacorasByFormato?idUsuario=${params.id}&formato=${params.formato}`
     );
 
+
     return NextResponse.json({
         result: data
     });
