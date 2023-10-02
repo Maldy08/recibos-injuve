@@ -1,6 +1,5 @@
 'use client'
 
-import { ChangeEvent, useRef, useState } from "react"
 import Image from "next/image";
 import { IoCloudUploadOutline } from "react-icons/io5";
 import { useCrearHipervinculo } from "./hooks/useCrearHipervinculo";
@@ -66,7 +65,7 @@ export const CrearHipervinculo = () => {
                             dark:focus:border-blue-500"
                         >
                             <option  disabled>Seleccione un trimestre</option>
-                            <option >1er trimestre</option>
+                            <option value={""} >1er trimestre</option>
                             <option >2do trimestre</option>
                             <option >3er trimestre</option>
                             <option >4to trimestre</option>
