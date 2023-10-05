@@ -2,9 +2,13 @@
 
 import Image from "next/image";
 import { IoCloudUploadOutline } from "react-icons/io5";
-import { useCrearHipervinculo } from "./hooks/useCrearHipervinculo";
+import { useCrearHipervinculo } from "../hooks/useCrearHipervinculo";
 
-export const CrearHipervinculo = () => {
+interface Props {
+    formato:string;
+}
+
+export const CrearHipervinculo = ({ formato } : Props) => {
 
     const {
         inputArchivo,
@@ -14,13 +18,14 @@ export const CrearHipervinculo = () => {
         handleChangePeriodo,
         periodo,
         trimestre,
-        handleChangeTrimestre, } = useCrearHipervinculo();
+        handleChangeTrimestre,
+        onFormSubmit 
+    } = useCrearHipervinculo({ formato });
 
 
     return (
-
         <div className="mt-12">
-            <form className="">
+            <form className="" onSubmit={onFormSubmit}>
                 <div className=" grid grid-cols-2 gap-2">
                     <div className="">
                         <label
@@ -56,7 +61,7 @@ export const CrearHipervinculo = () => {
 
                         <select
                             onChange={handleChangeTrimestre}
-                            value={ trimestre}
+                            value={trimestre}
                             id="trimestre"
                             className="bg-gray-50 border border-gray-300 text-gray-900
                             text-md rounded-lg focus:ring-blue-500 focus:border-blue-500 
@@ -64,7 +69,7 @@ export const CrearHipervinculo = () => {
                              dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500
                             dark:focus:border-blue-500"
                         >
-                            <option  disabled>Seleccione un trimestre</option>
+                            <option disabled>Seleccione un trimestre</option>
                             <option value={""} >1er trimestre</option>
                             <option >2do trimestre</option>
                             <option >3er trimestre</option>
@@ -116,7 +121,7 @@ export const CrearHipervinculo = () => {
 
                 <div className="mt-4">
                     <button
-                        type="button"
+                        type="submit"
                         className=" float-right w-52 text-white bg-primary-900 hover:bg-primary-800 
                             focus:ring-4 focus:outline-none focus:ring-primary-300 font-medium rounded-lg
                             text-sm px-5 py-2.5 text-center dark:bg-primary-600 dark:hover:bg-primary-700
@@ -128,6 +133,5 @@ export const CrearHipervinculo = () => {
 
             </form>
         </div>
-
     )
 }

@@ -2,7 +2,8 @@
 import { useEffect } from 'react';
 import DataTable from 'react-data-table-component';
 import { getBitacoras } from '../actions/client/bitacoras-action';
-import { useTablaBitacora } from './hooks/useTablaBitacora';
+import { useTablaBitacora } from '../hooks/useTablaBitacora';
+import { Progress } from '.';
 
 
 interface Props {
@@ -13,7 +14,14 @@ interface Props {
 
 export const TableBitacoras = ({ idusuario, formato }: Props) => {
 
-    const { loading, setLoading, datos, setDatos, columnas, paginacionOpciones, customStyles } = useTablaBitacora();
+    const {
+        loading,
+        setLoading,
+        datos,
+        setDatos,
+        columnas,
+        paginacionOpciones,
+        customStyles } = useTablaBitacora();
 
     useEffect(() => {
         setLoading(true)
@@ -30,7 +38,7 @@ export const TableBitacoras = ({ idusuario, formato }: Props) => {
     return (
         <DataTable
             columns={columnas}
-             customStyles={customStyles}
+            customStyles={customStyles}
             // conditionalRowStyles={conditionalRowStyles}
             pagination
             paginationPerPage={15}
@@ -38,7 +46,7 @@ export const TableBitacoras = ({ idusuario, formato }: Props) => {
             paginationComponentOptions={paginacionOpciones}
             data={datos}
             progressPending={loading}
-            progressComponent={<p>Cargando....</p>}
+            progressComponent={<Progress/>}
             noDataComponent={<p>Sin informacion a mostrar</p>}
             fixedHeader
             fixedHeaderScrollHeight="90%"
