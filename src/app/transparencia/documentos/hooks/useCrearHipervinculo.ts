@@ -31,6 +31,12 @@ export const useCrearHipervinculo = ({ formato }: Props) => {
   event.preventDefault();
   if( trimestre == "Seleccione un trimestre") alert('seleccione un trimestre')
   if( formato == "Seleccione un formato"  ) alert('Seleccione un formato')
+  const data = new FormData()
+  data.set('file',archivo!);
+
+  //lamada a la api
+  //post
+  ///Bitacora/NuevaBitacora
 }
 
   return {
