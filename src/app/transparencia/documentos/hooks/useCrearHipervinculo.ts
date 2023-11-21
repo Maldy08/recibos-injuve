@@ -2,9 +2,10 @@ import { ChangeEvent, FormEvent, useRef, useState } from "react";
 
 interface Props {
   formato?:string
+  idusuario:number
 }
 
-export const useCrearHipervinculo = ({ formato }: Props) => {
+export const useCrearHipervinculo = ({ formato, idusuario }: Props) => {
 
   const inputArchivo = useRef<HTMLInputElement>(null);
   const [archivo, setArchivo] = useState<File | null>(null);
@@ -33,6 +34,14 @@ export const useCrearHipervinculo = ({ formato }: Props) => {
   if( formato == "Seleccione un formato"  ) alert('Seleccione un formato')
   const data = new FormData()
   data.set('file',archivo!);
+  data.set('periodo',periodo.toString());
+  data.set('trimestre', trimestre);
+  data.set('idusuario', idusuario.toString());
+
+  data.forEach( (d) => {
+    console.log(d)
+  });
+
 
   //lamada a la api
   //post

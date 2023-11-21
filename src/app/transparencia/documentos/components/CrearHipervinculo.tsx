@@ -6,9 +6,10 @@ import { useCrearHipervinculo } from "../hooks/useCrearHipervinculo";
 
 interface Props {
     formato:string;
+    idusuario:number;
 }
 
-export const CrearHipervinculo = ({ formato } : Props) => {
+export const CrearHipervinculo = ({ formato, idusuario } : Props) => {
 
     const {
         inputArchivo,
@@ -20,7 +21,7 @@ export const CrearHipervinculo = ({ formato } : Props) => {
         trimestre,
         handleChangeTrimestre,
         onFormSubmit 
-    } = useCrearHipervinculo({ formato });
+    } = useCrearHipervinculo({ formato , idusuario });
 
 
     return (

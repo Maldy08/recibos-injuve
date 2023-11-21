@@ -21,7 +21,7 @@ export const Wrapper = ({ reporte, idusuario }: Props) => {
                 <SelectFormatos value={formato} reporte={reporte} handleChangeFormato={handleChangeFormato} />
 
                 {/* Formulario */}
-                <CrearHipervinculo formato={ formato } />
+                <CrearHipervinculo formato={ formato } idusuario={idusuario} />
             </div>
 
             <div className="w-full rounded-xl">
