@@ -13,6 +13,16 @@ const config: Config = {
         'gradient-conic':
           'conic-gradient(from 180deg at 50% 50%, var(--tw-gradient-stops))',
       },
+
+      keyframes: {
+        "fade-in" : {
+          '0%': { opacity: '0%' },
+          '100%': { opacity: '100%' },
+        }
+      },
+      animation: {
+        "fade-in": 'fade-in 0.5s ease-in-out',
+      } ,
       
       colors: {
         primary: {"50":"#fcf3f7","100":"#fbe8f1","200":"#f8d2e4","300":"#f4adcd","400":"#ec7aab","500":"#e2528b","600":"#d03268","700":"#b42251","800":"#951f43","900":"#651930","950":"#4b0c1f"},

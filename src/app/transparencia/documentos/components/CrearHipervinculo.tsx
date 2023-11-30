@@ -4,7 +4,7 @@ import { useState } from "react";
 import Image from "next/image";
 import { IoCloudUploadOutline } from "react-icons/io5";
 import { useCrearHipervinculo } from "../hooks/useCrearHipervinculo";
-import { ModalNuevosArchivos } from ".";
+import { LoadingButton, ModalNuevosArchivos } from ".";
 import { Bitacoras } from "@/interfaces";
 
 interface Props {
@@ -30,6 +30,7 @@ export const CrearHipervinculo = ({ formato, idusuario } : Props) => {
         setModal,
         bitacoras,
         setBitacoras,
+        submit,
 
     } = useCrearHipervinculo({ formato , idusuario , setBitacorasResponse});
 
@@ -143,13 +144,14 @@ export const CrearHipervinculo = ({ formato, idusuario } : Props) => {
 
                 <div className="mt-4">
                     <button
+                        disabled={submit}
                         type="submit"
                         className=" float-right w-52 text-white bg-primary-900 hover:bg-primary-800 
                             focus:ring-4 focus:outline-none focus:ring-primary-300 font-medium rounded-lg
                             text-sm px-5 py-2.5 text-center dark:bg-primary-600 dark:hover:bg-primary-700
                           dark:focus:ring-primary-800 transition-all"
                     >
-                        Crear
+                        {submit ?  <LoadingButton/> : 'Crear'}
                     </button>
                 </div>
                 {

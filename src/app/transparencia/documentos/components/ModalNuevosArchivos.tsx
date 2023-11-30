@@ -9,7 +9,7 @@ interface Props {
 export const ModalNuevosArchivos = ({ data, onShowModalClick }: Props) => {
     return (
         <div>
-            <div tabIndex={-1} aria-hidden="true" className="w-full justify-center items-center flex overflow-x-hidden overflow-y-auto fixed inset-0 z-50 outline-none focus:outline-none">
+            <div tabIndex={-1} aria-hidden="true" className=" backdrop:bg-gray-500  w-full justify-center items-center flex overflow-x-hidden overflow-y-auto fixed inset-0 z-50 outline-none focus:outline-none">
                 <div className=" relative w-full max-w-xl max-h-full">
                     <div className="border-0 rounded-lg shadow-lg relative flex flex-col bg-white outline-none focus:outline-none">
                         <div className="flex items-start justify-between p-4 border-b border-solid border-slate-200 rounded-t bg-primary-800 text-zinc-50">
