@@ -1,7 +1,4 @@
 
-
-
-
 export const Progress = () => {
     return (
         <div className=" p-4">

@@ -1,8 +1,11 @@
 'use client'
 
+import { useState } from "react";
 import Image from "next/image";
 import { IoCloudUploadOutline } from "react-icons/io5";
 import { useCrearHipervinculo } from "../hooks/useCrearHipervinculo";
+import { ModalNuevosArchivos } from ".";
+import { Bitacoras } from "@/interfaces";
 
 interface Props {
     formato:string;
@@ -10,18 +13,25 @@ interface Props {
 }
 
 export const CrearHipervinculo = ({ formato, idusuario } : Props) => {
+ 
+    const setBitacorasResponse = ( data: Bitacoras[]) => setBitacoras(data);
 
     const {
         inputArchivo,
         archivo,
-        src,
         handleChangeFile,
         handleChangePeriodo,
         periodo,
         trimestre,
         handleChangeTrimestre,
-        onFormSubmit 
-    } = useCrearHipervinculo({ formato , idusuario });
+        onFormSubmit,
+        progress,
+        modal,
+        setModal,
+        bitacoras,
+        setBitacoras,
+
+    } = useCrearHipervinculo({ formato , idusuario , setBitacorasResponse});
 
 
     return (
@@ -83,28 +93,38 @@ export const CrearHipervinculo = ({ formato, idusuario } : Props) => {
                 <section
                     onClick={() => { inputArchivo.current?.click() }}
                     className=" cursor-pointer mt-6 flex flex-col w-full  justify-center items-center
-                      h-40 border-4 border-dashed border-gray-600 rounded-lg bg-gray-200
+                      h-80 border-4 border-dashed border-gray-600 rounded-lg bg-gray-200
                      dark:bg-gray-700 ">
                     {
-                        !archivo
+                      archivo === null
                             ?
                             (
                                 <>
                                     <IoCloudUploadOutline className=" w-14 h-14" />
-                                    <span>Click aquí spanara subir archivo</span>
+                                    <span>Click aquí para subir archivos</span>
                                 </>
                             )
                             :
                             (
-                                <>
-                                    <Image
-                                        src={src}
-                                        alt="icono"
-                                        width={50}
-                                        height={50}
-                                    />
-                                    <span className="text-sm">{archivo.name}</span>
-                                </>
+                                <div className="max-h-80 overflow-auto">
+                                  {
+                                        archivo.map( (a) => {
+                                            const regex = new RegExp("[^.]+$");
+                                            const extension = a.name.match(regex);
+                                            return (
+                                              <div className="flex flex-wrap">
+                                                 <Image
+                                                    src={`/assets/${extension![0].toString()}.png`}
+                                                    alt="icono"
+                                                    width={25}
+                                                    height={25}
+                                                 />
+                                                 <span className="text-xs ml-2">{a.name}</span>
+                                              </div>
+                                            )
+                                        })
+                                  }
+                                </div>
                             )
                     }
 
@@ -115,6 +135,7 @@ export const CrearHipervinculo = ({ formato, idusuario } : Props) => {
                         type="file"
                         name="archivos"
                         id="archivos"
+                        multiple={true}
                         accept=".doc,.docx,.xls,.xlsx,.pdf"
                         className=" hidden"
                     />
@@ -131,6 +152,23 @@ export const CrearHipervinculo = ({ formato, idusuario } : Props) => {
                         Crear
                     </button>
                 </div>
+                {
+                    progress != 0 &&                
+                     <div className="">
+                        <div className="flex w-full bg-gray-200 rounded-full dark:bg-gray-700">
+                             <div className=" bg-primary-800 text-xs font-medium text-blue-100 text-center p-0.5 leading-none rounded-full" style={{width: progress + '%'}}>
+                                {progress + '%'}
+                             </div>
+                        </div>
+                    </div>
+                }
+
+                 {
+                    modal && <ModalNuevosArchivos
+                                 data={ bitacoras }
+                                 onShowModalClick={() => setModal((prev) => !prev)}
+                             />
+                 }
 
             </form>
         </div>
