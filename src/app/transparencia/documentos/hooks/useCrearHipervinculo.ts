@@ -21,7 +21,7 @@ export const useCrearHipervinculo = ({
   const [error, setError] = useState(false);
   const [progress, setProgress] = useState(0);
   const [submit, setSubmit] = useState(false);
-  const [modal, setModal] = useState(false);
+  const [modal, setModal] = useState(true);
   const [bitacoras, setBitacoras] = useState<Bitacoras[]>([
     {
       id: 1,
@@ -103,22 +103,22 @@ export const useCrearHipervinculo = ({
       setTimeout(() => { resolve('')}, 3000)
     });
 
-    setSubmit(false);
-    setModal(true);
-    // const data = new FormData();
 
-    // data.set("idUsuario", idusuario.toString());
-    // data.set("codigo", formato!);
-    // archivo?.map((a) => {
-    //   data.append("archivos", a);
-    // });
-    // data.set("trimestre", trimestre.charAt(0));
-    // data.set("periodo", periodo.toString());
+    const data = new FormData();
 
-    // const resultado = await postBitacoras(data, setProgress);
+    data.set("idUsuario", idusuario.toString());
+    data.set("codigo", formato!);
+    archivo?.map((a) => {
+      data.append("archivos", a);
+    });
+    data.set("trimestre", trimestre.charAt(0));
+    data.set("periodo", periodo.toString());
+
+    const resultado = await postBitacoras(data, setProgress);
     
-    //setSubmit(false);
-    // setBitacorasResponse(resultado);
+    setSubmit(false);
+    setBitacorasResponse(resultado);
+    setModal(true);
 
     //lamada a la api
     //post

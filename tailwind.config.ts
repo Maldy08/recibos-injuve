@@ -18,10 +18,16 @@ const config: Config = {
         "fade-in" : {
           '0%': { opacity: '0%' },
           '100%': { opacity: '100%' },
+        },
+        "fade-out" : {
+          '0%': { opacity: '100%' },
+          '100%': { opacity: '0%' },
         }
       },
       animation: {
-        "fade-in": 'fade-in 0.5s ease-in-out',
+        openmodal: 'fade-in 0.5s ease-in-out',
+        closemodal: 'fade-in 0.5s ease-in-out'
+
       } ,
       
       colors: {

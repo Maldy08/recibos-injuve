@@ -168,6 +168,7 @@ export const CrearHipervinculo = ({ formato, idusuario } : Props) => {
                  {
                     modal && <ModalNuevosArchivos
                                  data={ bitacoras }
+                                 isOpen={modal}
                                  onShowModalClick={() => setModal((prev) => !prev)}
                              />
                  }
