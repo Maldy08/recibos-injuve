@@ -1,20 +1,29 @@
 'use client'
 
-import { useState } from "react";
 import Image from "next/image";
 import { IoCloudUploadOutline } from "react-icons/io5";
 import { useCrearHipervinculo } from "../hooks/useCrearHipervinculo";
-import { LoadingButton, ModalNuevosArchivos } from ".";
+import { LoadingButton, ModalEliminar, ModalNuevosArchivos } from ".";
 import { Bitacoras } from "@/interfaces";
 
 interface Props {
-    formato:string;
-    idusuario:number;
+    formato: string;
+    idusuario: number;
+    modalDelete: boolean;
+    idbitacora: number;
+    onCancel: () => void;
+    handleReloadTable: () => void;
 }
 
-export const CrearHipervinculo = ({ formato, idusuario } : Props) => {
- 
-    const setBitacorasResponse = ( data: Bitacoras[]) => setBitacoras(data);
+export const CrearHipervinculo = ({
+    formato,
+    idusuario,
+    modalDelete,
+    idbitacora,
+    onCancel,
+    handleReloadTable }: Props) => {
+
+    const setBitacorasResponse = (data: Bitacoras[]) => setBitacoras(data);
 
     const {
         inputArchivo,
@@ -31,8 +40,16 @@ export const CrearHipervinculo = ({ formato, idusuario } : Props) => {
         bitacoras,
         setBitacoras,
         submit,
+        handleDeleteBitacora,
 
-    } = useCrearHipervinculo({ formato , idusuario , setBitacorasResponse});
+
+    } = useCrearHipervinculo({
+        formato,
+        idusuario,
+        setBitacorasResponse,
+        idbitacora,
+
+    });
 
 
     return (
@@ -94,10 +111,10 @@ export const CrearHipervinculo = ({ formato, idusuario } : Props) => {
                 <section
                     onClick={() => { inputArchivo.current?.click() }}
                     className=" cursor-pointer mt-6 flex flex-col w-full  justify-center items-center
-                      h-80 border-4 border-dashed border-gray-600 rounded-lg bg-gray-200
-                     dark:bg-gray-700 ">
+                         h-80 border-4 border-dashed border-gray-600 rounded-lg bg-gray-200
+                         dark:bg-gray-700 ">
                     {
-                      archivo === null
+                        archivo === null
                             ?
                             (
                                 <>
@@ -108,23 +125,23 @@ export const CrearHipervinculo = ({ formato, idusuario } : Props) => {
                             :
                             (
                                 <div className="max-h-80 overflow-auto">
-                                  {
-                                        archivo.map( (a) => {
+                                    {
+                                        archivo.map((a) => {
                                             const regex = new RegExp("[^.]+$");
                                             const extension = a.name.match(regex);
                                             return (
-                                              <div className="flex flex-wrap">
-                                                 <Image
-                                                    src={`/assets/${extension![0].toString()}.png`}
-                                                    alt="icono"
-                                                    width={25}
-                                                    height={25}
-                                                 />
-                                                 <span className="text-xs ml-2">{a.name}</span>
-                                              </div>
+                                                <div className="flex flex-wrap">
+                                                    <Image
+                                                        src={`/assets/${extension![0].toString()}.png`}
+                                                        alt="icono"
+                                                        width={25}
+                                                        height={25}
+                                                    />
+                                                    <span className="text-xs ml-2">{a.name}</span>
+                                                </div>
                                             )
                                         })
-                                  }
+                                    }
                                 </div>
                             )
                     }
@@ -151,28 +168,39 @@ export const CrearHipervinculo = ({ formato, idusuario } : Props) => {
                             text-sm px-5 py-2.5 text-center dark:bg-primary-600 dark:hover:bg-primary-700
                           dark:focus:ring-primary-800 transition-all"
                     >
-                        {submit ?  <LoadingButton/> : 'Crear'}
+                        {submit ? <LoadingButton /> : 'Crear'}
                     </button>
                 </div>
-                {
-                    progress != 0 &&                
-                     <div className="">
+                {/* {
+                    progress != 0 &&
+                    <div className="">
                         <div className="flex w-full bg-gray-200 rounded-full dark:bg-gray-700">
-                             <div className=" bg-primary-800 text-xs font-medium text-blue-100 text-center p-0.5 leading-none rounded-full" style={{width: progress + '%'}}>
+                            <div className=" bg-primary-800 text-xs font-medium text-blue-100 text-center p-0.5 leading-none rounded-full" style={{ width: progress + '%' }}>
                                 {progress + '%'}
-                             </div>
+                            </div>
                         </div>
                     </div>
+                } */}
+
+                {
+                    modal && 
+                    <ModalNuevosArchivos
+                        data={bitacoras}
+                        isOpen={modal}
+                        onShowModalClick={() => setModal((prev) => !prev)}
+                        handleReloadTable={handleReloadTable}
+                    />
                 }
 
-                 {
-                    modal && <ModalNuevosArchivos
-                                 data={ bitacoras }
-                                 isOpen={modal}
-                                 onShowModalClick={() => setModal((prev) => !prev)}
-                             />
-                 }
-
+                {
+                    modalDelete && 
+                    <ModalEliminar 
+                        onCancel={onCancel} 
+                        idbitacora={idbitacora} 
+                        onDelete={handleDeleteBitacora}  
+                        handleReloadTable={handleReloadTable}
+                    />
+                }
             </form>
         </div>
     )

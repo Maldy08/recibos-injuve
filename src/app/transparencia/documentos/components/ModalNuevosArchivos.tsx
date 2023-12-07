@@ -3,11 +3,12 @@ import { Bitacoras } from "@/interfaces"
 interface Props {
     data: Bitacoras[];
     onShowModalClick(): void
-    isOpen:boolean
+    isOpen:boolean;
+    handleReloadTable: () => void;
 }
 
 
-export const ModalNuevosArchivos = ({ data, onShowModalClick , isOpen}: Props) => {
+export const ModalNuevosArchivos = ({ data, onShowModalClick , isOpen, handleReloadTable}: Props) => {
     return (
         <div>
             <div  tabIndex={-1}   
@@ -45,7 +46,10 @@ export const ModalNuevosArchivos = ({ data, onShowModalClick , isOpen}: Props) =
                         <div className="flex justify-end p-4 md:p-5 border-t border-gray-200 rounded-b dark:border-gray-600">
                             <button 
                                 type="button" 
-                                onClick={onShowModalClick}
+                                onClick={ () => {
+                                    onShowModalClick()
+                                    handleReloadTable()
+                                }}
                                 className="text-white bg-primary-800 hover:bg-prymary-800 focus:ring-4 
                                             focus:outline-none focus:ring-primary-400 font-medium rounded-lg 
                                             text-sm px-5 py-2.5 text-center"

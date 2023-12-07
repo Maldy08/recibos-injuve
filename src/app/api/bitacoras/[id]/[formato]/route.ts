@@ -26,7 +26,6 @@ export async function GET(request: Request, { params }: Segments) {
     });
   }
 
-
 }
 
 export async function POST(request: Request) {

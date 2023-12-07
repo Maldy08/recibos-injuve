@@ -1,11 +1,13 @@
 import { ChangeEvent, FormEvent, useRef, useState } from "react";
-import { postBitacoras } from "../actions/client/bitacoras-action";
+import { deleteBitacora, postBitacoras } from "../actions/client/bitacoras-action";
 import { Bitacoras } from "@/interfaces";
 
 interface Props {
   formato?: string;
   idusuario: number;
   setBitacorasResponse: (data: Bitacoras[]) => void;
+  idbitacora:number;
+
   
 }
 
@@ -13,57 +15,19 @@ export const useCrearHipervinculo = ({
   formato,
   idusuario,
   setBitacorasResponse,
+  idbitacora,
 }: Props) => {
   const inputArchivo = useRef<HTMLInputElement>(null);
   const [archivo, setArchivo] = useState<Array<File> | null>(null);
   const [periodo, setPeriodo] = useState(2023);
   const [trimestre, setTrimestre] = useState("Seleccione un trimestre");
-  const [error, setError] = useState(false);
   const [progress, setProgress] = useState(0);
   const [submit, setSubmit] = useState(false);
-  const [modal, setModal] = useState(true);
+  const [modal, setModal] = useState(false);
   const [bitacoras, setBitacoras] = useState<Bitacoras[]>([
-    {
-      id: 1,
-      nombreporte: "LGT-BC-81-01-Fm-I",
-      nombre: "202320233Fichas Generales Glosa MO 16 nov.pdf",
-      hipervinculo:
-        "http://www.ceabc.gob.mx/ceatransparencia/81A01/20231Formatos-V3-214-23.pdf",
-      existe: false,
-    },
-    {
-      id: 1,
-      nombreporte: "LGT-BC-81-01-Fm-I",
-      nombre: "202320233Fichas Generales Glosa MO 16 nov.pdf",
-      hipervinculo:
-        "http://www.ceabc.gob.mx/ceatransparencia/81A01/20231Formatos-V3-214-23.pdf",
-      existe: false,
-    },
-    {
-      id: 1,
-      nombreporte: "LGT-BC-81-01-Fm-I",
-      nombre: "202320233Fichas Generales Glosa MO 16 nov.pdf",
-      hipervinculo:
-        "http://www.ceabc.gob.mx/ceatransparencia/81A01/20231Formatos-V3-214-23.pdf",
-      existe: false,
-    },
-    {
-      id: 1,
-      nombreporte: "LGT-BC-81-01-Fm-I",
-      nombre: "202320233Fichas Generales Glosa MO 16 nov.pdf",
-      hipervinculo:
-        "http://www.ceabc.gob.mx/ceatransparencia/81A01/20231Formatos-V3-214-23.pdf",
-      existe: false,
-    },
-    {
-      id: 1,
-      nombreporte: "LGT-BC-81-01-Fm-I",
-      nombre: "202320233Fichas Generales Glosa MO 16 nov.pdf",
-      hipervinculo:
-        "http://www.ceabc.gob.mx/ceatransparencia/81A01/20231Formatos-V3-214-23.pdf",
-      existe: false,
-    },
+   
   ]);
+
 
   const handleChangeFile = (event: ChangeEvent<HTMLInputElement>) => {
     // setArchivo(event.target.files![0]);
@@ -99,9 +63,6 @@ export const useCrearHipervinculo = ({
      }
     setSubmit(true);
 
-    await new Promise( resolve => {
-      setTimeout(() => { resolve('')}, 3000)
-    });
 
 
     const data = new FormData();
@@ -115,15 +76,26 @@ export const useCrearHipervinculo = ({
     data.set("periodo", periodo.toString());
 
     const resultado = await postBitacoras(data, setProgress);
+    await new Promise( resolve => {
+      setTimeout(() => { resolve('')}, 3000)
+    });
+
     
     setSubmit(false);
     setBitacorasResponse(resultado);
     setModal(true);
+    setArchivo(null);
 
     //lamada a la api
     //post
     ///Bitacora/NuevaBitacora
   };
+
+  const handleDeleteBitacora = async (idbitacora:number) => {
+      await deleteBitacora(idbitacora);
+    // alert(idbitacora)
+     
+  }
 
   return {
     inputArchivo,
@@ -141,5 +113,7 @@ export const useCrearHipervinculo = ({
     setModal,
     bitacoras,
     setBitacoras,
+    handleDeleteBitacora,
+
   };
 };
