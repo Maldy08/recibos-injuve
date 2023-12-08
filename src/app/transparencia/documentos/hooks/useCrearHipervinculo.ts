@@ -38,16 +38,19 @@ export const useCrearHipervinculo = ({
     const file = Array<File>();
 
     for (let index = 0; index < event.target.files!.length; index++) {
-      file.push(event.target.files![index]);
+    
       let size = event.target.files![index].size;
     
       if(size > file_size_limit) {
         //let newsize = file_size_limit/1000000 
-        alert('Algo')
-        return ;
+        alert(`${event.target.files![index].name} \nEl tamaño de este archivo excede el limite permitido y no puede ser procesado.`)
+      }
+      else {
+        file.push(event.target.files![index]);
+        setArchivo(file);
       }
     }
-    setArchivo(file);
+   
     // const extension = file.match(regex);
     //setSrc(`/assets/${extension![0].toString()}.png`);
   };
