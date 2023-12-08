@@ -32,9 +32,10 @@ export const ModalEliminar = ({ onCancel, onDelete, idbitacora, handleReloadTabl
 
                         <button
                             onClick={() => {
-                                 onDelete(idbitacora);
-                                 onCancel();
-                                 handleReloadTable()
+                                alert(idbitacora)
+                                //  onDelete(idbitacora);
+                                //  onCancel();
+                                //  handleReloadTable()
                             }}
                             type="button"
                             className="py-2 px-3 text-sm font-medium text-center text-white bg-red-600 rounded-lg hover:bg-red-700 focus:ring-4 

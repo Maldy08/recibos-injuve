@@ -8,9 +8,10 @@ import { useWrapper } from "../hooks/useWrapper";
 interface Props {
     reporte: Reporte[];
     idusuario: number;
+    file_size_limit: number;
 }
 
-export const Wrapper = ({ reporte, idusuario }: Props) => {
+export const Wrapper = ({ reporte, idusuario, file_size_limit }: Props) => {
 
     const {
         formato,
@@ -42,6 +43,7 @@ export const Wrapper = ({ reporte, idusuario }: Props) => {
                     idbitacora={idbitacora}
                     onCancel={handleCancelDelete}
                     handleReloadTable={handleReloadTable}
+                    file_size_limit={file_size_limit}
                 />
             </div>
 

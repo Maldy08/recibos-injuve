@@ -13,6 +13,7 @@ interface Props {
     idbitacora: number;
     onCancel: () => void;
     handleReloadTable: () => void;
+    file_size_limit:number;
 }
 
 export const CrearHipervinculo = ({
@@ -21,7 +22,8 @@ export const CrearHipervinculo = ({
     modalDelete,
     idbitacora,
     onCancel,
-    handleReloadTable }: Props) => {
+    handleReloadTable,
+    file_size_limit }: Props) => {
 
     const setBitacorasResponse = (data: Bitacoras[]) => setBitacoras(data);
 
@@ -48,6 +50,7 @@ export const CrearHipervinculo = ({
         idusuario,
         setBitacorasResponse,
         idbitacora,
+        file_size_limit,
 
     });
 

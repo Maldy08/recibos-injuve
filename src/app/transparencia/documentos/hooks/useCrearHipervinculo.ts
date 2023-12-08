@@ -7,6 +7,7 @@ interface Props {
   idusuario: number;
   setBitacorasResponse: (data: Bitacoras[]) => void;
   idbitacora:number;
+  file_size_limit: number;
 
   
 }
@@ -16,6 +17,7 @@ export const useCrearHipervinculo = ({
   idusuario,
   setBitacorasResponse,
   idbitacora,
+  file_size_limit,
 }: Props) => {
   const inputArchivo = useRef<HTMLInputElement>(null);
   const [archivo, setArchivo] = useState<Array<File> | null>(null);
@@ -37,6 +39,13 @@ export const useCrearHipervinculo = ({
 
     for (let index = 0; index < event.target.files!.length; index++) {
       file.push(event.target.files![index]);
+      let size = event.target.files![index].size;
+    
+      if(size > file_size_limit) {
+        //let newsize = file_size_limit/1000000 
+        alert('Algo')
+        return ;
+      }
     }
     setArchivo(file);
     // const extension = file.match(regex);
@@ -63,8 +72,6 @@ export const useCrearHipervinculo = ({
      }
     setSubmit(true);
 
-
-
     const data = new FormData();
 
     data.set("idUsuario", idusuario.toString());
@@ -80,7 +87,7 @@ export const useCrearHipervinculo = ({
       setTimeout(() => { resolve('')}, 3000)
     });
 
-    
+
     setSubmit(false);
     setBitacorasResponse(resultado);
     setModal(true);
