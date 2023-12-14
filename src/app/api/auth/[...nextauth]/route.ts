@@ -11,6 +11,7 @@ export const authOptions: NextAuthOptions = {
         email: { label: "Correo electronico", type: "email" },
         password: { label: "Password", type: "password" },
       },
+    
 
       async authorize(credentials) {
         const { data } = await transparenciaApi.post(

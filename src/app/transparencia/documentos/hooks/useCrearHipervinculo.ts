@@ -40,6 +40,15 @@ export const useCrearHipervinculo = ({
     for (let index = 0; index < event.target.files!.length; index++) {
     
       let size = event.target.files![index].size;
+      let caracteres =  event.target.files![index].name.length;
+      // let name : string
+      // name = event.target.files![index].name
+      // name = name.replace(/\s/g, '');
+    
+      if(caracteres > 50) {
+        alert(`${event.target.files![index].name} \nEl archivo supera el limite de caracteres permitidos`);
+        continue
+      }
     
       if(size > file_size_limit) {
         //let newsize = file_size_limit/1000000 

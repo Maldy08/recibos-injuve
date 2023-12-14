@@ -133,7 +133,7 @@ export const CrearHipervinculo = ({
                                             const regex = new RegExp("[^.]+$");
                                             const extension = a.name.match(regex);
                                             return (
-                                                <div className="flex flex-wrap">
+                                                <div key={a.name} className="flex flex-wrap">
                                                     <Image
                                                         src={`/assets/${extension![0].toString()}.png`}
                                                         alt="icono"
@@ -173,6 +173,10 @@ export const CrearHipervinculo = ({
                     >
                         {submit ? <LoadingButton /> : 'Crear'}
                     </button>
+
+                    <p className=" text-xs"><i>* Caracteres permitidos: 50</i></p>
+                    
+                    <p className=" text-xs"><i>* Tamaño de archivo: 8mb</i></p>
                 </div>
                 {/* {
                     progress != 0 &&
