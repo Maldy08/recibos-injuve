@@ -4,6 +4,7 @@ import NextAuth from "next-auth/next";
 import CredentialsProvider from "next-auth/providers/credentials";
 
 export const authOptions: NextAuthOptions = {
+
   providers: [
     CredentialsProvider({
       name: "Credentials",
@@ -11,7 +12,7 @@ export const authOptions: NextAuthOptions = {
         email: { label: "Correo electronico", type: "email" },
         password: { label: "Password", type: "password" },
       },
-    
+
 
       async authorize(credentials) {
         const { data } = await transparenciaApi.post(
@@ -56,8 +57,9 @@ export const authOptions: NextAuthOptions = {
       }
       return token;
     },
-    
   },
+  secret: process.env.NEXTAUTH_SECRET
+  
 };
 
 const handler = NextAuth(authOptions);

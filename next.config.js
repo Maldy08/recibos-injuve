@@ -1,8 +1,8 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   //  basePath: "/transparencia"
-  serverRuntimeConfig: {
-    NEXTAUTH_SECRET : process.env.NEXTAUTH_SECRET
+  env: {
+    NEXTAUTH_SECRET: process.env.NEXTAUTH_SECRET,
   }
 }
 

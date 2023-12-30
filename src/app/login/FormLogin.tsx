@@ -20,7 +20,7 @@ export const FormLogin = ({ titulo }: Props) => {
     const [open, setOpen] = useState(false);
 
     const searchParams = useSearchParams();
-    const callbackUrl = searchParams.get("callbackUrl") || "/transparencia";
+    const callbackUrl = searchParams.get("callbackUrl") || "/";
 
     const onSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
