@@ -21,11 +21,12 @@ export const useCrearHipervinculo = ({
 }: Props) => {
   const inputArchivo = useRef<HTMLInputElement>(null);
   const [archivo, setArchivo] = useState<Array<File> | null>(null);
-  const [periodo, setPeriodo] = useState(2023);
+  const [periodo, setPeriodo] = useState( new Date().getFullYear());
   const [trimestre, setTrimestre] = useState("Seleccione un trimestre");
   const [progress, setProgress] = useState(0);
   const [submit, setSubmit] = useState(false);
   const [modal, setModal] = useState(false);
+  const [modalModificar, setModalModificar] = useState(false);
   const [bitacoras, setBitacoras] = useState<Bitacoras[]>([
    
   ]);
@@ -73,6 +74,11 @@ export const useCrearHipervinculo = ({
   
   const onFormSubmit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
+
+    if(archivo === null) {
+      alert("Seleccione un archivo");
+      return;
+    }
     if (trimestre == "Seleccione un trimestre")
       {
         alert("seleccione un trimestre");
@@ -95,15 +101,22 @@ export const useCrearHipervinculo = ({
     data.set("periodo", periodo.toString());
 
     const resultado = await postBitacoras(data, setProgress);
+    console.log(resultado);
     await new Promise( resolve => {
       setTimeout(() => { resolve('')}, 3000)
     });
 
+    if(resultado === "modificado") {
+      setModalModificar(true);
+      setSubmit(false);
+      setArchivo(null);
+      return;
+    }
 
-    setSubmit(false);
-    setBitacorasResponse(resultado);
-    setModal(true);
-    setArchivo(null);
+     setSubmit(false);
+     setBitacorasResponse(resultado);
+     setModal(true);
+     setArchivo(null);
 
     //lamada a la api
     //post

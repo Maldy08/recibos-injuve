@@ -1,6 +1,5 @@
 import { NextResponse } from "next/server";
 import transparenciaApi from "@/app/api/transparencia-api";
-import { AxiosProgressEvent } from "axios";
 
 
 interface Segments {

@@ -40,8 +40,19 @@ export const TableBitacoras = ({ idusuario, formato, onDeleteData, reload }: Pro
             name: 'HÍPERVINCULO',
             selector: (row: any) => row.hipervinculo,
             minWidth: "250px",
-            wrap: true
+            wrap: true,
+            cell: (row: any) => <a href={row.hipervinculo} target="_blank" rel="noreferrer">{row.hipervinculo}</a>,
+            style: {  cursor: "pointer", ":hover": { textDecoration: "underline" , color: "blue" , transition: 'all 0.3s'} }
+            
         },
+        {
+            name: 'FECHA',
+            selector: (row: any) => new Date(row.fechaSubido).toLocaleDateString(),
+            wrap: true,
+            maxWidth: "200px",
+        },
+
+
         {
             name: 'ACCIÓNES',
             button: true,
@@ -50,15 +61,18 @@ export const TableBitacoras = ({ idusuario, formato, onDeleteData, reload }: Pro
                 <>
                     <button
                         type="button"
+                        title='Eliminar registro'
                         onClick={ () => onDeleteData(row.id)}
                     >
-                        <IoTrashBinOutline className="w-5 h-5 text-gray-700" />
+                        <IoTrashBinOutline className="w-5 h-5 text-gray-700  hover:text-gray-950 transition-all hover:h-6 hover:w-6 " />
                     </button>
 
                     <button
-                        type="button"
+                        type='button'
+                        title='Copiar Hípervinculo'
+                        onClick={async () => await navigator.clipboard.writeText(row.hipervinculo)}
                     >
-                        <IoCopyOutline className="ml-2 w-5 h-5 text-gray-700" />
+                        <IoCopyOutline className="ml-2 w-5 h-5 text-gray-700 hover:text-gray-950 transition-all hover:h-6 hover:w-6" />
                     </button>
                 </>
         }
@@ -70,8 +84,8 @@ export const TableBitacoras = ({ idusuario, formato, onDeleteData, reload }: Pro
         setLoading(true)
         setDatos([])
         const getData = async () => {
-            console.log(formato);
-            console.log(idusuario);
+           // console.log(formato);
+            //console.log(idusuario);
             const { result } = await getBitacoras(idusuario, formato)
                 .finally(() => setLoading(false))
 
@@ -91,13 +105,13 @@ export const TableBitacoras = ({ idusuario, formato, onDeleteData, reload }: Pro
             paginationRowsPerPageOptions={[15, 30, 45, 60, 75]}
             paginationComponentOptions={paginacionOpciones}
             data={datos}
-            highlightOnHover={true}
+          
             progressPending={loading}
             progressComponent={<Progress />}
             noDataComponent={<p>Sin informacion a mostrar</p>}
             fixedHeader
             fixedHeaderScrollHeight="90%"
-            // striped={true}
+             striped={true}
             dense={true}
         />
     )

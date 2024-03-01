@@ -15,35 +15,17 @@ export const postBitacoras = async (
   formData: FormData,
   setProgress: (t: number) => void
 ) => {
-  // for( var f of formData.entries() ) {
-  //   console.log(f);
-  // }
-  // return;
 
   try {
-    const { data } = await transparenciaApi
-      .postForm(`/Bitacora/NuevaBitacora`, formData, {
-        onUploadProgress: (progressEvent: AxiosProgressEvent) => {
-          const progress =
-            Math.round(progressEvent.loaded * 100) / progressEvent.total!;
-          // console.log("Loaded: " + progressEvent.loaded);
-          // console.log("Total: " + progressEvent.total);
-          setProgress(Math.round(progress));
-        },
-      })
-      .then((resp) => {
-        return resp;
-      })
-      .catch((error) => {
-        return error.response;
-      });
-
+    const { data } = await transparenciaApi.postForm(
+      `/Bitacora/NuevaBitacora`,
+      formData
+    );
     return data;
   } catch (error) {
     console.log(error);
   }
 };
-
 export const deleteBitacora = async (idbitacora: number) => {
   try {
     const { data } = await axios.post(`/api/bitacoras/${idbitacora}`);
@@ -52,3 +34,4 @@ export const deleteBitacora = async (idbitacora: number) => {
     console.log(error);
   }
 };
+

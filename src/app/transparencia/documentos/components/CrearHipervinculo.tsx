@@ -3,7 +3,7 @@
 import Image from "next/image";
 import { IoCloudUploadOutline } from "react-icons/io5";
 import { useCrearHipervinculo } from "../hooks/useCrearHipervinculo";
-import { LoadingButton, ModalEliminar, ModalNuevosArchivos } from ".";
+import { LoadingButton, ModalEliminar, ModalModificaArchivos, ModalNuevosArchivos } from ".";
 import { Bitacoras } from "@/interfaces";
 
 interface Props {
@@ -36,7 +36,6 @@ export const CrearHipervinculo = ({
         trimestre,
         handleChangeTrimestre,
         onFormSubmit,
-        progress,
         modal,
         setModal,
         bitacoras,
@@ -71,8 +70,8 @@ export const CrearHipervinculo = ({
                             onChange={handleChangePeriodo}
                             type="number"
                             id="periodo"
-                            min={2022}
-                            max={2023}
+                            min={2023}
+                            max={2024}
                             value={periodo}
                             className="bg-gray-50 border border-gray-300 text-gray-900 text-sm 
                              rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5
@@ -102,10 +101,10 @@ export const CrearHipervinculo = ({
                             dark:focus:border-blue-500"
                         >
                             <option disabled>Seleccione un trimestre</option>
-                            <option value={""} >1er trimestre</option>
-                            <option >2do trimestre</option>
-                            <option >3er trimestre</option>
-                            <option >4to trimestre</option>
+                            <option value={1}>1er trimestre</option>
+                            <option value={2} >2do trimestre</option>
+                            <option value={3} >3er trimestre</option>
+                            <option value={4} >4to trimestre</option>
 
                         </select>
                     </div>
@@ -189,8 +188,15 @@ export const CrearHipervinculo = ({
                     </div>
                 } */}
 
+                <ModalModificaArchivos
+                   // data={bitacoras}
+                    isOpen={modal}
+                    onShowModalClick={() => setModal((prev) => !prev)}
+                    handleReloadTable={handleReloadTable}
+                />
+
                 {
-                    modal && 
+                    modal && bitacoras.length > 0 &&
                     <ModalNuevosArchivos
                         data={bitacoras}
                         isOpen={modal}
