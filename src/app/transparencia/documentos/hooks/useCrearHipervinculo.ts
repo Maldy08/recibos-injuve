@@ -33,6 +33,7 @@ export const useCrearHipervinculo = ({
 
 
   const handleChangeFile = (event: ChangeEvent<HTMLInputElement>) => {
+    console.log('',"handleChangeFile");
     // setArchivo(event.target.files![0]);
     //  const regex = new RegExp("[^.]+$");
     if (event.target.files?.length == 0) return;
@@ -143,6 +144,8 @@ export const useCrearHipervinculo = ({
     submit,
     modal,
     setModal,
+    modalModificar,
+    setModalModificar,
     bitacoras,
     setBitacoras,
     handleDeleteBitacora,

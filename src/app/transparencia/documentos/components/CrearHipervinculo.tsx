@@ -38,6 +38,8 @@ export const CrearHipervinculo = ({
         onFormSubmit,
         modal,
         setModal,
+        modalModificar,
+        setModalModificar,
         bitacoras,
         setBitacoras,
         submit,
@@ -188,12 +190,14 @@ export const CrearHipervinculo = ({
                     </div>
                 } */}
 
-                <ModalModificaArchivos
-                   // data={bitacoras}
-                    isOpen={modal}
-                    onShowModalClick={() => setModal((prev) => !prev)}
-                    handleReloadTable={handleReloadTable}
-                />
+                {
+                    modalModificar &&
+                    <ModalModificaArchivos
+                        isOpen={modalModificar}
+                        onShowModalClick={() => setModalModificar((prev) => !prev)}
+                        handleReloadTable={handleReloadTable}
+                    />
+                }
 
                 {
                     modal && bitacoras.length > 0 &&
