@@ -48,6 +48,7 @@ export const Wrapper = ({ reporte, idusuario, file_size_limit }: Props) => {
             </div>
 
             <div className="w-full rounded-xl">
+
                 <TableBitacoras
                     idusuario={idusuario}
                     formato={formato}
