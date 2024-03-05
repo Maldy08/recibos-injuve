@@ -11,7 +11,7 @@ import { TablaBitacoras } from '@/interfaces';
 interface Props {
     idusuario: number;
     formato: string;
-    onDeleteData:( idbitacora:number) => void;
+    onDeleteData: (idbitacora: number) => void;
     reload: boolean;
 }
 
@@ -36,12 +36,13 @@ border-top-left-radius: 0;
 border-bottom-left-radius: 0;
 border-top-right-radius: 5px;
 border-bottom-right-radius: 5px;
-height: 34px;
+height: 32px;
 width: 32px;
 text-align: center;
 display: flex;
 align-items: center;
 justify-content: center;
+cursor: pointer;
 `;
 
 
@@ -52,10 +53,10 @@ export const TableBitacoras = ({ idusuario, formato, onDeleteData, reload }: Pro
 
     const [datos, setDatos] = useState([] as TablaBitacoras[])
     const [loading, setLoading] = useState(false)
-	const [filterText, setFilterText] = useState('');
-	const filteredItems = datos.filter(
-		item => item.hipervinculo && item.hipervinculo.toLowerCase().includes(filterText.toLowerCase()),
-	);
+    const [filterText, setFilterText] = useState('');
+    const filteredItems = datos.filter(
+        item => item.hipervinculo && item.hipervinculo.toLowerCase().includes(filterText.toLowerCase()),
+    );
 
     const paginacionOpciones = {
         rowsPerPageText: "Registros por Página",
@@ -64,7 +65,7 @@ export const TableBitacoras = ({ idusuario, formato, onDeleteData, reload }: Pro
         selectAllRowsItemText: "Todos",
     };
 
-    
+
     const columnas: TableColumn<TablaBitacoras>[] = [
         {
             name: "ID",
@@ -79,8 +80,8 @@ export const TableBitacoras = ({ idusuario, formato, onDeleteData, reload }: Pro
             minWidth: "250px",
             wrap: true,
             cell: (row: any) => <a href={row.hipervinculo} target="_blank" rel="noreferrer">{row.hipervinculo}</a>,
-            style: {  cursor: "pointer", ":hover": { textDecoration: "underline" , color: "blue" , transition: 'all 0.3s'} }
-            
+            style: { cursor: "pointer", ":hover": { textDecoration: "underline", color: "blue", transition: 'all 0.3s' } }
+
         },
         {
             name: 'FECHA',
@@ -99,7 +100,7 @@ export const TableBitacoras = ({ idusuario, formato, onDeleteData, reload }: Pro
                     <button
                         type="button"
                         title='Eliminar registro'
-                        onClick={ () => onDeleteData(row.id)}
+                        onClick={() => onDeleteData(row.id)}
                     >
                         <IoTrashBinOutline className="w-5 h-5 text-gray-700  hover:text-gray-950 transition-all hover:h-6 hover:w-6 " />
                     </button>
@@ -121,7 +122,7 @@ export const TableBitacoras = ({ idusuario, formato, onDeleteData, reload }: Pro
         setLoading(true)
         setDatos([])
         const getData = async () => {
-           // console.log(formato);
+            // console.log(formato);
             //console.log(idusuario);
             const { result } = await getBitacoras(idusuario, formato)
                 .finally(() => setLoading(false))
@@ -134,33 +135,39 @@ export const TableBitacoras = ({ idusuario, formato, onDeleteData, reload }: Pro
 
     return (
 
-            <DataTable
-                        columns={columnas}
-                        // customStyles={customStyles}
-                        // conditionalRowStyles={conditionalRowStyles}
-                        pagination
-                        paginationPerPage={15}
-                        paginationRowsPerPageOptions={[15, 30, 45, 60, 75]}
-                        paginationComponentOptions={paginacionOpciones}
-                        data={filteredItems}
-                        subHeader
-                        subHeaderComponent={<><TextField
-                            id="search"
-                            type="text"
-                            placeholder="Buscar"
-                            aria-label="Search Input"
-                            value={filterText}
-                            onChange={e => setFilterText(e.target.value)}
-                        >
-                            </TextField></>}
-                        progressPending={loading}
-                        progressComponent={<Progress />}
-                        noDataComponent={<p>Sin informacion a mostrar</p>}
-                        fixedHeader
-                        fixedHeaderScrollHeight="90%"
-                        striped={true}
-                        dense={true}
-                    />
-     
+        <DataTable
+            columns={columnas}
+            // customStyles={customStyles}
+            // conditionalRowStyles={conditionalRowStyles}
+            pagination
+            paginationPerPage={15}
+            paginationRowsPerPageOptions={[15, 30, 45, 60, 75]}
+            paginationComponentOptions={paginacionOpciones}
+            data={filteredItems}
+            subHeader
+            subHeaderComponent={datos.length > 0 && <><TextField
+                id="search"
+                type="text"
+                placeholder="Buscar"
+                aria-label="Search Input"
+                value={filterText}
+                onChange={e => setFilterText(e.target.value)}
+            >
+            </TextField>
+                <ClearButton
+                    className='bg-primary-800 text-white'
+                    type="button"
+                    value="X"
+                    onClick={() => setFilterText('')} />
+            </>}
+            progressPending={loading}
+            progressComponent={<Progress />}
+            noDataComponent={<p>Sin informacion a mostrar</p>}
+            fixedHeader
+            fixedHeaderScrollHeight="90%"
+            striped={true}
+            dense={true}
+        />
+
     )
 }
