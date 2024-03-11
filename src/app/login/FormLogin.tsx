@@ -109,7 +109,7 @@ export const FormLogin = ({ titulo }: Props) => {
                 </div>
 
             </div>
-            {open && <div className="text-white px-6 py-4 border-0 rounded relative mb-4 bg-primary-800 mt-6">
+            {open && <div className="animate-openmodal text-white px-6 py-4 border-0 rounded relative mb-4 bg-primary-800 mt-6">
                 <span className="text-xl inline-block mr-5 align-middle">
                     <i className="fas fa-bell" />
                 </span>
@@ -118,7 +118,7 @@ export const FormLogin = ({ titulo }: Props) => {
                 </span>
                 <button
                     onClick={ () => setOpen(false)} 
-                    className="absolute bg-transparent text-2xl font-semibold leading-none right-0 top-0 mt-4 mr-6 outline-none focus:outline-none">
+                    className=" absolute bg-transparent text-2xl font-semibold leading-none right-0 top-0 mt-4 mr-6 outline-none focus:outline-none">
                     <span>×</span>
                 </button>
             </div>}

@@ -16,15 +16,16 @@ export const SelectFormatos = ({ value, reporte, handleChangeFormato }: Props) =
     }
 
     return (
-        <div className="flex items-center gap-2">
+        <div className=" items-center gap-2">
 
             <label
                 htmlFor="countries"
-                className="block mb-2 text-md font-medium text-gray-900
+                className=" mb-2 text-sm font-medium text-gray-900
                  dark:text-white"
             >
                 Formato
             </label>
+
             <select
                 onChange={handleChange}
                 id="countries"
@@ -43,6 +44,7 @@ export const SelectFormatos = ({ value, reporte, handleChangeFormato }: Props) =
                 }
 
             </select>
+
         </div>
     )
 }

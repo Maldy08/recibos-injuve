@@ -46,9 +46,6 @@ cursor: pointer;
 `;
 
 
-
-
-
 export const TableBitacoras = ({ idusuario, formato, onDeleteData, reload }: Props) => {
 
     const [datos, setDatos] = useState([] as TablaBitacoras[])
@@ -85,7 +82,7 @@ export const TableBitacoras = ({ idusuario, formato, onDeleteData, reload }: Pro
         },
         {
             name: 'FECHA',
-            selector: (row: any) => new Date(row.fechaSubido).toLocaleDateString(),
+            selector: (row: any) => new Date(row.fechaSubido).toLocaleDateString('es-MX', { year: 'numeric', month: 'long', day: 'numeric' }),
             wrap: true,
             maxWidth: "200px",
         },

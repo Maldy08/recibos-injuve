@@ -8,4 +8,4 @@ const transparenciaApi = axios.create({
     
 });
 
-export default transparenciaApi;
+export default transparenciaApi; 
