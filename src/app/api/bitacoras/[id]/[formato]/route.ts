@@ -12,12 +12,12 @@ interface Segments {
 export async function GET(request: Request, { params }: Segments) {
   try {
     const { data } = await transparenciaApi.get(
-      `/Bitacora/GetBitacorasByFormato?idUsuario=${params.id}&formato=${params.formato}`
+      `api/Transparencia/Bitacoras/GetBitacorasByUserIdAndFormato?userId=${params.id}&formato=${params.formato}`
     );
 
 
     return NextResponse.json({
-        result: data
+        result: data.data
     });
   } catch (error) {
     return NextResponse.json({
@@ -29,7 +29,8 @@ export async function GET(request: Request, { params }: Segments) {
 
 export async function POST(request: Request) {
   const data = await request.formData(); 
-  const response = transparenciaApi.postForm(`/NuevaBitacora`, data, {
+  console.log(data);
+  const response = transparenciaApi.postForm(`api/Transparencia/Bitacoras/CreateBitacora`, data, {
     // onUploadProgress : (event :AxiosProgressEvent) => {
     //   const progress = Math.round((event.loaded * 100) / event.total!);
     // }

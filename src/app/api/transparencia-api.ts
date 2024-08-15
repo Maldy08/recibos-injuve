@@ -2,9 +2,9 @@ import axios from 'axios';
 
 
 const transparenciaApi = axios.create({
-      // baseURL: 'http://localhost:5190/api-transparencia',
-      baseURL: 'http://200.56.97.5:7282/api-transparencia',
-   // baseURL:'http://200.56.97.5:7281/api-viaticos'
+     // baseURL: 'http://localhost:5178/',
+     // baseURL: 'http://200.56.97.5:7282/api-transparencia',
+    baseURL:'http://200.56.97.5:7281/'
     
 });
 

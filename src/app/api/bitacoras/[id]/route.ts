@@ -11,7 +11,7 @@ export async function POST(request: Request, { params }: Segments) {
   
   try {
     const { data } = await transparenciaApi.post(
-      `/Bitacora/EliminarBitacora?idBitacora=${params.id}`
+      `api/Transparencia/Bitacoras/DeleteBitacora/${params.id}`
     );
 
     return NextResponse.json({

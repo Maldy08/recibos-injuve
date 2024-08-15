@@ -9,14 +9,16 @@ interface Segments {
 }
 
 export async function GET(request: Request, { params }: Segments) {
+  
   try {
+    
     const { data } = await transparenciaApi.get(
-      `/Formato/GetFormatoById?userId=${params.id}`
-    );
+      `api/Transparencia/Formatos/GetFormatoById?userId=${params.id}`
+    )
 
     return NextResponse.json({
-      idDepto: data[0].idDepto,
-      reporte: data[0].reporte,
+      idDepto: data.data[0].idDepto,
+      reporte: data.data[0].reporte,
     });
   } catch (error) {
     return NextResponse.json({

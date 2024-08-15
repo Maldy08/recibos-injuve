@@ -1,11 +1,13 @@
 'use client'
-import { useEffect, useMemo, useState } from 'react';
+import { useEffect, useState } from 'react';
+import moment from 'moment';
 import DataTable, { TableColumn } from 'react-data-table-component';
 import styled from 'styled-components';
 import { getBitacoras } from '../actions/client/bitacoras-action';
 import { Progress } from '.';
 import { IoCopyOutline, IoTrashBinOutline } from 'react-icons/io5';
 import { TablaBitacoras } from '@/interfaces';
+import { useRouter } from 'next/navigation';
 
 
 interface Props {
@@ -52,8 +54,10 @@ export const TableBitacoras = ({ idusuario, formato, onDeleteData, reload }: Pro
     const [loading, setLoading] = useState(false)
     const [filterText, setFilterText] = useState('');
     const filteredItems = datos.filter(
-        item => item.hipervinculo && item.hipervinculo.toLowerCase().includes(filterText.toLowerCase()),
+        item => item.nombre && item.nombre.toLowerCase().includes(filterText.toLowerCase()),
     );
+
+    const router = useRouter();
 
     const paginacionOpciones = {
         rowsPerPageText: "Registros por Página",
@@ -66,7 +70,7 @@ export const TableBitacoras = ({ idusuario, formato, onDeleteData, reload }: Pro
     const columnas: TableColumn<TablaBitacoras>[] = [
         {
             name: "ID",
-            selector: (row: any) => row.id,
+            cell: (row: any) => <div style={ { fontWeight: 'bold', fontSize: '10px'}}>{row.id}</div>,
             width: "100px",
 
         },
@@ -82,7 +86,7 @@ export const TableBitacoras = ({ idusuario, formato, onDeleteData, reload }: Pro
         },
         {
             name: 'FECHA',
-            selector: (row: any) => new Date(row.fechaSubido).toLocaleDateString('es-MX', { year: 'numeric', month: 'long', day: 'numeric' }),
+            selector: (row: any) => moment(row.fechaSubido).format('DD/MM/YYYY'),
             wrap: true,
             maxWidth: "200px",
         },
@@ -97,23 +101,27 @@ export const TableBitacoras = ({ idusuario, formato, onDeleteData, reload }: Pro
                     <button
                         type="button"
                         title='Eliminar registro'
-                        onClick={() => onDeleteData(row.id)}
+                        onClick={() => {
+                            //alert(row.id)
+                            onDeleteData(row.id)
+                        }}
                     >
                         <IoTrashBinOutline className="w-5 h-5 text-gray-700  hover:text-gray-950 transition-all hover:h-6 hover:w-6 " />
                     </button>
 
-                    <button
+{/*                     <button
                         type='button'
                         title='Copiar Hípervinculo'
-                        onClick={async () => await navigator.clipboard.writeText(row.hipervinculo)}
+                        onClick={() => {
+                            router.push(`/transparencia/documentos/${row.id}`)
+                        }}
                     >
                         <IoCopyOutline className="ml-2 w-5 h-5 text-gray-700 hover:text-gray-950 transition-all hover:h-6 hover:w-6" />
-                    </button>
+                    </button> */}
                 </>
         }
 
     ];
-
 
     useEffect(() => {
         setLoading(true)
@@ -131,7 +139,6 @@ export const TableBitacoras = ({ idusuario, formato, onDeleteData, reload }: Pro
 
 
     return (
-
         <DataTable
             columns={columnas}
             // customStyles={customStyles}
@@ -148,7 +155,7 @@ export const TableBitacoras = ({ idusuario, formato, onDeleteData, reload }: Pro
                 placeholder="Buscar"
                 aria-label="Search Input"
                 value={filterText}
-                onChange={e => setFilterText(e.target.value)}
+                onChange={e => setFilterText(e.target.value.toUpperCase())}
             >
             </TextField>
                 <ClearButton
@@ -160,11 +167,11 @@ export const TableBitacoras = ({ idusuario, formato, onDeleteData, reload }: Pro
             progressPending={loading}
             progressComponent={<Progress />}
             noDataComponent={<p>Sin informacion a mostrar</p>}
-            fixedHeader
+            fixedHeader 
+            persistTableHead
             fixedHeaderScrollHeight="90%"
             striped={true}
             dense={true}
         />
-
     )
 }

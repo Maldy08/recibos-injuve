@@ -63,7 +63,7 @@ export const CrearHipervinculo = ({
                     <div className="">
                         <label
                             htmlFor="periodo"
-                            className="block mb-2 text-md font-medium text-gray-900 dark:text-white"
+                            className="block mb-2 text-xs font-medium text-gray-900 dark:text-white"
                         >
                             Periodo
                         </label>
@@ -75,7 +75,7 @@ export const CrearHipervinculo = ({
                             min={2023}
                             max={2024}
                             value={periodo}
-                            className="bg-gray-50 border border-gray-300 text-gray-900 text-sm 
+                            className="bg-gray-50 border border-gray-300 text-gray-900 text-xs 
                              rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5
                              dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 
                              dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
@@ -86,7 +86,7 @@ export const CrearHipervinculo = ({
                     <div>
                         <label
                             htmlFor="trimestre"
-                            className="block mb-2 text-md font-medium text-gray-900
+                            className="block mb-2 text-xs font-medium text-gray-900
                          dark:text-white"
                         >
                             Trimestre
@@ -97,7 +97,7 @@ export const CrearHipervinculo = ({
                             value={trimestre}
                             id="trimestre"
                             className="bg-gray-50 border border-gray-300 text-gray-900
-                            text-md rounded-lg focus:ring-blue-500 focus:border-blue-500 
+                            text-xs rounded-lg focus:ring-blue-500 focus:border-blue-500 
                             block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 
                              dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500
                             dark:focus:border-blue-500"
@@ -191,15 +191,6 @@ export const CrearHipervinculo = ({
                 } */}
 
                 {
-                    modalModificar &&
-                    <ModalModificaArchivos
-                        isOpen={modalModificar}
-                        onShowModalClick={() => setModalModificar((prev) => !prev)}
-                        handleReloadTable={handleReloadTable}
-                    />
-                }
-
-                {
                     modal && bitacoras.length > 0 &&
                     <ModalNuevosArchivos
                         data={bitacoras}
@@ -212,6 +203,7 @@ export const CrearHipervinculo = ({
                 {
                     modalDelete && 
                     <ModalEliminar 
+                        visible={modalDelete}
                         onCancel={onCancel} 
                         idbitacora={idbitacora} 
                         onDelete={handleDeleteBitacora}  

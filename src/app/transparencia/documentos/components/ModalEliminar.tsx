@@ -3,12 +3,13 @@ interface Props {
      onDelete: (idbitacora: number) => Promise<void>
      onCancel: () => void
      handleReloadTable: () => void
+     visible: boolean;
 
 }
 
-export const ModalEliminar = ({ onCancel, onDelete, idbitacora, handleReloadTable }: Props) => {
+export const ModalEliminar = ({ visible,onCancel, onDelete, idbitacora, handleReloadTable }: Props) => {
     return (
-        <div  tabIndex={-1} aria-hidden="true" className="backdrop:bg-gray-700 animate-openmodal w-full justify-center items-center flex overflow-x-hidden overflow-y-auto fixed inset-0 z-50 outline-none focus:outline-none ">
+        <div  tabIndex={-1} aria-hidden="true" className={`transition-opacity ease-in duration-150 ${visible ? "opacity-100" : "opacity-0"} backdrop:bg-gray-700 w-full justify-center items-center flex overflow-x-hidden overflow-y-auto fixed inset-0 z-50 outline-none focus:outline-none`}>
             <div className="relative p-4 w-full max-w-md h-full md:h-auto">
 
                 <div className="relative p-4 text-center bg-white rounded-lg shadow dark:bg-gray-800 sm:p-5">

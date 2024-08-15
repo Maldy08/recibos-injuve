@@ -4,6 +4,8 @@ import { DefaultSession, DefaultUser } from "next-auth"
 interface IUser extends DefaultUser {
 
     token? :string;
+    //empleadoId? : number;
+    //empleadoId? : number;   
     //roles? : string[];
 
 

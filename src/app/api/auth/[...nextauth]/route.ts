@@ -16,7 +16,7 @@ export const authOptions: NextAuthOptions = {
 
       async authorize(credentials) {
         const { data } = await transparenciaApi.post(
-          `/Auth/login?user=${credentials!.email}&password=${
+          `api/Transparencia/Auth/login?user=${credentials!.email}&password=${
             credentials!.password
           }`
         );
@@ -25,7 +25,7 @@ export const authOptions: NextAuthOptions = {
             id : data.id,
             token: data.token,
             name: data.user,
-            user: data.id,
+            user: data.username,
           
           };
         }
@@ -45,7 +45,8 @@ export const authOptions: NextAuthOptions = {
       if( session && session.user) {
         session.user.token = token.token;
         session.user.id = token.id;
-       // session.user = token.user
+        //session.user.empleadoId = token.empleadoId;
+        
       }
       return session;
     },

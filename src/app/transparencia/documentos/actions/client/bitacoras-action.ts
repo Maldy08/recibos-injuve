@@ -18,10 +18,10 @@ export const postBitacoras = async (
 
   try {
     const { data } = await transparenciaApi.postForm(
-      `/Bitacora/NuevaBitacora`,
+      `api/Transparencia/Bitacoras/CreateBitacora`,
       formData
     );
-    return data;
+    return data.data;
   } catch (error) {
     console.log(error);
   }

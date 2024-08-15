@@ -25,8 +25,8 @@ const config: Config = {
         }
       },
       animation: {
-        openmodal: 'fade-in 0.5s ease-in-out',
-        closemodal: 'fade-in 0.5s ease-in-out'
+        openmodal: 'fade-in 0.2s ease-in',
+        closemodal: ' fade-out 0.2s ease-out',
 
       } ,
       

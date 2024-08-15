@@ -9,8 +9,8 @@ interface Props {
   idbitacora:number;
   file_size_limit: number;
 
-  
 }
+
 
 export const useCrearHipervinculo = ({
   formato,
@@ -30,6 +30,8 @@ export const useCrearHipervinculo = ({
   const [bitacoras, setBitacoras] = useState<Bitacoras[]>([
    
   ]);
+
+   
 
 
   const handleChangeFile = (event: ChangeEvent<HTMLInputElement>) => {
@@ -111,13 +113,17 @@ export const useCrearHipervinculo = ({
       setModalModificar(true);
       setSubmit(false);
       setArchivo(null);
+      inputArchivo.current!.value = "";
       return;
     }
 
      setSubmit(false);
      setBitacorasResponse(resultado);
+     console.log(resultado);
      setModal(true);
      setArchivo(null);
+     inputArchivo.current!.value = "";
+
 
     //lamada a la api
     //post

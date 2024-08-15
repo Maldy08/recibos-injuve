@@ -5,13 +5,13 @@ import { CrearHipervinculo, SelectFormatos, TableBitacoras } from "."
 import { useWrapper } from "../hooks/useWrapper";
 
 
-interface Props {
+interface WrapperProps {
     reporte: Reporte[];
     idusuario: number;
     file_size_limit: number;
 }
 
-export const Wrapper = ({ reporte, idusuario, file_size_limit }: Props) => {
+export const Wrapper = ({ reporte, idusuario, file_size_limit }: WrapperProps) => {
 
     const {
         formato,
@@ -22,13 +22,12 @@ export const Wrapper = ({ reporte, idusuario, file_size_limit }: Props) => {
         handleCancelDelete,
         reloadTable,
         handleReloadTable,
-        
     } = useWrapper();
 
 
     return (
         <>
-            <div className=" lg:w-3/5 md:w-full sm:w-full bg-white p-10 rounded-lg">
+            <div className=" lg:w-1/2 md:w-full sm:w-full bg-white p-10 rounded-lg">
                 <SelectFormatos
                     value={formato}
                     reporte={reporte}

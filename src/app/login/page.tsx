@@ -17,7 +17,6 @@ export default async function LoginPage() {
     if( session ) {
       redirect('/transparencia/documentos')
     }
-    
 
     const sistema = process.env.NOMBRE_SISTEMA;
 
