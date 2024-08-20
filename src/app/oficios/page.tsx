@@ -6,4 +6,11 @@ export const metadata = {
 
 export default async function OficiosPage() {
   //redirect('/oficios');
+
+
+  return (
+    <div>
+      <h1>Oficios</h1>
+    </div>
+  );
 }
