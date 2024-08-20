@@ -2,7 +2,8 @@ import { UsuariosRepository } from "@/app/application/interfaces/usuarios-reposi
 import { Usuarios } from "@/app/domain/entities/usuario";
 import { DbAdapter } from "../adapters/db.adapter";
 import { UsuariosMapper } from "../mappers/usuarios.mapper";
-import { Result } from "postcss";
+import { Result } from "@/app/domain/common/result";
+
 
 
 
