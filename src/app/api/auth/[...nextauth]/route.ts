@@ -1,7 +1,8 @@
-import transparenciaApi from "@/app/api/transparencia-api";
+
 import { NextAuthOptions } from "next-auth";
 import NextAuth from "next-auth/next";
 import CredentialsProvider from "next-auth/providers/credentials";
+import oficiosApi from "../../oficios-api";
 
 export const authOptions: NextAuthOptions = {
 
@@ -15,8 +16,8 @@ export const authOptions: NextAuthOptions = {
 
 
       async authorize(credentials) {
-        const { data } = await transparenciaApi.post(
-          `api/Transparencia/Auth/login?user=${credentials!.email}&password=${
+        const { data } = await oficiosApi.post(
+          `api/Auth/login?user=${credentials!.email}&password=${
             credentials!.password
           }`
         );
