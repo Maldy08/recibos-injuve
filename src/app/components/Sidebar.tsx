@@ -74,25 +74,7 @@ export const Sidebar = () => {
                             <li>
                                 <Link href={'/transparencia/documentos'} className="flex items-center p-3 rounded-lg transition-transform duration-300 lg:hover:scale-105 lg:hover:bg-green-700">
                                     <IoDocumentAttachOutline className="w-6 h-6" />
-                                    <span className="ml-4 text-lg">Documentos</span>
-                                </Link>
-                            </li>
-                            <li>
-                                <Link href={"/transparencia/"} className="flex items-center p-3 rounded-lg transition-transform duration-300 lg:hover:scale-105 lg:hover:bg-green-700">
-                                    <IoArrowUp className="w-6 h-6" />
-                                    <span className="ml-4 text-lg">Oficios Recibidos</span>
-                                </Link>
-                            </li>
-                            <li>
-                                <Link href={"/transparencia/"} className="flex items-center p-3 rounded-lg transition-transform duration-300 lg:hover:scale-105 lg:hover:bg-green-700">
-                                    <IoArrowDown className="w-6 h-6" />
-                                    <span className="ml-4 text-lg">Oficios Expedidos</span>
-                                </Link>
-                            </li>
-                            <li>
-                                <Link href={"/transparencia/"} className="flex items-center p-3 rounded-lg transition-transform duration-300 lg:hover:scale-105 lg:hover:bg-green-700">
-                                    <IoPencil className="w-6 h-6" />
-                                    <span className="ml-4 text-lg">Oficios por Expedir</span>
+                                    <span className="ml-4 text-lg">Recibos de nomina</span>
                                 </Link>
                             </li>
                         </ul>
