@@ -4,9 +4,12 @@ import { DefaultSession, DefaultUser } from "next-auth"
 interface IUser extends DefaultUser {
 
     token? :string;
-    //empleadoId? : number;
-    //empleadoId? : number;   
-    //roles? : string[];
+    empleado?: number; // Corresponde a EMPLEADO
+    name?: string; // Corresponde a NOMBRE
+    appat?: string; // Corresponde a APPAT
+    apmat?: string; // Corresponde a APMAT
+    rfc?: string; // Corresponde a RFC
+    curp?: string; // Corresponde a CURP
 
 
 }

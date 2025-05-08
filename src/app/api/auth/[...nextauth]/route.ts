@@ -3,6 +3,7 @@ import { NextAuthOptions } from "next-auth";
 import NextAuth from "next-auth/next";
 import CredentialsProvider from "next-auth/providers/credentials";
 import oficiosApi from "../../oficios-api";
+import { LoginResponse } from "@/app/application/dto/login-response.dto";
 
 export const authOptions: NextAuthOptions = {
 
@@ -10,24 +11,27 @@ export const authOptions: NextAuthOptions = {
     CredentialsProvider({
       name: "Credentials",
       credentials: {
-        email: { label: "Correo electronico", type: "email" },
-        password: { label: "Password", type: "password" },
+        rfc: { label: "rfc", type: "string" },
       },
 
 
       async authorize(credentials) {
-        const { data } = await oficiosApi.post(
-          `api/Auth/login?user=${credentials!.email}&password=${
-            credentials!.password
-          }`
+        const { data } = await oficiosApi.post<LoginResponse>(
+          `api/auth/login`,
+          {
+            rfc: credentials!.rfc, // Cambia "email" por "rfc" si es necesario
+          }
         );
         if (data) {
           return {
-            id : data.id,
+            id: data.empleado.EMPLEADO.toString(), // Ensure 'id' is a string
+            empleado: data.empleado.EMPLEADO,
             token: data.token,
-            name: data.user,
-            user: data.username,
-          
+            name: data.empleado.NOMBRE,
+            appat: data.empleado.APPAT,
+            apmat: data.empleado.APMAT,
+            rfc: data.empleado.RFC,
+            curp: data.empleado.CURP,
           };
         }
         return null;
@@ -45,7 +49,13 @@ export const authOptions: NextAuthOptions = {
      // console.log(`callback session: ${ JSON.stringify( session )}`)
       if( session && session.user) {
         session.user.token = token.token;
+        session.user.empleado = token.empleado;
         session.user.id = token.id;
+        session.user.name = token.name;
+        session.user.appat = token.appat;
+        session.user.apmat = token.apmat;
+        session.user.rfc = token.rfc;
+        session.user.curp = token.curp;
         //session.user.empleadoId = token.empleadoId;
         
       }
@@ -55,7 +65,13 @@ export const authOptions: NextAuthOptions = {
      // console.log(`callback token: ${ JSON.stringify( token ) }` );
       if( token &&  user) {
         token.id = user.id;
-        token.token = user.token
+        token.empleado = user.empleado;
+        token.token = user.token;
+        token.name = user.name;
+        token.appat = user.appat;
+        token.apmat = user.apmat;
+        token.rfc = user.rfc;
+        token.curp = user.curp;
       }
       return token;
     },

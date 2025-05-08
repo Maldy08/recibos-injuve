@@ -7,7 +7,7 @@ const sistema = process.env.NOMBRE_SISTEMA;
 
 export const Header = async () => {
   const session = await getServerSession(authOptions);
-  const user = session?.user?.name;
+  const user = session?.user?.name + " " + session?.user?.appat + " " + session?.user?.apmat;
 
   return (
     <header className="lg:fixed lg:top-0 lg:left-64 lg:w-[calc(100%-16rem)] w-full bg-primary-900 border-b-4 border-gray- px-4 lg:px-6 py-2.5 z-30">
@@ -15,7 +15,7 @@ export const Header = async () => {
         <div className="flex flex-wrap justify-between items-center mx-auto">
           {/* Imagen solo visible en pantallas pequeñas */}
           <div className="block lg:hidden">
-            <Image src={"/assets/logo-blanco.png"} alt="logo" width={225} height={100} className="" />
+            <Image src={"/assets/logo.png"} alt="logo" width={225} height={100} className="" />
           </div>
 
           <div className="lg:order-2">
