@@ -32,6 +32,7 @@ export const authOptions: NextAuthOptions = {
             apmat: data.empleado.APMAT,
             rfc: data.empleado.RFC,
             curp: data.empleado.CURP,
+            tipo: data.empleado.TIPO,
           };
         }
         return null;
@@ -56,6 +57,7 @@ export const authOptions: NextAuthOptions = {
         session.user.apmat = token.apmat;
         session.user.rfc = token.rfc;
         session.user.curp = token.curp;
+        session.user.tipo = token.tipo;
         //session.user.empleadoId = token.empleadoId;
         
       }
@@ -72,6 +74,7 @@ export const authOptions: NextAuthOptions = {
         token.apmat = user.apmat;
         token.rfc = user.rfc;
         token.curp = user.curp;
+        token.tipo = user.tipo;
       }
       return token;
     },

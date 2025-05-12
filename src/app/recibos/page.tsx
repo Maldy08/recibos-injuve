@@ -22,12 +22,15 @@ export default async function RecibosPage() {
   const nombre = session.user?.name + " " + session.user?.appat + " " + session.user?.apmat;
   const rfc = session.user?.rfc;
   const curp = session.user?.curp;
+  const tipo = session.user?.tipo;
+
+  console.log("tipo", tipo);
 
 
   return (
     <div>
         <div className="overflow-x-auto">
-          <TablaRecibos empleado={empleado!} nombre={nombre!} rfc={rfc!} curp={curp!} />
+          <TablaRecibos empleado={empleado!} nombre={nombre!} rfc={rfc!} curp={curp!} tipo={tipo!}/>
         </div>
 
     </div>

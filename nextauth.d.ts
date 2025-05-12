@@ -10,6 +10,7 @@ interface IUser extends DefaultUser {
     apmat?: string; // Corresponde a APMAT
     rfc?: string; // Corresponde a RFC
     curp?: string; // Corresponde a CURP
+    tipo?: number;
 
 
 }

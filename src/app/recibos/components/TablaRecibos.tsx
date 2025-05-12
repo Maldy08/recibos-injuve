@@ -18,9 +18,10 @@ interface Props {
     nombre: string;
     rfc: string;
     curp: string;
+    tipo: number;
 }
 
-export const TablaRecibos = ({ empleado, nombre, rfc, curp }: Props) => {
+export const TablaRecibos = ({ empleado, nombre, rfc, curp, tipo }: Props) => {
     const [recibos, setRecibos] = useState<Recibo[]>([]);
     const [anioSeleccionado, setAnioSeleccionado] = useState<string>("2025");
     const [loading, setLoading] = useState<boolean>(true);
@@ -72,11 +73,14 @@ export const TablaRecibos = ({ empleado, nombre, rfc, curp }: Props) => {
             <div className="flex items-center justify-between mt-6 mb-4">
                 <div>
                     <h2 className="text-lg font-semibold text-[#6e1e2a] flex items-center gap-2">
-                        Recibos de Nómina
+                        {
+                            tipo === 1 ? "Recibos de Nómina" : "Recibos de Honorarios"
+                        }
                     </h2>
-                    <p className="text-sm text-gray-600">EMPLEADO: {nombre}</p>
-                    <p className="text-sm text-gray-600">RFC: {rfc}</p>
-                    <p className="text-sm text-gray-600">CURP: {curp}</p>
+                    <p className="text-sm text-gray-600"><span className=" font-bold">EMPLEADO:</span> {nombre}</p>
+                    <p className="text-sm text-gray-600"><span className="font-bold">NUMERO:</span> {empleado}</p>
+                    <p className="text-sm text-gray-600"><span className="font-bold">RFC:</span> {rfc}</p>
+                    <p className="text-sm text-gray-600"><span className="font-bold">CURP:</span> {curp}</p>
                 </div>
                 <div>
                     <label htmlFor="anio" className="mr-2 text-sm text-gray-600">Año:</label>

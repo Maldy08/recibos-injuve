@@ -5,4 +5,5 @@ export interface Empleado {
     APMAT: string;
     RFC: string;
     CURP: string;
+    TIPO: number;
 }
