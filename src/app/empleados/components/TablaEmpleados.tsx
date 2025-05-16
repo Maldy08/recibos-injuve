@@ -4,6 +4,9 @@ import { useEffect, useState } from "react";
 import { ImSpinner2 } from "react-icons/im";
 import { FaUser, FaRegFilePdf } from "react-icons/fa";
 import { MdOutlineEmail } from "react-icons/md";
+import { LuStickyNote } from "react-icons/lu"; // icono de recibo
+import usePdf from "@/app/hooks/usePdf";
+import useSendMail from "@/app/hooks/useSendMail";
 
 
 interface Empleado {
@@ -26,7 +29,11 @@ interface Periodo {
   neto: string;
 }
 
-export const TablaEmpleados = () => {
+interface Props {
+  tipo: number;
+}
+
+export const TablaEmpleados = ({ tipo }: Props) => {
   const [empleados, setEmpleados] = useState<Empleado[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
   const [busqueda, setBusqueda] = useState<string>("");
@@ -36,10 +43,12 @@ export const TablaEmpleados = () => {
   const [empleadoSeleccionado, setEmpleadoSeleccionado] = useState<Empleado | null>(null);
   const [periodos, setPeriodos] = useState<Periodo[]>([]);
   const [loadingPeriodos, setLoadingPeriodos] = useState<boolean>(false);
+  const { abrirPDF } = usePdf();
+  const { sendMail } = useSendMail();
 
   useEffect(() => {
     setLoading(true);
-    fetch(`${process.env.NEXT_PUBLIC_API_URL}empleados`)
+    fetch(`${process.env.NEXT_PUBLIC_API_URL}empleados/${tipo}`)
       .then((res) => res.json())
       .then((data) => {
         if (Array.isArray(data)) setEmpleados(data);
@@ -80,7 +89,7 @@ export const TablaEmpleados = () => {
     setLoadingPeriodos(true);
 
     try {
-      const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}nomina/recibos/${emp.EMPLEADO}`);
+      const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}nomina/recibos/${emp.EMPLEADO}/${tipo}`);
       const data = await res.json();
       if (Array.isArray(data)) {
         setPeriodos(data);
@@ -90,6 +99,26 @@ export const TablaEmpleados = () => {
     } catch (error) {
       console.error("Error al cargar periodos:", error);
       setPeriodos([]);
+    } finally {
+      setLoadingPeriodos(false);
+    }
+  };
+
+
+  const openPdfHandler = async (empleado: number, periodo: number) => {
+    setLoadingPeriodos(true);
+    await abrirPDF(empleado, periodo, tipo);
+    setLoadingPeriodos(false);
+  };
+
+  const sendEmailHandler = async (empleado: number, periodo: number, correo: string) => {
+    setLoadingPeriodos(true);
+    try {
+      await sendMail(empleado, periodo, correo, tipo);
+      alert("Correo enviado exitosamente");
+    } catch (error) {
+      console.error("Error al enviar el correo:", error);
+      alert("Error al enviar el correo");
     } finally {
       setLoadingPeriodos(false);
     }
@@ -159,7 +188,8 @@ export const TablaEmpleados = () => {
                       onClick={() => abrirModalPeriodos(emp)}
                       className="text-white bg-primary-900 hover:bg-primary-800 rounded-lg flex items-center justify-center p-2 text-xs"
                     >
-                      Periodos
+                      <LuStickyNote className="" />
+                      <span className="ml-2 ">Periodos</span>
                     </button>
                   </td>
                 </tr>
@@ -171,8 +201,8 @@ export const TablaEmpleados = () => {
 
       {/* Modal de Periodos */}
       {empleadoSeleccionado && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-gradient-to-br from-black/70 to-black/60 backdrop-blur-sm">
-          <div className="bg-white rounded-2xl shadow-2xl p-8 w-full max-w-4xl relative animate-fade-in">
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-gradient-to-br from-black/70 to-black/60 backdrop-blur-sm px-4">
+          <div className="bg-white rounded-2xl shadow-2xl w-full max-w-4xl p-6 md:p-8 relative animate-fade-in overflow-hidden">
 
             {/* Botón de cerrar */}
             <button
@@ -183,7 +213,7 @@ export const TablaEmpleados = () => {
             </button>
 
             {/* Título */}
-            <h2 className="text-2xl font-bold text-center text-[#6e1e2a] mb-6">
+            <h2 className="text-xl md:text-2xl font-bold text-center text-[#6e1e2a] mb-6">
               Periodos de {empleadoSeleccionado.NOMBRE} {empleadoSeleccionado.APPAT}
             </h2>
 
@@ -195,53 +225,50 @@ export const TablaEmpleados = () => {
             ) : (
               <>
                 {periodos.length > 0 ? (
-                  <div className="overflow-x-auto">
-                    <table className="min-w-full divide-y divide-gray-300 text-sm text-center">
+                  <div className="overflow-x-auto scrollbar-thin scrollbar-thumb-gray-400 scrollbar-track-gray-200 rounded-md">
+                    <table className="min-w-[700px] divide-y divide-gray-300 text-sm md:text-base text-center">
                       <thead className="bg-[#383838] text-white uppercase text-xs">
                         <tr>
-                          <th className="px-4 py-3">Periodo</th>
-                          <th className="px-4 py-3">Fecha Pago</th>
-                          <th className="px-4 py-3">Percepciones</th>
-                          <th className="px-4 py-3">Prestaciones</th>
-                          <th className="px-4 py-3">Deducciones</th>
-                          <th className="px-4 py-3">Neto</th>
-                          <th className="px-4 py-3">Acciones</th> {/* NUEVA COLUMNA */}
+                          <th className="px-3 py-2">Periodo</th>
+                          <th className="px-3 py-2">Fecha Pago</th>
+                          <th className="px-3 py-2">Percepciones</th>
+                          <th className="px-3 py-2">Prestaciones</th>
+                          <th className="px-3 py-2">Deducciones</th>
+                          <th className="px-3 py-2">Neto</th>
+                          <th className="px-3 py-2">Acciones</th>
                         </tr>
                       </thead>
                       <tbody className="divide-y divide-gray-200">
                         {periodos.map((p) => (
                           <tr key={p.periodo} className="hover:bg-gray-50 transition">
-                            <td className="px-4 py-3">{p.periodo}</td>
-                            <td className="px-4 py-3">{p.fechaPago}</td>
-                            <td className="px-4 py-3 font-medium text-green-700">
+                            <td className="px-3 py-2 text-md">{p.periodo}</td>
+                            <td className="px-3 py-2 text-xs">{p.fechaPago}</td>
+                            <td className="px-3 py-2 font-medium text-xs">
                               ${parseFloat(p.percepciones).toLocaleString('es-MX', { minimumFractionDigits: 2 })}
                             </td>
-                            <td className="px-4 py-3 font-medium text-green-700">
+                            <td className="px-3 py-2 font-medium text-xs">
                               ${parseFloat(p.prestaciones).toLocaleString('es-MX', { minimumFractionDigits: 2 })}
                             </td>
-                            <td className="px-4 py-3 font-medium text-red-700">
+                            <td className="px-3 py-2 font-medium text-xs">
                               ${parseFloat(p.deducciones).toLocaleString('es-MX', { minimumFractionDigits: 2 })}
                             </td>
-                            <td className="px-4 py-3 font-semibold text-[#6e1e2a]">
+                            <td className="px-3 py-2 font-semibold text-xs">
                               ${parseFloat(p.neto).toLocaleString('es-MX', { minimumFractionDigits: 2 })}
                             </td>
-                            <td className="px-4 py-3 flex items-center justify-center gap-3">
-                              {/* Botón de Enviar Correo */}
+                            <td className="px-3 py-2 flex items-center justify-center gap-2">
                               <button
-                                onClick={() => enviarCorreo(p)}
+                                onClick={() => { sendEmailHandler(p.empleado, p.periodo, "camv29@gmail.com") }}
                                 className="bg-[#6e1e2a] hover:bg-[#5b1823] text-white p-2 rounded-full transition"
                                 title="Enviar por correo"
                               >
-                                <MdOutlineEmail className="text-lg" />
+                                <MdOutlineEmail className="text-base" />
                               </button>
-
-                              {/* Botón de Descargar PDF */}
                               <button
-                                onClick={() => descargarPDF(p)}
+                                onClick={() => { openPdfHandler(p.empleado, p.periodo) }}
                                 className="bg-[#6e1e2a] hover:bg-[#5b1823] text-white p-2 rounded-full transition"
                                 title="Descargar PDF"
                               >
-                                <FaRegFilePdf className="text-lg" />
+                                <FaRegFilePdf className="text-base" />
                               </button>
                             </td>
                           </tr>

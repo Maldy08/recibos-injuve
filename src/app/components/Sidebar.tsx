@@ -3,15 +3,7 @@
 import { useState, useEffect } from "react";
 import Link from "next/link";
 import Image from "next/image";
-import {
-  IoDocumentAttachOutline,
-  IoHomeOutline,
-  IoMenuOutline,
-  IoCloseOutline,
-  IoArrowUp,
-  IoArrowDown,
-  IoPencil,
-} from "react-icons/io5";
+import { LuReceipt, LuUsers} from "react-icons/lu";
 
 export const Sidebar = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -38,7 +30,7 @@ export const Sidebar = () => {
           onClick={() => setIsOpen(true)}
           className="lg:hidden fixed top-28 left-4 z-50 bg-[#383838] text-white p-3 rounded-full shadow-lg transition-transform transform hover:bg-[#383838]"
         >
-          <IoMenuOutline className="w-6 h-6" />
+          {/* <IoMenuOutline className="w-6 h-6" /> */}
         </button>
       )}
 
@@ -65,7 +57,7 @@ export const Sidebar = () => {
               onClick={() => setIsOpen(false)}
               className="absolute top-4 right-4 bg-red-500 text-white p-2 rounded-full shadow-lg transition-transform transform hover:bg-red-600 lg:hidden z-50"
             >
-              <IoCloseOutline className="w-6 h-6" />
+              {/* <IoCloseOutline className="w-6 h-6" /> */}
             </button>
           )}
 
@@ -73,11 +65,35 @@ export const Sidebar = () => {
             <ul className="space-y-4 font-medium">
               <li>
                 <Link
-                  href={"/oficios"}
+                  href={"/recibos"}
                   className="flex items-center p-3 rounded-lg transition-transform duration-300 lg:hover:scale-105 lg:hover:bg-[#641c34]"
                 >
-                  <IoHomeOutline className="w-6 h-6" />
-                  <span className="ml-4 text-lg">Principal</span>
+                  <LuReceipt className="w-6 h-6" />
+                  <span className="ml-4 text-lg">Recibos</span>
+                </Link>
+              </li>
+             
+            </ul>
+            <ul className="space-y-4 font-medium">
+              <li>
+                <Link
+                  href={"/empleados"}
+                  className="flex items-center p-3 rounded-lg transition-transform duration-300 lg:hover:scale-105 lg:hover:bg-[#641c34]"
+                >
+                   <LuUsers className="w-6 h-6" /> 
+                  <span className="ml-4 text-lg">Empleados</span>
+                </Link>
+              </li>
+             
+            </ul>
+            <ul className="space-y-4 font-medium">
+              <li>
+                <Link
+                  href={"/asimilables"}
+                  className="flex items-center p-3 rounded-lg transition-transform duration-300 lg:hover:scale-105 lg:hover:bg-[#641c34]"
+                >
+                   <LuUsers className="w-6 h-6" /> 
+                  <span className="ml-4 text-lg">Asimilables</span>
                 </Link>
               </li>
              

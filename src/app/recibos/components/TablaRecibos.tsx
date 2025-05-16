@@ -1,8 +1,10 @@
 'use client';
 
+import usePdf from "@/app/hooks/usePdf";
 import { useEffect, useState } from "react";
 import { FaRegFilePdf } from "react-icons/fa";
 import { ImSpinner2 } from "react-icons/im"; // spinner
+
 
 interface Recibo {
     empleado: number;
@@ -25,6 +27,7 @@ export const TablaRecibos = ({ empleado, nombre, rfc, curp, tipo }: Props) => {
     const [recibos, setRecibos] = useState<Recibo[]>([]);
     const [anioSeleccionado, setAnioSeleccionado] = useState<string>("2025");
     const [loading, setLoading] = useState<boolean>(true);
+    const { abrirPDF } = usePdf();
 
     const formatoMoneda = (valor: string) =>
         Number(valor).toLocaleString("es-MX", {
@@ -32,25 +35,15 @@ export const TablaRecibos = ({ empleado, nombre, rfc, curp, tipo }: Props) => {
             currency: "MXN",
         });
 
-    const abrirPDF = async (empleado: number, periodo: number) => {
-        setLoading(true);
-        try {
-            const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}pdf/${empleado}/${periodo}`);
-            if (!response.ok) throw new Error("No se pudo generar el PDF");
-
-            const blob = await response.blob();
-            const url = window.URL.createObjectURL(blob);
-
-            window.open(url, "_blank");
-            setLoading(false);
-        } catch (err) {
-            console.error("Error al abrir el PDF:", err);
-        }
-    };
+    const openPdfHandler = async (empleado: number, periodo: number) => {
+        setLoading(true)
+        await abrirPDF(empleado, periodo, tipo);
+        setLoading(false);
+    }
 
     useEffect(() => {
         setLoading(true);
-        fetch(`${process.env.NEXT_PUBLIC_API_URL}nomina/recibos/${empleado}`)
+        fetch(`${process.env.NEXT_PUBLIC_API_URL}nomina/recibos/${empleado}/${tipo}`)
             .then(res => res.json())
             .then(data => {
                 if (Array.isArray(data)) {
@@ -132,7 +125,7 @@ export const TablaRecibos = ({ empleado, nombre, rfc, curp, tipo }: Props) => {
                                     <td className="px-4 py-2 text-right font-semibold">{formatoMoneda(r.neto)}</td>
                                     <td className="px-4 py-2 text-center">
                                         <button
-                                            onClick={() => abrirPDF(r.empleado, r.periodo)}
+                                            onClick={() => openPdfHandler(r.empleado, r.periodo)}
                                             className="text-blue-600 hover:text-blue-800"
                                             aria-label={`Ver PDF del periodo ${r.periodo}`}
                                         >

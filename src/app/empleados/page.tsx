@@ -7,6 +7,8 @@ export const metadata = {
     description: 'Consulta de Recibos de Nómina',
 };
 
+const tipo = 1
+
 
 export default async function EmpleadosPage() {
     //redirect('/oficios');
@@ -14,7 +16,7 @@ export default async function EmpleadosPage() {
     // if (!session) {
     //     return (
     //         <div className="flex items-center justify-center h-screen">
-    //             <h1 className="text-2xl font-bold">Acceso no autorizado</h1>
+    //             <h1 className="text-2xl font-bold">Acceso no autorizao</h1>
     //         </div>
     //     );
     // }
@@ -22,7 +24,7 @@ export default async function EmpleadosPage() {
     return (
         <div>
             <h1>Empleados</h1>
-            <TablaEmpleados />
+            <TablaEmpleados tipo={1}/>
         </div>
     );
 }

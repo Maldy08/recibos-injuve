@@ -24,9 +24,6 @@ export default async function RecibosPage() {
   const curp = session.user?.curp;
   const tipo = session.user?.tipo;
 
-  console.log("tipo", tipo);
-
-
   return (
     <div>
         <div className="overflow-x-auto">

@@ -147,6 +147,7 @@ function InputField({ label, value }: { label: string, value: string | number })
     <div>
       <label className="block text-xs font-semibold mb-1 text-gray-700">{label}</label>
       <input
+      
         type="text"
         value={value}
         readOnly
