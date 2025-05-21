@@ -1,7 +1,6 @@
 import { TablaEmpleados } from "./components/TablaEmpleados";
 
 
-
 export const metadata = {
     title: 'INJUVE - Sistema Integral de Recursos Humanos',
     description: 'Consulta de Recibos de Nómina',

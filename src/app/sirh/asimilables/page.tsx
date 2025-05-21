@@ -1,5 +1,6 @@
 import { TablaEmpleados } from "../empleados/components/TablaEmpleados";
 
+
 export const metadata = {
     title: 'INJUVE - Sistema Integral de Recursos Humanos',
     description: 'Consulta de Recibos de Asimilables',

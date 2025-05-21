@@ -3,7 +3,7 @@
 import { useState, useEffect } from "react";
 import Link from "next/link";
 import Image from "next/image";
-import { LuReceipt, LuUsers} from "react-icons/lu";
+import { LuReceipt, LuUsers, LuBellRing } from "react-icons/lu";
 
 export const Sidebar = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -36,9 +36,8 @@ export const Sidebar = () => {
 
       <aside
         id="default-sidebar"
-        className={`fixed top-0 left-0 w-64 h-full bg-[#383838] text-white transition-transform duration-300 ${
-          isOpen ? "translate-x-0" : "-translate-x-full"
-        } lg:translate-x-0 lg:relative lg:w-64 z-40`}
+        className={`fixed top-0 left-0 w-64 h-full bg-[#383838] text-white transition-transform duration-300 ${isOpen ? "translate-x-0" : "-translate-x-full"
+          } lg:translate-x-0 lg:relative lg:w-64 z-40`}
         aria-label="Sidebar"
       >
         <div className="relative h-full flex flex-col overflow-hidden">
@@ -65,38 +64,51 @@ export const Sidebar = () => {
             <ul className="space-y-4 font-medium">
               <li>
                 <Link
-                  href={"/recibos"}
+                  href={"/sirh/timbrado"}
+                  className="flex items-center p-3 rounded-lg transition-transform duration-300 lg:hover:scale-105 lg:hover:bg-[#641c34]"
+                >
+                  <LuBellRing className="w-6 h-6" />
+                  <span className="ml-4 text-lg">Timbrado</span>
+                </Link>
+              </li>
+
+            </ul>
+
+            <ul className="space-y-4 font-medium">
+              <li>
+                <Link
+                  href={"/sirh/recibos"}
                   className="flex items-center p-3 rounded-lg transition-transform duration-300 lg:hover:scale-105 lg:hover:bg-[#641c34]"
                 >
                   <LuReceipt className="w-6 h-6" />
                   <span className="ml-4 text-lg">Recibos</span>
                 </Link>
               </li>
-             
+
             </ul>
             <ul className="space-y-4 font-medium">
               <li>
                 <Link
-                  href={"/empleados"}
+                  href={"/sirh/empleados"}
                   className="flex items-center p-3 rounded-lg transition-transform duration-300 lg:hover:scale-105 lg:hover:bg-[#641c34]"
                 >
-                   <LuUsers className="w-6 h-6" /> 
+                  <LuUsers className="w-6 h-6" />
                   <span className="ml-4 text-lg">Empleados</span>
                 </Link>
               </li>
-             
+
             </ul>
             <ul className="space-y-4 font-medium">
               <li>
                 <Link
-                  href={"/asimilables"}
+                  href={"/sirh/asimilables"}
                   className="flex items-center p-3 rounded-lg transition-transform duration-300 lg:hover:scale-105 lg:hover:bg-[#641c34]"
                 >
-                   <LuUsers className="w-6 h-6" /> 
+                  <LuUsers className="w-6 h-6" />
                   <span className="ml-4 text-lg">Asimilables</span>
                 </Link>
               </li>
-             
+
             </ul>
           </div>
         </div>

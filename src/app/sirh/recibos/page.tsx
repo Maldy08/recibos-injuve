@@ -1,6 +1,6 @@
 import { getServerSession } from "next-auth";
 import { TablaRecibos } from "./components/TablaRecibos";
-import { authOptions } from "../api/auth/[...nextauth]/route";
+import { authOptions } from "@/app/api/auth/[...nextauth]/route";
 
 export const metadata = {
   title: 'INJUVE - Sistema Integral de Recursos Humanos',
