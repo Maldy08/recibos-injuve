@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react";
 import { ImSpinner2 } from "react-icons/im";
 import { LuBellRing } from "react-icons/lu";
+import { RiFileExcel2Fill } from "react-icons/ri";
 
 interface ResumenRecibo {
     PERIODO: number;
@@ -115,13 +116,13 @@ const generarTimbradoHandler = async (periodo: number) => {
                                     <td className="px-4 py-2 text-right text-gray-700">{formatoMoneda(r.DEDUCCIONES)}</td>
                                     <td className="px-4 py-2 text-right font-semibold">{formatoMoneda(r.NETO)}</td>
                                     <td className="px-4 py-2 text-center">
-                                        <button
-                                            onClick={() => { generarTimbradoHandler(r.PERIODO) }}
-                                            className="text-blue-600 hover:text-blue-800"
-                                            title="Timbrar periodo"
-                                        >
-                                            <LuBellRing className="w-5 h-5" />
-                                        </button>
+                              <button
+                                onClick={() => { generarTimbradoHandler(r.PERIODO); }}
+                                className="bg-[#6e1e2a] hover:bg-[#5b1823] text-white p-2 rounded-full transition"
+                                title="Descargar XLSX del periodo"
+                              >
+                                <RiFileExcel2Fill className="text-base" />
+                              </button>
                                     </td>
                                 </tr>
                             ))
