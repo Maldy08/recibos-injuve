@@ -12,7 +12,7 @@ interface SidebarProps {
 
 export const Sidebar = ({ isAdmin }: SidebarProps) => {
   const [isOpen, setIsOpen] = useState(false);
-
+  const [submenuOpen, setSubmenuOpen] = useState(false);
   useEffect(() => {
     const handleResize = () => {
       if (window.innerWidth >= 1024) {
@@ -67,7 +67,7 @@ export const Sidebar = ({ isAdmin }: SidebarProps) => {
 
           <div className="flex-grow overflow-y-auto px-4 py-6">
             <ul className="space-y-4 font-medium">
-              {!isAdmin && (
+              {isAdmin && (
                 <li>
                   <Link
                     href={"/sirh/admin/timbrado"}
@@ -79,41 +79,77 @@ export const Sidebar = ({ isAdmin }: SidebarProps) => {
                 </li>
               )}
             </ul>
-
             <ul className="space-y-4 font-medium">
               <li>
-                <Link
-                  href={"/sirh/recibos"}
-                  className="flex items-center p-3 rounded-lg transition-transform duration-300 lg:hover:scale-105 lg:hover:bg-[#641c34]"
-                >
-                  <LuReceipt className="w-6 h-6" />
-                  <span className="ml-4 text-lg">Recibos</span>
-                </Link>
+                {isAdmin ? (
+                  <>
+                    <button
+                      type="button"
+                      onClick={() => setSubmenuOpen((v) => !v)}
+                      className="flex items-center w-full p-3 rounded-lg transition-transform duration-300 lg:hover:scale-105 lg:hover:bg-[#641c34] focus:outline-none"
+                    >
+                      <LuReceipt className="w-6 h-6" />
+                      <span className="ml-4 text-lg">Recibos</span>
+                      <span className="ml-auto">{submenuOpen ? "▲" : "▼"}</span>
+                    </button>
+                    {submenuOpen && (
+                      <ul className="ml-8 mt-2 space-y-2">
+                        <li>
+                          <Link
+                            href="/sirh/recibos"
+                            className="flex items-center p-2 rounded-lg transition-colors duration-200 hover:bg-[#641c34]"
+                          >
+                            <span>Mis Recibos</span>
+                          </Link>
+                        </li>
+                        <li>
+                          <Link
+                            href="/sirh/recibos/enviar-recibos"
+                            className="flex items-center p-2 rounded-lg transition-colors duration-200 hover:bg-[#641c34]"
+                          >
+                            <span>Mandar recibos</span>
+                          </Link>
+                        </li>
+                        {/* Agrega más subopciones aquí */}
+                      </ul>
+                    )}
+                  </>
+                ) : (
+                  <Link
+                    href="/sirh/recibos"
+                    className="flex items-center p-3 rounded-lg transition-transform duration-300 lg:hover:scale-105 lg:hover:bg-[#641c34]"
+                  >
+                    <LuReceipt className="w-6 h-6" />
+                    <span className="ml-4 text-lg">Recibos</span>
+                  </Link>
+                )}
               </li>
-
             </ul>
             <ul className="space-y-4 font-medium">
-              <li>
-                <Link
-                  href={"/sirh/empleados"}
-                  className="flex items-center p-3 rounded-lg transition-transform duration-300 lg:hover:scale-105 lg:hover:bg-[#641c34]"
-                >
-                  <LuUsers className="w-6 h-6" />
-                  <span className="ml-4 text-lg">Empleados</span>
-                </Link>
-              </li>
-
+              {isAdmin && (
+                <li>
+                  <Link
+                    href={"/sirh/admin/empleados"}
+                    className="flex items-center p-3 rounded-lg transition-transform duration-300 lg:hover:scale-105 lg:hover:bg-[#641c34]"
+                  >
+                    <LuUsers className="w-6 h-6" />
+                    <span className="ml-4 text-lg">Empleados</span>
+                  </Link>
+                </li>
+              )}
             </ul>
             <ul className="space-y-4 font-medium">
-              <li>
-                <Link
-                  href={"/sirh/asimilables"}
-                  className="flex items-center p-3 rounded-lg transition-transform duration-300 lg:hover:scale-105 lg:hover:bg-[#641c34]"
-                >
-                  <LuUsers className="w-6 h-6" />
-                  <span className="ml-4 text-lg">Asimilables</span>
-                </Link>
-              </li>
+              {isAdmin && (
+                <li>
+                  <Link
+                    href={"/sirh/admin/asimilables"}
+                    className="flex items-center p-3 rounded-lg transition-transform duration-300 lg:hover:scale-105 lg:hover:bg-[#641c34]"
+                  >
+                    <LuUsers className="w-6 h-6" />
+                    <span className="ml-4 text-lg">Asimilables</span>
+                  </Link>
+                </li>
+              )}
 
             </ul>
           </div>

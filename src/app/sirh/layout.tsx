@@ -19,7 +19,7 @@ export default async function OficiosLayout({
 
   return (
     <div className="flex h-screen">
-      <Sidebar isAdmin={admin == 1 ? true : false} /> {/* Mueve el sidebar fuera del flex principal para asegurarte de que ocupe su espacio adecuado */}
+      <Sidebar isAdmin={admin === 1 ? true : false} /> {/* Mueve el sidebar fuera del flex principal para asegurarte de que ocupe su espacio adecuado */}
       <div className="flex-1 flex flex-col overflow-hidden">
         <Header />
         <div className="flex h-full ml-4 mt-16"> {/* Añade margen izquierdo para el sidebar y superior para el header */}
