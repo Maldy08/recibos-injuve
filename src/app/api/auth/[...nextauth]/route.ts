@@ -33,6 +33,7 @@ export const authOptions: NextAuthOptions = {
             rfc: data.empleado.RFC,
             curp: data.empleado.CURP,
             tipo: data.empleado.TIPO,
+            admin: data.empleado.ADMIN,
           };
         }
         return null;
@@ -58,6 +59,7 @@ export const authOptions: NextAuthOptions = {
         session.user.rfc = token.rfc;
         session.user.curp = token.curp;
         session.user.tipo = token.tipo;
+        session.user.admin = token.admin;
         //session.user.empleadoId = token.empleadoId;
         
       }
@@ -75,6 +77,7 @@ export const authOptions: NextAuthOptions = {
         token.rfc = user.rfc;
         token.curp = user.curp;
         token.tipo = user.tipo;
+        token.admin = user.admin;
       }
       return token;
     },

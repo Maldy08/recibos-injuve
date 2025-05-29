@@ -5,7 +5,12 @@ import Link from "next/link";
 import Image from "next/image";
 import { LuReceipt, LuUsers, LuBellRing } from "react-icons/lu";
 
-export const Sidebar = () => {
+interface SidebarProps {
+  isAdmin?: boolean;
+}
+
+
+export const Sidebar = ({ isAdmin }: SidebarProps) => {
   const [isOpen, setIsOpen] = useState(false);
 
   useEffect(() => {
@@ -62,16 +67,17 @@ export const Sidebar = () => {
 
           <div className="flex-grow overflow-y-auto px-4 py-6">
             <ul className="space-y-4 font-medium">
-              <li>
-                <Link
-                  href={"/sirh/timbrado"}
-                  className="flex items-center p-3 rounded-lg transition-transform duration-300 lg:hover:scale-105 lg:hover:bg-[#641c34]"
-                >
-                  <LuBellRing className="w-6 h-6" />
-                  <span className="ml-4 text-lg">Timbrado</span>
-                </Link>
-              </li>
-
+              {!isAdmin && (
+                <li>
+                  <Link
+                    href={"/sirh/admin/timbrado"}
+                    className="flex items-center p-3 rounded-lg transition-transform duration-300 lg:hover:scale-105 lg:hover:bg-[#641c34]"
+                  >
+                    <LuBellRing className="w-6 h-6" />
+                    <span className="ml-4 text-lg">Timbrado</span>
+                  </Link>
+                </li>
+              )}
             </ul>
 
             <ul className="space-y-4 font-medium">

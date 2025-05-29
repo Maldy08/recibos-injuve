@@ -11,6 +11,7 @@ interface IUser extends DefaultUser {
     rfc?: string; // Corresponde a RFC
     curp?: string; // Corresponde a CURP
     tipo?: number;
+    admin?:number; // Corresponde a ADMIN
 
 
 }

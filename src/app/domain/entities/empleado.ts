@@ -6,4 +6,5 @@ export interface Empleado {
     RFC: string;
     CURP: string;
     TIPO: number;
+    ADMIN: number;
 }
