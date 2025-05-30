@@ -15,7 +15,7 @@ export const metadata = {
 };
 
 export default async function TimbradoPage() {
-  const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}nomina/resumen/1`, {
+  const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}nomina/resumen/2`, {
     cache: "no-store",
   });
   const data = await res.json();

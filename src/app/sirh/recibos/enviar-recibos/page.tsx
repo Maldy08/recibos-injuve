@@ -1,4 +1,5 @@
-import TablaTimbrado from "../../admin/timbrado/components/TablaTimbrado";
+
+import TablaEnviarRecibos from "./components/TablaEnviarRecibos";
 
 interface ResumenRecibo {
     PERIODO: number;
@@ -7,6 +8,12 @@ interface ResumenRecibo {
     DEDUCCIONES: number;
     NETO: number;
 }
+
+export const metadata = {
+  title: 'INJUVE - Sistema Integral de Recursos Humanos -  Enviar Recibos de Nómina',
+  keywords: ['INJUVE', 'Recibos de Nómina', 'Enviar Recibos', 'Sistema Integral de Recursos Humanos'],
+  description: 'Eviar Recibos de Nómina',
+};
 
 export default async function EnviarRecibosPage() {
     const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}nomina/resumen/1`, {
@@ -22,7 +29,7 @@ export default async function EnviarRecibosPage() {
             </div>
 
             <div className="overflow-x-auto max-w-3xl mx-auto px-4">
-                <TablaTimbrado resumen={resumen}  />
+                <TablaEnviarRecibos resumen={resumen}  />
             </div>
         </div>
     );
