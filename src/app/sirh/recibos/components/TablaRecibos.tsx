@@ -1,10 +1,9 @@
 'use client';
 
 import usePdf from "@/app/hooks/usePdf";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { FaRegFilePdf } from "react-icons/fa";
-import { ImSpinner2 } from "react-icons/im"; // spinner
-
+import { Table, Column } from "@/app/sirh/shared/Table";
 
 interface Recibo {
     empleado: number;
@@ -21,123 +20,77 @@ interface Props {
     rfc: string;
     curp: string;
     tipo: number;
+    recibos: Recibo[];
+    anioInicial: string;
 }
 
-export const TablaRecibos = ({ empleado, nombre, rfc, curp, tipo }: Props) => {
-    const [recibos, setRecibos] = useState<Recibo[]>([]);
-    const [anioSeleccionado, setAnioSeleccionado] = useState<string>("2025");
-    const [loading, setLoading] = useState<boolean>(true);
+const columns: Column<Recibo>[] = [
+    { key: "periodo", label: "Periodo" },
+    { key: "fechaPago", label: "Fecha de Pago" },
+    { key: "percepciones", label: "Percepciones", align: "right", render: (v: string) => Number(v).toLocaleString("es-MX", { style: "currency", currency: "MXN" }) },
+    { key: "deducciones", label: "Deducciones", align: "right", render: (v: string) => Number(v).toLocaleString("es-MX", { style: "currency", currency: "MXN" }) },
+    { key: "neto", label: "Neto", align: "right", render: (v: string) => Number(v).toLocaleString("es-MX", { style: "currency", currency: "MXN" }) },
+];
+
+export const TablaRecibos = ({
+    empleado,
+    nombre,
+    rfc,
+    curp,
+    tipo,
+    recibos,
+    anioInicial
+}: Props) => {
+    const [generandoRecibo, setGenerandoRecibo] = useState<boolean>(false);
     const { abrirPDF } = usePdf();
 
-    const formatoMoneda = (valor: string) =>
-        Number(valor).toLocaleString("es-MX", {
-            style: "currency",
-            currency: "MXN",
-        });
-
     const openPdfHandler = async (empleado: number, periodo: number) => {
-        setLoading(true)
+        setGenerandoRecibo(true);
         await abrirPDF(empleado, periodo, tipo);
-        setLoading(false);
-    }
-
-    useEffect(() => {
-        setLoading(true);
-        fetch(`${process.env.NEXT_PUBLIC_API_URL}nomina/recibos/${empleado}/${tipo}`)
-            .then(res => res.json())
-            .then(data => {
-                if (Array.isArray(data)) {
-                    const filtrados = data
-                        .filter((r: Recibo) => r.fechaPago.includes(anioSeleccionado))
-                        .sort((a, b) => b.periodo - a.periodo);
-                    setRecibos(filtrados);
-                }
-            })
-            .catch(err => console.error(err))
-            .finally(() => setLoading(false));
-    }, [anioSeleccionado, empleado]);
-
-    const cambiarAnio = (e: React.ChangeEvent<HTMLSelectElement>) => {
-        setAnioSeleccionado(e.target.value);
+        setGenerandoRecibo(false);
     };
 
+    // Si quieres cambiar de año, deberías hacerlo en el page y volver a pasar los props
+
     return (
-        <div className="max-w-6xl mx-auto px-4">
+        <div className="mx-auto px-4">
             <div className="flex items-center justify-between mt-6 mb-4">
-                <div>
-                    <h2 className="text-lg font-semibold text-[#6e1e2a] flex items-center gap-2">
-                        {
-                            tipo === 1 ? "Recibos de Nómina" : "Recibos de Honorarios"
-                        }
+                <div className="bg-white rounded-xl shadow p-5 flex flex-col gap-2 border border-gray-100">
+                    <h2 className="text-xl font-bold text-[#6e1e2a] flex items-center gap-2 mb-2">
+                        {tipo === 1 ? "Recibos de Nómina" : "Recibos de Honorarios"}
                     </h2>
-                    <p className="text-sm text-gray-600"><span className=" font-bold">EMPLEADO:</span> {nombre}</p>
-                    <p className="text-sm text-gray-600"><span className="font-bold">NUMERO:</span> {empleado}</p>
-                    <p className="text-sm text-gray-600"><span className="font-bold">RFC:</span> {rfc}</p>
-                    <p className="text-sm text-gray-600"><span className="font-bold">CURP:</span> {curp}</p>
-                </div>
-                <div>
-                    <label htmlFor="anio" className="mr-2 text-sm text-gray-600">Año:</label>
-                    <select
-                        id="anio"
-                        className="border rounded px-2 py-1 text-sm"
-                        value={anioSeleccionado}
-                        onChange={cambiarAnio}
-                    >
-                        <option value="2024">2024</option>
-                        <option value="2025">2025</option>
-                        <option value="2026">2026</option>
-                    </select>
-                </div>
-            </div>
-
-            <div className={`relative shadow-lg rounded-xl border border-gray-200 overflow-hidden ${loading ? "opacity-50" : ""}`}>
-                {loading && (
-                    <div className="absolute inset-0 flex items-center justify-center bg-white bg-opacity-60 z-10">
-                        <ImSpinner2 className="animate-spin text-3xl text-[#6e1e2a]" />
+                    <div className="grid grid-cols-2 gap-x-6 gap-y-1 text-sm text-gray-700">
+                        <span><span className="font-bold">Empleado:</span> {nombre}</span>
+                        <span><span className="font-bold">Número:</span> {empleado}</span>
+                        <span><span className="font-bold">RFC:</span> {rfc}</span>
+                        <span><span className="font-bold">CURP:</span> {curp}</span>
                     </div>
-                )}
-
-                <table className="min-w-full divide-y divide-gray-200 text-sm text-left">
-                    <thead className="bg-[#383838] text-white uppercase text-xs">
-                        <tr>
-                            <th className="px-4 py-3">Periodo</th>
-                            <th className="px-4 py-3">Fecha de Pago</th>
-                            <th className="px-4 py-3 text-right">Percepciones</th>
-                            <th className="px-4 py-3 text-right">Deducciones</th>
-                            <th className="px-4 py-3 text-right">Neto</th>
-                            <th className="px-4 py-3 text-center">Ver</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {recibos.length === 0 && !loading ? (
-                            <tr>
-                                <td colSpan={6} className="text-center py-4 text-gray-500">
-                                    No hay recibos disponibles.
-                                </td>
-                            </tr>
-                        ) : (
-                            recibos.map((r) => (
-                                <tr key={r.periodo} className="hover:bg-gray-50 transition-colors">
-                                    <td className="px-4 py-2 font-medium text-gray-700">{r.periodo}</td>
-                                    <td className="px-4 py-2 text-gray-600">{r.fechaPago}</td>
-                                    <td className="px-4 py-2 text-right text-gray-700">{formatoMoneda(r.percepciones)}</td>
-                                    <td className="px-4 py-2 text-right text-gray-700">{formatoMoneda(r.deducciones)}</td>
-                                    <td className="px-4 py-2 text-right font-semibold">{formatoMoneda(r.neto)}</td>
-                                    <td className="px-4 py-2 text-center">
-                                        <button
-                                            onClick={() => openPdfHandler(r.empleado, r.periodo)}
-                                            className="text-blue-600 hover:text-blue-800"
-                                            aria-label={`Ver PDF del periodo ${r.periodo}`}
-                                        >
-                                            <FaRegFilePdf className="w-5 h-5" />
-                                        </button>
-                                    </td>
-                                </tr>
-                            ))
-                        )}
-                    </tbody>
-                </table>
+                </div>
+                <div className="flex flex-col items-end">
+                    <label htmlFor="anio" className="mb-1 text-sm text-gray-600">Año:</label>
+                    <input
+                        id="anio"
+                        className="border border-gray-300 rounded px-3 py-1 text-sm bg-gray-50 font-semibold text-center w-24"
+                        value={anioInicial}
+                        readOnly
+                    />
+                </div>
             </div>
+
+            <Table
+                data={recibos}
+                columns={columns}
+                loading={generandoRecibo}
+                acciones={(row) => (
+                    <button
+                        onClick={() => openPdfHandler(row.empleado, row.periodo)}
+                        className="text-blue-600 hover:text-blue-800"
+                        aria-label={`Ver PDF del periodo ${row.periodo}`}
+                    >
+                        <FaRegFilePdf className="w-5 h-5" />
+                    </button>
+                )}
+            />
         </div>
     );
 };

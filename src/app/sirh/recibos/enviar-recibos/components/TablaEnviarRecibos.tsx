@@ -14,7 +14,6 @@ interface ResumenRecibo {
 
 interface Props {
   resumen: ResumenRecibo[];
-
 }
 
 const columns: Column<ResumenRecibo>[] = [
@@ -27,7 +26,6 @@ const columns: Column<ResumenRecibo>[] = [
 
 export default function TablaEnviarRecibos({ resumen }: Props) {
   const [loading, setLoading] = useState(false);
-
   const [progress, setProgress] = useState<number | null>(null);
   const [progressTotal, setProgressTotal] = useState<number | null>(null);
 
@@ -37,9 +35,8 @@ export default function TablaEnviarRecibos({ resumen }: Props) {
     setProgressTotal(null);
 
     // Construye la URL con los parámetros (SSE solo acepta GET)
- const url = `${process.env.NEXT_PUBLIC_API_URL}send-email/enviar-recibos?periodo=${periodo}&tipo=${tipo}`;
+    const url = `${process.env.NEXT_PUBLIC_API_URL}send-email/enviar-recibos?periodo=${periodo}&tipo=${tipo}`;
     const eventSource = new EventSource(url);
-
     eventSource.onmessage = (event) => {
       const data = JSON.parse(event.data);
       if (data.progreso !== undefined && data.total !== undefined) {
@@ -74,16 +71,27 @@ export default function TablaEnviarRecibos({ resumen }: Props) {
   return (
     <div className="relative">
       {loading && progressTotal !== null && (
-        <div className="fixed inset-0 bg-black bg-opacity-30 flex flex-col items-center justify-center z-50">
-          <div className="w-64 h-2 bg-gray-200 rounded-full overflow-hidden mb-4">
-            <div
-              className="h-full bg-[#6e1e2a] transition-all"
-              style={{ width: `${(progress! / progressTotal!) * 100}%` }}
-            ></div>
+        <div className="fixed inset-0 bg-black bg-opacity-40 flex flex-col items-center justify-center z-50">
+          <div className="flex flex-col items-center gap-4 bg-white rounded-xl shadow-lg px-8 py-6">
+            <div className="flex items-center gap-3">
+              <svg className="animate-spin h-6 w-6 text-[#6e1e2a]" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                <circle className="opacity-25" cx="12" cy="12" r="10" stroke="#6e1e2a" strokeWidth="4"></circle>
+                <path className="opacity-75" fill="#6e1e2a" d="M4 12a8 8 0 018-8v4a4 4 0 00-4 4H4z"></path>
+              </svg>
+              <span className="text-[#6e1e2a] font-semibold text-lg">
+                Enviando recibos...
+              </span>
+            </div>
+            <div className="w-64 h-4 bg-gray-200 rounded-full overflow-hidden shadow-inner">
+              <div
+                className="h-full bg-gradient-to-r from-[#6e1e2a] to-[#a8324a] transition-all duration-300"
+                style={{ width: `${(progress! / progressTotal!) * 100}%` }}
+              ></div>
+            </div>
+            <span className="text-[#6e1e2a] font-medium">
+              {progress} de {progressTotal} &nbsp;|&nbsp; {Math.round((progress! / progressTotal!) * 100)}%
+            </span>
           </div>
-          <span className="text-white font-semibold">
-            Enviando recibos... {progress} de {progressTotal}
-          </span>
         </div>
       )}
       <Table
@@ -102,4 +110,4 @@ export default function TablaEnviarRecibos({ resumen }: Props) {
       />
     </div>
   );
-} 
+}

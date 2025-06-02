@@ -1,13 +1,13 @@
 'use client';
 
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { ImSpinner2 } from "react-icons/im";
 import { FaUser, FaRegFilePdf } from "react-icons/fa";
 import { MdOutlineEmail } from "react-icons/md";
-import { LuStickyNote } from "react-icons/lu"; // icono de recibo
+import { LuStickyNote } from "react-icons/lu";
 import usePdf from "@/app/hooks/usePdf";
 import useSendMail from "@/app/hooks/useSendMail";
-
+import { Table, Column } from "@/app/sirh/shared/Table";
 
 interface Empleado {
   EMPLEADO: number;
@@ -30,32 +30,27 @@ interface Periodo {
 }
 
 interface Props {
+  empleados: Empleado[];
   tipo: number;
 }
 
-export const TablaEmpleados = ({ tipo }: Props) => {
-  const [empleados, setEmpleados] = useState<Empleado[]>([]);
-  const [loading, setLoading] = useState<boolean>(true);
+const columns: Column<Empleado>[] = [
+  { key: "EMPLEADO", label: "Empleado" },
+  { key: "NOMBRE", label: "Nombre", render: (v, row) => `${row.NOMBRE} ${row.APPAT} ${row.APMAT}` },
+  { key: "RFC", label: "RFC" },
+  { key: "CURP", label: "CURP" },
+  { key: "EMAIL", label: "Correo" },
+];
+
+export const TablaEmpleados = ({ empleados, tipo }: Props) => {
   const [busqueda, setBusqueda] = useState<string>("");
   const [sortKey, setSortKey] = useState<keyof Empleado>("EMPLEADO");
   const [sortOrder, setSortOrder] = useState<"asc" | "desc">("asc");
-
   const [empleadoSeleccionado, setEmpleadoSeleccionado] = useState<Empleado | null>(null);
   const [periodos, setPeriodos] = useState<Periodo[]>([]);
   const [loadingPeriodos, setLoadingPeriodos] = useState<boolean>(false);
   const { abrirPDF } = usePdf();
   const { sendMail } = useSendMail();
-
-  useEffect(() => {
-    setLoading(true);
-    fetch(`${process.env.NEXT_PUBLIC_API_URL}empleados/${tipo}`)
-      .then((res) => res.json())
-      .then((data) => {
-        if (Array.isArray(data)) setEmpleados(data);
-      })
-      .catch((err) => console.error("Error al obtener empleados:", err))
-      .finally(() => setLoading(false));
-  }, []);
 
   const ordenar = (campo: keyof Empleado) => {
     if (campo === sortKey) {
@@ -74,7 +69,6 @@ export const TablaEmpleados = ({ tipo }: Props) => {
     .sort((a, b) => {
       const valorA = a[sortKey];
       const valorB = b[sortKey];
-
       if (typeof valorA === "number" && typeof valorB === "number") {
         return sortOrder === "asc" ? valorA - valorB : valorB - valorA;
       } else {
@@ -87,23 +81,16 @@ export const TablaEmpleados = ({ tipo }: Props) => {
   const abrirModalPeriodos = async (emp: Empleado) => {
     setEmpleadoSeleccionado(emp);
     setLoadingPeriodos(true);
-
     try {
       const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}nomina/recibos/${emp.EMPLEADO}/${tipo}`);
       const data = await res.json();
-      if (Array.isArray(data)) {
-        setPeriodos(data);
-      } else {
-        setPeriodos([]);
-      }
+      setPeriodos(Array.isArray(data) ? data : []);
     } catch (error) {
-      console.error("Error al cargar periodos:", error);
       setPeriodos([]);
     } finally {
       setLoadingPeriodos(false);
     }
   };
-
 
   const openPdfHandler = async (empleado: number, periodo: number) => {
     setLoadingPeriodos(true);
@@ -116,8 +103,7 @@ export const TablaEmpleados = ({ tipo }: Props) => {
     try {
       await sendMail(empleado, periodo, correo, tipo);
       alert("Correo enviado exitosamente");
-    } catch (error) {
-      console.error("Error al enviar el correo:", error);
+    } catch {
       alert("Error al enviar el correo");
     } finally {
       setLoadingPeriodos(false);
@@ -140,84 +126,34 @@ export const TablaEmpleados = ({ tipo }: Props) => {
         />
       </div>
 
-      <div className={`relative rounded-xl border border-gray-200 overflow-hidden ${loading ? "opacity-50" : ""}`}>
-        {loading && (
-          <div className="absolute inset-0 flex items-center justify-center bg-white bg-opacity-60 z-10">
-            <ImSpinner2 className="animate-spin text-3xl text-[#6e1e2a]" />
-          </div>
+      <Table
+        data={empleadosFiltrados}
+        columns={columns}
+        loading={false}
+        acciones={(emp) => (
+          <button
+            onClick={() => abrirModalPeriodos(emp)}
+            className="text-white bg-primary-900 hover:bg-primary-800 rounded-lg flex items-center justify-center p-2 text-xs"
+          >
+            <LuStickyNote />
+            <span className="ml-2">Periodos</span>
+          </button>
         )}
-
-        <table className="min-w-full divide-y divide-gray-200 text-sm text-left">
-          <thead className="bg-[#383838] text-white uppercase text-xs">
-            <tr>
-              <th onClick={() => ordenar("EMPLEADO")} className="px-4 py-3 cursor-pointer hover:underline">
-                Empleado {sortKey === "EMPLEADO" && (sortOrder === "asc" ? "↑" : "↓")}
-              </th>
-              <th onClick={() => ordenar("NOMBRE")} className="px-4 py-3 cursor-pointer hover:underline">
-                Nombre {sortKey === "NOMBRE" && (sortOrder === "asc" ? "↑" : "↓")}
-              </th>
-              <th onClick={() => ordenar("RFC")} className="px-4 py-3 cursor-pointer hover:underline">
-                RFC {sortKey === "RFC" && (sortOrder === "asc" ? "↑" : "↓")}
-              </th>
-              <th onClick={() => ordenar("CURP")} className="px-4 py-3 cursor-pointer hover:underline">
-                CURP {sortKey === "CURP" && (sortOrder === "asc" ? "↑" : "↓")}
-              </th>
-              <th onClick={() => ordenar("EMAIL")} className="px-4 py-3 cursor-pointer hover:underline">
-                Correo {sortKey === "EMAIL" && (sortOrder === "asc" ? "↑" : "↓")}
-              </th>
-              <th className="px-4 py-3 text-center">Acciones</th>
-            </tr>
-          </thead>
-          <tbody>
-            {empleadosFiltrados.length === 0 && !loading ? (
-              <tr>
-                <td colSpan={6} className="text-center py-4 text-gray-500">
-                  No hay empleados disponibles.
-                </td>
-              </tr>
-            ) : (
-              empleadosFiltrados.map((emp) => (
-                <tr key={emp.EMPLEADO} className="hover:bg-gray-50 text-xs transition-colors">
-                  <td className="px-4 py-2 font-medium text-gray-700">{emp.EMPLEADO}</td>
-                  <td className="px-4 py-2 text-gray-600">{`${emp.NOMBRE} ${emp.APPAT} ${emp.APMAT}`}</td>
-                  <td className="px-4 py-2 text-gray-600">{emp.RFC}</td>
-                  <td className="px-4 py-2 text-gray-600">{emp.CURP}</td>
-                  <td className="px-4 py-2 text-gray-600">{emp.EMAIL}</td>
-                  <td className="px-4 py-2 text-center">
-                    <button
-                      onClick={() => abrirModalPeriodos(emp)}
-                      className="text-white bg-primary-900 hover:bg-primary-800 rounded-lg flex items-center justify-center p-2 text-xs"
-                    >
-                      <LuStickyNote className="" />
-                      <span className="ml-2 ">Periodos</span>
-                    </button>
-                  </td>
-                </tr>
-              ))
-            )}
-          </tbody>
-        </table>
-      </div>
+      />
 
       {/* Modal de Periodos */}
       {empleadoSeleccionado && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-gradient-to-br from-black/70 to-black/60 backdrop-blur-sm px-4">
           <div className="bg-white rounded-2xl shadow-2xl w-full max-w-4xl p-6 md:p-8 relative animate-fade-in overflow-hidden">
-
-            {/* Botón de cerrar */}
             <button
               onClick={() => { setEmpleadoSeleccionado(null); setPeriodos([]); }}
               className="absolute top-4 right-4 bg-gray-100 hover:bg-gray-300 text-gray-800 rounded-full p-2 transition"
             >
               ✕
             </button>
-
-            {/* Título */}
             <h2 className="text-xl md:text-2xl font-bold text-center text-[#6e1e2a] mb-6">
               Periodos de {empleadoSeleccionado.NOMBRE} {empleadoSeleccionado.APPAT}
             </h2>
-
-            {/* Contenido */}
             {loadingPeriodos ? (
               <div className="flex justify-center items-center py-20">
                 <ImSpinner2 className="animate-spin text-5xl text-[#6e1e2a]" />

@@ -1,7 +1,8 @@
 'use client'
 
-import { ImSpinner2 } from "react-icons/im";
-import React from "react";
+import React, { useState } from "react";
+import LoadingOverlay from "./LoadingOverlay";
+import { FaChevronLeft, FaChevronRight } from "react-icons/fa";
 
 export interface Column<T> {
   key: keyof T;
@@ -15,6 +16,7 @@ interface TableProps<T> {
   columns: Column<T>[];
   loading?: boolean;
   acciones?: (row: T) => React.ReactNode;
+  rowsPerPage?: number;
 }
 
 export const Table = <T,>({
@@ -22,48 +24,64 @@ export const Table = <T,>({
   columns,
   loading = false,
   acciones,
+  rowsPerPage = 10,
 }: TableProps<T>) => {
+  const [page, setPage] = useState(1);
+
+  const totalPages = Math.max(1, Math.ceil(data.length / rowsPerPage));
+  const paginatedData = data.slice((page - 1) * rowsPerPage, page * rowsPerPage);
+
+  const handlePrev = () => setPage((p) => Math.max(1, p - 1));
+  const handleNext = () => setPage((p) => Math.min(totalPages, p + 1));
+
+  React.useEffect(() => {
+    setPage(1);
+  }, [data]);
+
   return (
-    <div className={`relative shadow-lg rounded-xl border border-gray-200 overflow-hidden ${loading ? "opacity-50" : ""}`}>
+    <div className="relative rounded-2xl shadow-lg border border-gray-200 overflow-x-auto bg-white w-full" style={{ overflowY: "visible" }}>
       {loading && (
-        <div className="absolute inset-0 flex items-center justify-center bg-white bg-opacity-60 z-10">
-          <ImSpinner2 className="animate-spin text-3xl text-[#6e1e2a]" />
+        <div className="absolute inset-0 flex items-center justify-center z-10 bg-white bg-opacity-80">
+          <LoadingOverlay text="Cargando..." />
         </div>
       )}
-      <table className="min-w-full divide-y divide-gray-200 text-sm text-left">
-        <thead className="bg-[#383838] text-white uppercase text-xs">
+      <table className="min-w-full w-full divide-y divide-gray-200 text-sm text-left font-sans">
+        <thead className=" bg-gray-800 text-white uppercase text-xs">
           <tr>
             {columns.map((col) => (
               <th
                 key={String(col.key)}
-                className={`px-4 py-3 ${col.align === "right" ? "text-right" : col.align === "center" ? "text-center" : ""}`}
+                className={`px-5 py-3 ${col.align === "right" ? "text-right" : col.align === "center" ? "text-center" : "text-left"} font-semibold tracking-wider`}
               >
                 {col.label}
               </th>
             ))}
-            {acciones && <th className="px-4 py-3 text-center">ACCIONES</th>}
+            {acciones && <th className="px-5 py-3 text-center font-semibold tracking-wider">ACCIONES</th>}
           </tr>
         </thead>
         <tbody>
-          {data.length === 0 && !loading ? (
+          {paginatedData.length === 0 && !loading ? (
             <tr>
-              <td colSpan={columns.length + (acciones ? 1 : 0)} className="text-center py-4 text-gray-500">
+              <td colSpan={columns.length + (acciones ? 1 : 0)} className="text-center py-8 text-gray-400 italic">
                 No hay datos disponibles.
               </td>
             </tr>
           ) : (
-            data.map((row, idx) => (
-              <tr key={idx} className="hover:bg-gray-50 transition-colors">
+            paginatedData.map((row, idx) => (
+              <tr
+                key={idx}
+                className="hover:bg-[#f6e9ec] transition-colors duration-200 border-b border-gray-100"
+              >
                 {columns.map((col) => (
                   <td
                     key={String(col.key)}
-                    className={`px-4 py-2 ${col.align === "right" ? "text-right" : col.align === "center" ? "text-center" : ""}`}
+                    className={`px-5 py-3 ${col.align === "right" ? "text-right" : col.align === "center" ? "text-center" : ""}`}
                   >
-                   {col.render ? col.render(row[col.key], row) : String(row[col.key] ?? "")}
+                    {col.render ? col.render(row[col.key], row) : String(row[col.key] ?? "")}
                   </td>
                 ))}
                 {acciones && (
-                  <td className="px-4 py-2 text-center">
+                  <td className="px-5 py-3 text-center">
                     {acciones(row)}
                   </td>
                 )}
@@ -72,6 +90,32 @@ export const Table = <T,>({
           )}
         </tbody>
       </table>
+      {/* Paginación elegante alineada a la derecha */}
+      {totalPages > 1 && (
+        <div className="flex justify-end items-center gap-2 py-4 pr-6">
+          <button
+            onClick={handlePrev}
+            disabled={page === 1}
+            className="w-9 h-9 flex items-center justify-center rounded-full bg-[#6e1e2a] text-white hover:bg-[#5b1823] disabled:opacity-40 disabled:cursor-not-allowed transition"
+            aria-label="Página anterior"
+            title="Anterior"
+          >
+            <FaChevronLeft />
+          </button>
+          <span className="text-sm font-medium select-none">
+            Página <span className="font-bold">{page}</span> de <span className="font-bold">{totalPages}</span>
+          </span>
+          <button
+            onClick={handleNext}
+            disabled={page === totalPages}
+            className="w-9 h-9 flex items-center justify-center rounded-full bg-[#6e1e2a] text-white hover:bg-[#5b1823] disabled:opacity-40 disabled:cursor-not-allowed transition"
+            aria-label="Página siguiente"
+            title="Siguiente"
+          >
+            <FaChevronRight />
+          </button>
+        </div>
+      )}
     </div>
   );
 };

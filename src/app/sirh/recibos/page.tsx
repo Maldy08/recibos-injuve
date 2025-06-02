@@ -7,9 +7,19 @@ export const metadata = {
   description: 'Consulta de Recibos de Nómina',
 };
 
+async function getRecibos(empleado: number, tipo: number, anio: string) {
+  const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}nomina/recibos/${empleado}/${tipo}`, { cache: "no-store" });
+  const data = await res.json();
+  if (Array.isArray(data)) {
+    return data
+      .filter((r: any) => r.fechaPago.includes(anio))
+      .sort((a: any, b: any) => b.periodo - a.periodo);
+  }
+  return [];
+}
+
 export default async function RecibosPage() {
-  //redirect('/oficios');
-   const session = await getServerSession(authOptions);
+  const session = await getServerSession(authOptions);
   if (!session) {
     return (
       <div className="flex items-center justify-center h-screen">
@@ -23,13 +33,23 @@ export default async function RecibosPage() {
   const rfc = session.user?.rfc;
   const curp = session.user?.curp;
   const tipo = session.user?.tipo;
+  const anio = "2025"; // Puedes obtenerlo de query params o dejarlo fijo
+
+  const recibos = await getRecibos(empleado!, tipo!, anio);
 
   return (
     <div>
-        <div className="overflow-x-auto">
-          <TablaRecibos empleado={empleado!} nombre={nombre!} rfc={rfc!} curp={curp!} tipo={tipo!}/>
-        </div>
-
+      <div className="overflow-x-auto">
+        <TablaRecibos
+          empleado={empleado!}
+          nombre={nombre!}
+          rfc={rfc!}
+          curp={curp!}
+          tipo={tipo!}
+          recibos={recibos}
+          anioInicial={anio}
+        />
+      </div>
     </div>
   );
 }
