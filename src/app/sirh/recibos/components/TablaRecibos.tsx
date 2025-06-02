@@ -83,8 +83,9 @@ export const TablaRecibos = ({
                 loading={generandoRecibo}
                 acciones={(row) => (
                     <button
+                        title="Ver PDF del periodo"
                         onClick={() => openPdfHandler(row.empleado, row.periodo)}
-                        className="text-blue-600 hover:text-blue-800"
+                        className=""
                         aria-label={`Ver PDF del periodo ${row.periodo}`}
                     >
                         <FaRegFilePdf className="w-5 h-5" />

@@ -1,8 +1,8 @@
-'use client'
+'use client';
 
-import React, { useState } from "react";
-import LoadingOverlay from "./LoadingOverlay";
-import { FaChevronLeft, FaChevronRight } from "react-icons/fa";
+import React, { useState, useEffect } from "react";
+import { FaChevronLeft, FaChevronRight, FaEye, FaEdit, FaTrash } from "react-icons/fa";
+import LoadingOverlay from "./LoadingOverlay"; // Asegúrate de tener este componente
 
 export interface Column<T> {
   key: keyof T;
@@ -27,42 +27,52 @@ export const Table = <T,>({
   rowsPerPage = 10,
 }: TableProps<T>) => {
   const [page, setPage] = useState(1);
-
   const totalPages = Math.max(1, Math.ceil(data.length / rowsPerPage));
   const paginatedData = data.slice((page - 1) * rowsPerPage, page * rowsPerPage);
 
   const handlePrev = () => setPage((p) => Math.max(1, p - 1));
   const handleNext = () => setPage((p) => Math.min(totalPages, p + 1));
 
-  React.useEffect(() => {
+  useEffect(() => {
     setPage(1);
   }, [data]);
 
   return (
-    <div className="relative rounded-2xl shadow-lg border border-gray-200 overflow-x-auto bg-white w-full" style={{ overflowY: "visible" }}>
+    <div className="relative rounded-2xl border border-gray-200 shadow-md bg-white overflow-x-auto w-full">
       {loading && (
         <div className="absolute inset-0 flex items-center justify-center z-10 bg-white bg-opacity-80">
           <LoadingOverlay text="Cargando..." />
         </div>
       )}
-      <table className="min-w-full w-full divide-y divide-gray-200 text-sm text-left font-sans">
-        <thead className=" bg-gray-800 text-white uppercase text-xs">
+      <table className="min-w-full divide-y divide-gray-200 text-sm font-sans">
+        <thead className="sticky top-0 z-10 bg-gray-100 text-gray-700 uppercase text-xs shadow-sm">
           <tr>
+            {acciones && (
+              <th className="px-5 py-3 text-center font-semibold tracking-wider">ACCIONES</th>
+            )}
             {columns.map((col) => (
               <th
                 key={String(col.key)}
-                className={`px-5 py-3 ${col.align === "right" ? "text-right" : col.align === "center" ? "text-center" : "text-left"} font-semibold tracking-wider`}
+                className={`px-5 py-3 ${
+                  col.align === "right"
+                    ? "text-right"
+                    : col.align === "center"
+                    ? "text-center"
+                    : "text-left"
+                } font-semibold tracking-wider`}
               >
                 {col.label}
               </th>
             ))}
-            {acciones && <th className="px-5 py-3 text-center font-semibold tracking-wider">ACCIONES</th>}
           </tr>
         </thead>
         <tbody>
           {paginatedData.length === 0 && !loading ? (
             <tr>
-              <td colSpan={columns.length + (acciones ? 1 : 0)} className="text-center py-8 text-gray-400 italic">
+              <td
+                colSpan={columns.length + (acciones ? 1 : 0)}
+                className="text-center py-8 text-gray-400 italic"
+              >
                 No hay datos disponibles.
               </td>
             </tr>
@@ -70,34 +80,42 @@ export const Table = <T,>({
             paginatedData.map((row, idx) => (
               <tr
                 key={idx}
-                className="hover:bg-[#f6e9ec] transition-colors duration-200 border-b border-gray-100"
+                className="even:bg-white odd:bg-gray-50 hover:bg-[#f6e9ec] transition-colors duration-200 border-b border-gray-100"
               >
-                {columns.map((col) => (
-                  <td
-                    key={String(col.key)}
-                    className={`px-5 py-3 ${col.align === "right" ? "text-right" : col.align === "center" ? "text-center" : ""}`}
-                  >
-                    {col.render ? col.render(row[col.key], row) : String(row[col.key] ?? "")}
-                  </td>
-                ))}
                 {acciones && (
                   <td className="px-5 py-3 text-center">
                     {acciones(row)}
                   </td>
                 )}
+                {columns.map((col) => (
+                  <td
+                    key={String(col.key)}
+                    className={`px-5 py-3 ${
+                      col.align === "right"
+                        ? "text-right"
+                        : col.align === "center"
+                        ? "text-center"
+                        : ""
+                    }`}
+                  >
+                    {col.render
+                      ? col.render(row[col.key], row)
+                      : String(row[col.key] ?? "")}
+                  </td>
+                ))}
               </tr>
             ))
           )}
         </tbody>
       </table>
-      {/* Paginación elegante alineada a la derecha */}
+
+      {/* Paginación */}
       {totalPages > 1 && (
         <div className="flex justify-end items-center gap-2 py-4 pr-6">
           <button
             onClick={handlePrev}
             disabled={page === 1}
             className="w-9 h-9 flex items-center justify-center rounded-full bg-[#6e1e2a] text-white hover:bg-[#5b1823] disabled:opacity-40 disabled:cursor-not-allowed transition"
-            aria-label="Página anterior"
             title="Anterior"
           >
             <FaChevronLeft />
@@ -109,7 +127,6 @@ export const Table = <T,>({
             onClick={handleNext}
             disabled={page === totalPages}
             className="w-9 h-9 flex items-center justify-center rounded-full bg-[#6e1e2a] text-white hover:bg-[#5b1823] disabled:opacity-40 disabled:cursor-not-allowed transition"
-            aria-label="Página siguiente"
             title="Siguiente"
           >
             <FaChevronRight />
