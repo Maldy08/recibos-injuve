@@ -1,8 +1,12 @@
 'use client';
 
-import React, { useState, useEffect } from "react";
-import { FaChevronLeft, FaChevronRight, FaEye, FaEdit, FaTrash } from "react-icons/fa";
-import LoadingOverlay from "./LoadingOverlay"; // Asegúrate de tener este componente
+import { useState, useEffect } from "react";
+import {
+  FaChevronLeft,
+  FaChevronRight,
+  FaFilePdf
+} from "react-icons/fa";
+import LoadingOverlay from "./LoadingOverlay";
 
 export interface Column<T> {
   key: keyof T;
@@ -38,28 +42,31 @@ export const Table = <T,>({
   }, [data]);
 
   return (
-    <div className="relative rounded-2xl border border-gray-200 shadow-md bg-white overflow-x-auto w-full">
+    <div className="relative rounded-2xl border border-gray-200 shadow-lg bg-white overflow-x-auto w-full">
       {loading && (
         <div className="absolute inset-0 flex items-center justify-center z-10 bg-white bg-opacity-80">
           <LoadingOverlay text="Cargando..." />
         </div>
       )}
+
       <table className="min-w-full divide-y divide-gray-200 text-sm font-sans">
-        <thead className="sticky top-0 z-10 bg-gray-100 text-gray-700 uppercase text-xs shadow-sm">
+        <thead className="sticky top-0 z-10 bg-[#f9fafb] text-gray-700 text-sm border-b shadow-sm">
           <tr>
             {acciones && (
-              <th className="px-5 py-3 text-center font-semibold tracking-wider">ACCIONES</th>
+              <th className="px-5 py-3 text-center font-semibold tracking-wider">
+                Acciones
+              </th>
             )}
             {columns.map((col) => (
               <th
                 key={String(col.key)}
-                className={`px-5 py-3 ${
+                className={`px-5 py-3 font-semibold tracking-wider ${
                   col.align === "right"
                     ? "text-right"
                     : col.align === "center"
                     ? "text-center"
                     : "text-left"
-                } font-semibold tracking-wider`}
+                }`}
               >
                 {col.label}
               </th>
@@ -80,17 +87,22 @@ export const Table = <T,>({
             paginatedData.map((row, idx) => (
               <tr
                 key={idx}
-                className="even:bg-white odd:bg-gray-50 hover:bg-[#f6e9ec] transition-colors duration-200 border-b border-gray-100"
+                className="even:bg-white odd:bg-gray-50 hover:bg-[#fdebed] transition-colors border-b border-gray-100"
               >
                 {acciones && (
                   <td className="px-5 py-3 text-center">
-                    {acciones(row)}
+                    <button
+                      className="p-2 bg-gray-100 hover:bg-[#e2ccd2] rounded-full transition"
+                      title="Ver PDF"
+                    >
+                      <FaFilePdf className="text-[#6e1e2a] w-4 h-4" />
+                    </button>
                   </td>
                 )}
                 {columns.map((col) => (
                   <td
                     key={String(col.key)}
-                    className={`px-5 py-3 ${
+                    className={`px-5 py-3 align-middle text-sm text-gray-800 ${
                       col.align === "right"
                         ? "text-right"
                         : col.align === "center"
@@ -111,22 +123,23 @@ export const Table = <T,>({
 
       {/* Paginación */}
       {totalPages > 1 && (
-        <div className="flex justify-end items-center gap-2 py-4 pr-6">
+        <div className="flex justify-end items-center gap-3 py-4 px-6 bg-[#f9f4f5] rounded-b-xl">
           <button
             onClick={handlePrev}
             disabled={page === 1}
-            className="w-9 h-9 flex items-center justify-center rounded-full bg-[#6e1e2a] text-white hover:bg-[#5b1823] disabled:opacity-40 disabled:cursor-not-allowed transition"
+            className="w-9 h-9 flex items-center justify-center rounded-lg bg-[#6e1e2a] text-white hover:bg-[#5b1823] disabled:opacity-40 disabled:cursor-not-allowed shadow-md transition transform hover:scale-105"
             title="Anterior"
           >
             <FaChevronLeft />
           </button>
           <span className="text-sm font-medium select-none">
-            Página <span className="font-bold">{page}</span> de <span className="font-bold">{totalPages}</span>
+            Página <span className="font-bold">{page}</span> de{" "}
+            <span className="font-bold">{totalPages}</span>
           </span>
           <button
             onClick={handleNext}
             disabled={page === totalPages}
-            className="w-9 h-9 flex items-center justify-center rounded-full bg-[#6e1e2a] text-white hover:bg-[#5b1823] disabled:opacity-40 disabled:cursor-not-allowed transition"
+            className="w-9 h-9 flex items-center justify-center rounded-lg bg-[#6e1e2a] text-white hover:bg-[#5b1823] disabled:opacity-40 disabled:cursor-not-allowed shadow-md transition transform hover:scale-105"
             title="Siguiente"
           >
             <FaChevronRight />
