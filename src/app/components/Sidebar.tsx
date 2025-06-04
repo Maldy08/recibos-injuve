@@ -112,7 +112,7 @@ export const Sidebar = ({ isAdmin }: SidebarProps) => {
                   >
                     Mis Recibos
                   </Link>
-                  <Link
+                  {/* <Link
                     href="/sirh/recibos/enviar-recibos"
                     className={`block px-3 py-2 rounded-md text-sm transition ${
                       pathname === "/sirh/recibos/enviar-recibos"
@@ -121,7 +121,7 @@ export const Sidebar = ({ isAdmin }: SidebarProps) => {
                     }`}
                   >
                     Mandar Recibos
-                  </Link>
+                  </Link> */}
                 </div>
               )}
             </div>
