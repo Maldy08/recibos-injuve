@@ -1,7 +1,10 @@
 'use client';
+
 import { useState } from "react";
 import { Table, Column } from "@/app/sirh/shared/Table";
+import { sendEmailHandler } from "@/app/sirh/shared/SendEmailHandler";
 import { RiFileExcel2Fill } from "react-icons/ri";
+import { MdOutlineEmail } from "react-icons/md";
 
 interface ResumenRecibo {
   PERIODO: number;
@@ -13,7 +16,6 @@ interface ResumenRecibo {
 
 interface Props {
   resumen: ResumenRecibo[];
-
 }
 
 const columns: Column<ResumenRecibo>[] = [
@@ -26,6 +28,8 @@ const columns: Column<ResumenRecibo>[] = [
 
 export default function TablaTimbrado({ resumen }: Props) {
   const [loading, setLoading] = useState(false);
+  const [progress, setProgress] = useState<number | null>(null);
+  const [progressTotal, setProgressTotal] = useState<number | null>(null);
 
   const generarTimbradoHandler = async (periodo: number) => {
     setLoading(true);
@@ -58,19 +62,56 @@ export default function TablaTimbrado({ resumen }: Props) {
   };
 
   return (
-    <Table
-      data={resumen}
-      columns={columns}
-      loading={loading}
-      acciones={(row) => (
-        <button
-          onClick={() => generarTimbradoHandler(row.PERIODO)}
-          className="bg-[#6e1e2a] hover:bg-[#5b1823] text-white p-2 rounded-full transition"
-          title="Descargar XLSX del periodo"
-        >
-          <RiFileExcel2Fill className="text-base" />
-        </button>
+    <div className="relative">
+      {loading && progressTotal !== null && (
+        <div className="fixed inset-0 bg-black bg-opacity-40 flex flex-col items-center justify-center z-50">
+          <div className="flex flex-col items-center gap-4 bg-white rounded-xl shadow-lg px-8 py-6">
+            <div className="flex items-center gap-3">
+              <svg className="animate-spin h-6 w-6 text-[#6e1e2a]" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                <circle className="opacity-25" cx="12" cy="12" r="10" stroke="#6e1e2a" strokeWidth="4"></circle>
+                <path className="opacity-75" fill="#6e1e2a" d="M4 12a8 8 0 018-8v4a4 4 0 00-4 4H4z"></path>
+              </svg>
+              <span className="text-[#6e1e2a] font-semibold text-lg">
+                Enviando recibos...
+              </span>
+            </div>
+            <div className="w-64 h-4 bg-gray-200 rounded-full overflow-hidden shadow-inner">
+              <div
+                className="h-full bg-gradient-to-r from-[#6e1e2a] to-[#a8324a] transition-all duration-300"
+                style={{ width: `${(progress! / progressTotal!) * 100}%` }}
+              ></div>
+            </div>
+            <span className="text-[#6e1e2a] font-medium">
+              {progress} de {progressTotal} &nbsp;|&nbsp; {Math.round((progress! / progressTotal!) * 100)}%
+            </span>
+          </div>
+        </div>
       )}
-    />
+      <Table
+        data={resumen}
+        columns={columns}
+        loading={loading}
+        acciones={(row) => (
+          <div className="flex gap-2 justify-center">
+            <button
+              onClick={() => generarTimbradoHandler(row.PERIODO)}
+              className="bg-[#6e1e2a] hover:bg-[#5b1823] text-white p-2 rounded-full transition"
+              title="Descargar XLSX del periodo"
+            >
+              <RiFileExcel2Fill className="text-base" />
+            </button>
+            <button
+              onClick={() =>
+                sendEmailHandler(row.PERIODO, 1, setLoading, setProgress, setProgressTotal)
+              }
+              className="bg-[#6e1e2a] hover:bg-[#5b1823] text-white p-2 rounded-full transition"
+              title="Enviar por correo"
+            >
+              <MdOutlineEmail className="text-base" />
+            </button>
+          </div>
+        )}
+      />
+    </div>
   );
 }

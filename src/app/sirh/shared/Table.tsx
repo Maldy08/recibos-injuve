@@ -4,7 +4,6 @@ import { useState, useEffect } from "react";
 import {
   FaChevronLeft,
   FaChevronRight,
-  FaFilePdf
 } from "react-icons/fa";
 import LoadingOverlay from "./LoadingOverlay";
 
@@ -91,12 +90,7 @@ export const Table = <T,>({
               >
                 {acciones && (
                   <td className="px-5 py-3 text-center">
-                    <button
-                      className="p-2 bg-gray-100 hover:bg-[#e2ccd2] rounded-full transition"
-                      title="Ver PDF"
-                    >
-                      <FaFilePdf className="text-[#6e1e2a] w-4 h-4" />
-                    </button>
+                    {acciones(row)}
                   </td>
                 )}
                 {columns.map((col) => (
