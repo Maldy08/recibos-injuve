@@ -53,7 +53,7 @@ export const Table = <T,>({
           <tr>
             {acciones && (
               <th className="px-5 py-3 text-center font-semibold tracking-wider">
-                Acciones
+                ACCIONES
               </th>
             )}
             {columns.map((col) => (

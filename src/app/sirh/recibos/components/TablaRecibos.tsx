@@ -4,6 +4,7 @@ import usePdf from "@/app/hooks/usePdf";
 import { useState } from "react";
 import { FaRegFilePdf } from "react-icons/fa";
 import { Table, Column } from "@/app/sirh/shared/Table";
+import { FichaEmpleado } from "./FichaEmpleado";
 
 interface Recibo {
     empleado: number;
@@ -55,18 +56,10 @@ export const TablaRecibos = ({
     return (
         <div className="mx-auto px-4">
             <div className="flex items-center justify-between mt-6 mb-4">
-                <div className="bg-white rounded-xl shadow p-5 flex flex-col gap-2 border border-gray-100">
-                    <h2 className="text-xl font-bold text-[#6e1e2a] flex items-center gap-2 mb-2">
-                        {tipo === 1 ? "Recibos de Nómina" : "Recibos de Honorarios"}
-                    </h2>
-                    <div className="grid grid-cols-2 gap-x-6 gap-y-1 text-sm text-gray-700">
-                        <span><span className="font-bold">Empleado:</span> {nombre}</span>
-                        <span><span className="font-bold">Número:</span> {empleado}</span>
-                        <span><span className="font-bold">RFC:</span> {rfc}</span>
-                        <span><span className="font-bold">CURP:</span> {curp}</span>
-                    </div>
-                </div>
-                <div className="flex flex-col items-end">
+                <FichaEmpleado empleado={
+                    { nombre, numero: empleado, rfc, curp }
+                }/>
+                {/* <div className="flex flex-col items-end">
                     <label htmlFor="anio" className="mb-1 text-sm text-gray-600">Año:</label>
                     <input
                         id="anio"
@@ -74,7 +67,7 @@ export const TablaRecibos = ({
                         value={anioInicial}
                         readOnly
                     />
-                </div>
+                </div> */}
             </div>
 
             <Table
@@ -83,9 +76,8 @@ export const TablaRecibos = ({
                 loading={generandoRecibo}
                 acciones={(row) => (
                     <button
-                        title="Ver PDF del periodo"
                         onClick={() => openPdfHandler(row.empleado, row.periodo)}
-                        className=""
+                        className="text-blue-600 hover:text-blue-800"
                         aria-label={`Ver PDF del periodo ${row.periodo}`}
                     >
                         <FaRegFilePdf className="w-5 h-5" />
