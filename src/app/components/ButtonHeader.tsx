@@ -39,7 +39,7 @@ export const ButtonHeader = ({ user }: ButtonHeaderProps) => {
       {open && (
         <div className="absolute right-0 mt-2 w-48 bg-white text-gray-800 rounded-md shadow-lg ring-1 ring-black/10 z-50">
           <button
-            onClick={() => signOut()}
+            onClick={() => signOut({ callbackUrl: '/logout' })}
             className="block w-full text-left px-4 py-2 text-sm hover:bg-gray-100"
           >
             Cerrar sesión
