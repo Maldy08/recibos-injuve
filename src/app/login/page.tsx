@@ -15,7 +15,7 @@ export default async function LoginPage() {
 
     const session = await getServerSession(authOptions);
     if( session ) {
-      redirect('/transparencia/documentos')
+      redirect('/sirh/recibos')
     }
 
     const sistema = process.env.NOMBRE_SISTEMA;

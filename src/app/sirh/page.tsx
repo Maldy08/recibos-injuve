@@ -1,3 +1,4 @@
+import { redirect } from "next/navigation";
 
 export const metadata = {
   title: 'INJUVE - Sistema Integral de Recursos Humanos',
@@ -5,7 +6,7 @@ export const metadata = {
 };
 
 export default async function OficiosPage() {
-  //redirect('/oficios');
+  redirect('/sirh/recibos');
 
 
   return (
