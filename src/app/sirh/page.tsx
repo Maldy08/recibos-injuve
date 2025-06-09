@@ -6,7 +6,7 @@ export const metadata = {
 };
 
 export default async function OficiosPage() {
-  redirect('/sirh/recibos');
+ // redirect('/sirh/recibos');
 
 
   return (
