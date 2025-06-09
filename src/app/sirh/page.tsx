@@ -7,7 +7,7 @@ export default async function OficiosPage() {
   return (
     <div className="flex flex-col items-center justify-center min-h-screen bg-white px-4 py-8">
       <img
-        src="/banner-injuve.png"
+        src="/assets/banner-injuve.png"
         alt="Sistema Integral de Recursos Humanos - Juventud BC"
         className="max-w-3xl w-full object-contain mb-8"
       />
