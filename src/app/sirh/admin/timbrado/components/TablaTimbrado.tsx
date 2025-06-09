@@ -79,6 +79,38 @@ export default function TablaTimbrado() {
     }
   };
 
+
+  const generarExcelBSSHandler = async (periodo: number) => {
+    setLoading(true);
+        try {
+      const response = await fetch(
+        `${process.env.NEXT_PUBLIC_API_URL}timbrado/percepciones/${periodo}`,
+        { method: "GET", cache: "no-store" }
+      );
+      if (!response.ok) throw new Error("Error al descargar el archivo");
+      const blob = await response.blob();
+      const url = window.URL.createObjectURL(blob);
+      const disposition = response.headers.get('Content-Disposition');
+      let fileName = `PERIODO_${periodo}_REVISION_BSS.xlsx`;
+      if (disposition && disposition.includes('filename=')) {
+        fileName = disposition.split('filename=')[1].replace(/["']/g, "").trim();
+      }
+      const link = document.createElement('a');
+      link.href = url;
+      link.setAttribute('download', fileName);
+      document.body.appendChild(link);
+      link.click();
+      link.remove();
+      window.URL.revokeObjectURL(url);
+    } catch (error) {
+      alert("No se pudo descargar el archivo.");
+      console.error(error);
+    } finally {
+      setLoading(false);
+    }
+    setLoading(true);
+  }
+
   return (
     <div className="relative">
       {/* Dropdown para seleccionar tipo */}
