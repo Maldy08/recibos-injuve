@@ -17,7 +17,7 @@ export const authOptions: NextAuthOptions = {
 
       async authorize(credentials) {
         const { data } = await oficiosApi.post<LoginResponse>(
-          `api/auth/login`,
+          `${process.env.NEXT_PUBLIC_API_URL}auth/login`,
           {
             rfc: credentials!.rfc, // Cambia "email" por "rfc" si es necesario
           }
