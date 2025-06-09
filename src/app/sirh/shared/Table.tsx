@@ -96,7 +96,7 @@ export const Table = <T,>({
                 {columns.map((col) => (
                   <td
                     key={String(col.key)}
-                    className={`px-5 py-3 align-middle text-sm text-gray-800 ${
+                    className={`px-5 py-3 align-middle text-xs text-gray-800 ${
                       col.align === "right"
                         ? "text-right"
                         : col.align === "center"

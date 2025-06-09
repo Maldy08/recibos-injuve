@@ -108,7 +108,7 @@ export default function TablaTimbrado() {
     } finally {
       setLoading(false);
     }
-    setLoading(true);
+   
   }
 
   return (

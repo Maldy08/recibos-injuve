@@ -40,9 +40,8 @@ export const Sidebar = ({ isAdmin }: SidebarProps) => {
       )}
 
       <aside
-        className={`fixed top-0 left-0 w-64 h-full bg-gradient-to-b from-[#383838] to-[#2b2b2b] text-white shadow-lg transform transition-transform duration-300 ${
-          isOpen ? "translate-x-0" : "-translate-x-full"
-        } lg:translate-x-0 lg:relative z-40`}
+        className={`fixed top-0 left-0 w-64 h-full bg-gradient-to-b from-[#383838] to-[#2b2b2b] text-white shadow-lg transform transition-transform duration-300 ${isOpen ? "translate-x-0" : "-translate-x-full"
+          } lg:translate-x-0 lg:relative z-40`}
         aria-label="Sidebar"
       >
         <div className="flex flex-col h-full">
@@ -69,15 +68,28 @@ export const Sidebar = ({ isAdmin }: SidebarProps) => {
 
           {/* Menú */}
           <nav className="flex-1 px-4 space-y-3">
+            {isAdmin && (
+              <Link
+                href="/sirh/admin/bss"
+                className={`group flex items-center gap-4 p-3 rounded-xl transition-all duration-200 ${pathname === "/sirh/admin/bss"
+                    ? "bg-white/10 text-white font-semibold"
+                    : "hover:bg-white/10 text-gray-300"
+                  }`}
+              >
+                <div className="p-2 rounded-full bg-white/10 group-hover:bg-white/20 transition">
+                  <LuBellRing className="w-5 h-5" />
+                </div>
+                <span className="text-base tracking-wide">BSS</span>
+              </Link>
+            )}
             {/* Periodos */}
             {isAdmin && (
               <Link
                 href="/sirh/admin/periodos"
-                className={`group flex items-center gap-4 p-3 rounded-xl transition-all duration-200 ${
-                  pathname === "/sirh/admin/periodos"
+                className={`group flex items-center gap-4 p-3 rounded-xl transition-all duration-200 ${pathname === "/sirh/admin/periodos"
                     ? "bg-white/10 text-white font-semibold"
                     : "hover:bg-white/10 text-gray-300"
-                }`}
+                  }`}
               >
                 <div className="p-2 rounded-full bg-white/10 group-hover:bg-white/20 transition">
                   <LuCalendarDays className="w-5 h-5" />
@@ -104,11 +116,10 @@ export const Sidebar = ({ isAdmin }: SidebarProps) => {
                 <div className="ml-6 mt-2 space-y-1">
                   <Link
                     href="/sirh/recibos"
-                    className={`block px-3 py-2 rounded-md text-sm transition ${
-                      pathname === "/sirh/recibos"
+                    className={`block px-3 py-2 rounded-md text-sm transition ${pathname === "/sirh/recibos"
                         ? "bg-white/10 text-white font-semibold"
                         : "text-gray-300 hover:bg-white/10"
-                    }`}
+                      }`}
                   >
                     Mis Recibos
                   </Link>

@@ -1,4 +1,3 @@
-
 import { NextAuthOptions } from "next-auth";
 import NextAuth from "next-auth/next";
 import CredentialsProvider from "next-auth/providers/credentials";
@@ -6,14 +5,12 @@ import oficiosApi from "../../oficios-api";
 import { LoginResponse } from "@/app/application/dto/login-response.dto";
 
 export const authOptions: NextAuthOptions = {
-
   providers: [
     CredentialsProvider({
       name: "Credentials",
       credentials: {
         rfc: { label: "rfc", type: "string" },
       },
-
 
       async authorize(credentials) {
         const { data } = await oficiosApi.post<LoginResponse>(
@@ -47,9 +44,9 @@ export const authOptions: NextAuthOptions = {
     strategy: "jwt",
   },
   callbacks: {
-    session: async({ session, token }) => {
-     // console.log(`callback session: ${ JSON.stringify( session )}`)
-      if( session && session.user) {
+    session: async ({ session, token }) => {
+      // console.log(`callback session: ${ JSON.stringify( session )}`)
+      if (session && session.user) {
         session.user.token = token.token;
         session.user.empleado = token.empleado;
         session.user.id = token.id;
@@ -61,13 +58,12 @@ export const authOptions: NextAuthOptions = {
         session.user.tipo = token.tipo;
         session.user.admin = token.admin;
         //session.user.empleadoId = token.empleadoId;
-        
       }
       return session;
     },
-    async jwt( { token, user }) {
-     // console.log(`callback token: ${ JSON.stringify( token ) }` );
-      if( token &&  user) {
+    async jwt({ token, user }) {
+      // console.log(`callback token: ${ JSON.stringify( token ) }` );
+      if (token && user) {
         token.id = user.id;
         token.empleado = user.empleado;
         token.token = user.token;
@@ -85,16 +81,18 @@ export const authOptions: NextAuthOptions = {
   secret: process.env.NEXTAUTH_SECRET,
   cookies: {
     sessionToken: {
-      name: `__Secure-next-auth.session-token`,
+      name:
+        process.env.NODE_ENV === "production"
+          ? "__Secure-next-auth.session-token"
+          : "next-auth.session-token",
       options: {
         httpOnly: true,
         sameSite: "lax",
         path: "/",
-        secure: true,
+        secure: process.env.NODE_ENV === "production",
       },
     },
   },
-  
 };
 
 const handler = NextAuth(authOptions);
