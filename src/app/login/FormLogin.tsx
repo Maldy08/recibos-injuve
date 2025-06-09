@@ -37,8 +37,8 @@ export const FormLogin = ({ titulo }: Props) => {
             setLoading(false);
 
             console.log(res);
-            if (!res?.error) {
-                router.push(callbackUrl);
+            if (res?.ok && res.url) {
+                router.push(res.url);
             } else {
                 setError("rfc incorrecto");
                 setOpen(true)
