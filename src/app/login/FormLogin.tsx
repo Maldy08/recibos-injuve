@@ -19,13 +19,14 @@ export const FormLogin = ({ titulo }: Props) => {
     const [open, setOpen] = useState(false);
 
     const searchParams = useSearchParams();
-    const callbackUrl = searchParams.get("callbackUrl") || "/sirh";
+    const rawCallback = searchParams.get("callbackUrl");
+    const callbackUrl = rawCallback && rawCallback !== "undefined" ? rawCallback : "/sirh";
 
     const onSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
         try {
             setLoading(true);
-            setFormValues({ rfc: ""});
+            setFormValues({ rfc: "" });
 
             const res = await signIn("credentials", {
                 redirect: false,
