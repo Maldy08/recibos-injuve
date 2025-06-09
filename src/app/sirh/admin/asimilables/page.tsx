@@ -11,7 +11,7 @@ export default async function AsimilablesPage() {
     return (
         <div>
             <h1>Asimilables</h1>
-            <TablaEmpleados tipo={tipo}/>
+            <TablaEmpleados tipo={tipo} empleados={[]}/>
         </div>
     );
 }
