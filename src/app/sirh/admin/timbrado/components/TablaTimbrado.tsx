@@ -157,7 +157,7 @@ export default function TablaTimbrado() {
         acciones={(row) => (
           <div className="flex gap-2 justify-center">
             <button
-              onClick={() => generarTimbradoHandler(row.PERIODO)}
+              onClick={() => generarExcelBSSHandler(row.PERIODO)}
               className="bg-[#6e1e2a] hover:bg-[#5b1823] text-white p-2 rounded-full transition"
               title="Descargar Excel para revision BSS"
             >
