@@ -1,6 +1,6 @@
 'use client';
 
-import { signIn } from "next-auth/react";
+import { getSession, signIn } from "next-auth/react";
 import { useSearchParams, useRouter } from "next/navigation";
 import { ChangeEvent, useState } from "react";
 
@@ -38,6 +38,7 @@ export const FormLogin = ({ titulo }: Props) => {
 
             console.log(res);
             if (res?.ok && res.url) {
+                await getSession()
                 router.push(res.url);
             } else {
                 setError("rfc incorrecto");
