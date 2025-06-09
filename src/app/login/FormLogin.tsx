@@ -20,7 +20,7 @@ export const FormLogin = ({ titulo }: Props) => {
 
     const searchParams = useSearchParams();
     const rawCallback = searchParams.get("callbackUrl");
-    const callbackUrl = rawCallback && rawCallback !== "undefined" ? rawCallback : "/";
+    const callbackUrl = rawCallback && rawCallback !== "undefined" ? rawCallback : "/sirh";
 
     const onSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
