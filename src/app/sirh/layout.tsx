@@ -10,7 +10,11 @@ export default async function OficiosLayout({
 }) {
 
   const session = await getServerSession(authOptions);
-  const user = session!.user;
+  if (!session) {
+    redirect('/login')
+  }
+
+  const user = session.user;
   const admin = user!.admin || 0;
 
   return (
