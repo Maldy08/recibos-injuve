@@ -26,7 +26,7 @@ export default async function TimbradoPage() {
       <h1 className="text-2xl font-bold flex items-center justify-center ">Timbrado de Periodos de Nómina</h1>
       <h2 className="text-lg font-semibold text-[#6e1e2a] my-4 flex items-center justify-center">Resumen de Periodos</h2>
       <div className="overflow-x-auto max-w-3xl mx-auto px-4">
-        <TablaTimbrado resumen={resumen} />
+        <TablaTimbrado  />
       </div>
     </div>
   );
