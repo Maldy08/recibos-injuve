@@ -9,7 +9,7 @@ export default async function OficiosPage() {
       <img
         src="/assets/banner.png"
         alt="Sistema Integral de Recursos Humanos - Juventud BC"
-        className="max-w-3xl w-full object-contain mb-8"
+        className=""
       />
 
     </div>
