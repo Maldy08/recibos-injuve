@@ -38,8 +38,9 @@ export const FormLogin = ({ titulo }: Props) => {
 
             console.log(res);
             if (res?.ok && res.url) {
-                await getSession()
+                //await getSession()
                 router.push(res.url);
+                router.refresh();
             } else {
                 setError("rfc incorrecto");
                 setOpen(true)
