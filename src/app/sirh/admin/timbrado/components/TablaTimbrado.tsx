@@ -127,7 +127,7 @@ export default function TablaTimbrado() {
             <button
               onClick={() => generarTimbradoHandler(row.PERIODO)}
               className="bg-[#6e1e2a] hover:bg-[#5b1823] text-white p-2 rounded-full transition"
-              title="Descargar Timbrado del periodo"
+              title="Descargar Excel para revision BSS"
             >
               <RiFileExcel2Fill className="text-base" />
             </button>
