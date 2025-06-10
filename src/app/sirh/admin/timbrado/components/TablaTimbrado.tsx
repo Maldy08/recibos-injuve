@@ -1,12 +1,12 @@
 'use client';
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { Table, Column } from "@/app/sirh/shared/Table";
 import { sendEmailHandler } from "@/app/sirh/shared/SendEmailHandler";
-
 import { MdOutlineEmail } from "react-icons/md";
 import { IoDocumentTextOutline } from "react-icons/io5";
 import { RiFileExcel2Fill } from "react-icons/ri";
+import { HiOutlineUpload } from "react-icons/hi";
 
 interface ResumenRecibo {
   PERIODO: number;
@@ -30,22 +30,26 @@ export default function TablaTimbrado() {
   const [loading, setLoading] = useState(false);
   const [progress, setProgress] = useState<number | null>(null);
   const [progressTotal, setProgressTotal] = useState<number | null>(null);
+  const fileInputRef = useRef<HTMLInputElement>(null);
+
+
+  const fetchResumen = async () => {
+    setLoading(true);
+    try {
+      const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}nomina/resumen/${tipo}`, {
+        cache: "no-store",
+      });
+      const data = await res.json();
+      setResumen(Array.isArray(data) ? data : [data]);
+    } catch (e) {
+      setResumen([]);
+    } finally {
+      setLoading(false);
+    }
+  };
 
   useEffect(() => {
-    const fetchResumen = async () => {
-      setLoading(true);
-      try {
-        const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}nomina/resumen/${tipo}`, {
-          cache: "no-store",
-        });
-        const data = await res.json();
-        setResumen(Array.isArray(data) ? data : [data]);
-      } catch (e) {
-        setResumen([]);
-      } finally {
-        setLoading(false);
-      }
-    };
+
     fetchResumen();
   }, [tipo]);
 
@@ -79,10 +83,9 @@ export default function TablaTimbrado() {
     }
   };
 
-
   const generarExcelBSSHandler = async (periodo: number) => {
     setLoading(true);
-        try {
+    try {
       const response = await fetch(
         `${process.env.NEXT_PUBLIC_API_URL}timbrado/percepciones/${periodo}`,
         { method: "GET", cache: "no-store" }
@@ -108,24 +111,79 @@ export default function TablaTimbrado() {
     } finally {
       setLoading(false);
     }
-   
-  }
+  };
+
+  // Subir periodo
+  const handleSubirPeriodo = () => {
+    fileInputRef.current?.click();
+  };
+
+  const handleArchivoSeleccionado = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+    const formData = new FormData();
+    formData.append("archivo", file);
+
+    setLoading(true);
+    try {
+      // Selecciona el endpoint según el tipo
+      const endpoint =
+        tipo === 1
+          ? `${process.env.NEXT_PUBLIC_API_URL}upload/mnom12`
+          : `${process.env.NEXT_PUBLIC_API_URL}upload/mnom12h`;
+
+      const response = await fetch(endpoint, {
+        method: "POST",
+        body: formData,
+      });
+      if (!response.ok) throw new Error("Error al subir el archivo");
+      alert("Archivo subido correctamente");
+       await fetchResumen();
+    } catch (error) {
+      alert("No se pudo subir el archivo");
+      console.error(error);
+    } finally {
+      setLoading(false);
+      if (fileInputRef.current) fileInputRef.current.value = "";
+    }
+  };
 
   return (
     <div className="relative">
-      {/* Dropdown para seleccionar tipo */}
-      <div className="flex justify-start mb-4">
-        <label htmlFor="tipo" className="mr-2 text-sm text-gray-700 font-semibold">Tipo:</label>
-        <select
-          id="tipo"
-          value={tipo}
-          onChange={e => setTipo(Number(e.target.value))}
-          className="border border-gray-300 rounded px-3 py-1 text-sm bg-gray-50 font-semibold"
-        >
-          <option value={1}>Nómina</option>
-          <option value={2}>Honorarios</option>
-        </select>
+      {/* Dropdown y botón en la misma fila */}
+      <div className="flex justify-between items-center mb-4">
+        <div className="flex items-center">
+          <label htmlFor="tipo" className="mr-2 text-sm text-gray-700 font-semibold">Tipo:</label>
+          <select
+            id="tipo"
+            value={tipo}
+            onChange={e => setTipo(Number(e.target.value))}
+            className="border border-gray-300 rounded px-3 py-1 text-sm bg-gray-50 font-semibold"
+          >
+            <option value={1}>Nómina</option>
+            <option value={2}>Honorarios</option>
+          </select>
+        </div>
+        <div>
+          <button
+            className=" text-xs flex items-center gap-2 bg-gradient-to-r from-[#6e1e2a] to-[#a8324a] hover:from-[#5b1823] hover:to-[#a8324a]
+             text-white px-4 py-2 rounded-lg shadow-md transition-all duration-200 hover:scale-105 focus:ring-2 focus:ring-[#a8324a] focus:outline-none"
+            onClick={handleSubirPeriodo}
+            type="button"
+          >
+            <HiOutlineUpload className="w-5 h-5" />
+            <span>Subir periodo</span>
+          </button>
+          <input
+            type="file"
+            ref={fileInputRef}
+            className="hidden"
+            onChange={handleArchivoSeleccionado}
+            accept=".csv,.xlsx,.xls"
+          />
+        </div>
       </div>
+
       {loading && progressTotal !== null && (
         <div className="fixed inset-0 bg-black bg-opacity-40 flex flex-col items-center justify-center z-50">
           <div className="flex flex-col items-center gap-4 bg-white rounded-xl shadow-lg px-8 py-6">

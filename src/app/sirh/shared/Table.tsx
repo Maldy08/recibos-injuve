@@ -115,29 +115,36 @@ export const Table = <T,>({
         </tbody>
       </table>
 
-      {/* Paginación */}
+      {/* Paginación y total de registros */}
       {totalPages > 1 && (
-        <div className="flex justify-end items-center gap-3 py-4 px-6 bg-[#f9f4f5] rounded-b-xl">
-          <button
-            onClick={handlePrev}
-            disabled={page === 1}
-            className="w-9 h-9 flex items-center justify-center rounded-lg bg-[#6e1e2a] text-white hover:bg-[#5b1823] disabled:opacity-40 disabled:cursor-not-allowed shadow-md transition transform hover:scale-105"
-            title="Anterior"
-          >
-            <FaChevronLeft />
-          </button>
-          <span className="text-sm font-medium select-none">
-            Página <span className="font-bold">{page}</span> de{" "}
-            <span className="font-bold">{totalPages}</span>
+        <div className="flex justify-between items-center gap-3 py-4 px-6 bg-[#f9f4f5] rounded-b-xl">
+          {/* Total de registros a la izquierda */}
+          <span className="text-xs text-gray-600 font-medium">
+            Total de registros: <span className="font-bold">{data.length}</span>
           </span>
-          <button
-            onClick={handleNext}
-            disabled={page === totalPages}
-            className="w-9 h-9 flex items-center justify-center rounded-lg bg-[#6e1e2a] text-white hover:bg-[#5b1823] disabled:opacity-40 disabled:cursor-not-allowed shadow-md transition transform hover:scale-105"
-            title="Siguiente"
-          >
-            <FaChevronRight />
-          </button>
+          {/* Botones de paginación a la derecha */}
+          <div className="flex items-center gap-3">
+            <button
+              onClick={handlePrev}
+              disabled={page === 1}
+              className="w-9 h-9 flex items-center justify-center rounded-lg bg-[#6e1e2a] text-white hover:bg-[#5b1823] disabled:opacity-40 disabled:cursor-not-allowed shadow-md transition transform hover:scale-105"
+              title="Anterior"
+            >
+              <FaChevronLeft />
+            </button>
+            <span className="text-sm font-medium select-none">
+              Página <span className="font-bold">{page}</span> de{" "}
+              <span className="font-bold">{totalPages}</span>
+            </span>
+            <button
+              onClick={handleNext}
+              disabled={page === totalPages}
+              className="w-9 h-9 flex items-center justify-center rounded-lg bg-[#6e1e2a] text-white hover:bg-[#5b1823] disabled:opacity-40 disabled:cursor-not-allowed shadow-md transition transform hover:scale-105"
+              title="Siguiente"
+            >
+              <FaChevronRight />
+            </button>
+          </div>
         </div>
       )}
     </div>
