@@ -16,9 +16,9 @@ export const Header = async () => {
   <div className="flex flex-wrap justify-between items-center gap-3">
     
     {/* Título adaptable */}
-    <span className="text-white  font-bold tracking-wide text-base lg:text-sm sm:text-lg md:text-xl truncate max-w-[60%] sm:max-w-none uppercase">
+    {/* <span className="text-white  font-bold tracking-wide text-base lg:text-sm sm:text-lg md:text-xl truncate max-w-[60%] sm:max-w-none uppercase">
       SISTEMA INTEGRAL DE RECURSOS HUMANOS
-    </span>
+    </span> */}
 
     {/* Info del usuario con truncado */}
     <div className="flex items-center gap-2 ml-auto">

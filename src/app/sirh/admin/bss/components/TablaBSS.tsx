@@ -42,22 +42,24 @@ export const TablaBSS = () => {
   const [search, setSearch] = useState("");
   const fileInputRef = useRef<HTMLInputElement>(null);
 
+
+  const fetchBSSData = async () => {
+    setLoading(true);
+    try {
+      const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}bss/get-datos-bss`, {
+        cache: "no-store",
+      });
+      const data = await response.json();
+      setBSSData(Array.isArray(data) ? data : [data]);
+    } catch (error) {
+      console.error("Error fetching BSS data:", error);
+      setBSSData([]);
+    } finally {
+      setLoading(false);
+    }
+  };
+
   useEffect(() => {
-    const fetchBSSData = async () => {
-      setLoading(true);
-      try {
-        const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}bss/get-datos-bss`, {
-          cache: "no-store",
-        });
-        const data = await response.json();
-        setBSSData(Array.isArray(data) ? data : [data]);
-      } catch (error) {
-        console.error("Error fetching BSS data:", error);
-        setBSSData([]);
-      } finally {
-        setLoading(false);
-      }
-    };
     fetchBSSData();
   }, []);
 
@@ -88,8 +90,7 @@ export const TablaBSS = () => {
       });
       if (!response.ok) throw new Error("Error al subir el archivo");
       alert("Archivo subido correctamente");
-      // Opcional: recargar datos después de subir
-      // ... fetchBSSData() ...
+      await fetchBSSData(); 
     } catch (error) {
       alert("No se pudo subir el archivo");
       console.error(error);
