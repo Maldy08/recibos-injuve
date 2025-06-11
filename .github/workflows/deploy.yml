@@ -1,4 +1,4 @@
-ame: Deploy Frontend a EC2
+name: Deploy Frontend a EC2
 
 on:
   push:
