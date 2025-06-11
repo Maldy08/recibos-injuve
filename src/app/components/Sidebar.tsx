@@ -68,7 +68,7 @@ export const Sidebar = ({ isAdmin }: SidebarProps) => {
 
           {/* Menú */}
           <nav className="flex-1 px-4 space-y-3">
-            {/* {isAdmin && (
+            {isAdmin && (
               <Link
                 href="/sirh/admin/bss"
                 className={`group flex items-center gap-4 p-3 rounded-xl transition-all duration-200 ${pathname === "/sirh/admin/bss"
@@ -81,7 +81,7 @@ export const Sidebar = ({ isAdmin }: SidebarProps) => {
                 </div>
                 <span className="text-base tracking-wide">BSS</span>
               </Link>
-            )} */}
+            )}
             {/* Periodos */}
             {isAdmin && (
               <Link
