@@ -111,7 +111,6 @@ export const TablaBSS = () => {
     const periodo = prompt("Ingresa el periodo a exportar:");
     if (!periodo) return;
 
-
     setLoading(true);
     try {
       const response = await fetch(
@@ -142,10 +141,10 @@ export const TablaBSS = () => {
     }
   };
 
-    const generarZipBss = async (banco: string) => {
+  const generarZipBss = async (banco: string) => {
     const periodo = prompt("Ingresa el periodo a exportar:");
     if (!periodo) return;
-  
+
     setLoading(true);
     try {
       const response = await fetch(
@@ -157,7 +156,7 @@ export const TablaBSS = () => {
       const url = window.URL.createObjectURL(blob);
       const disposition = response.headers.get('Content-Disposition');
       let fileName = `BSS_${periodo}_${banco === "012" ? "BBVA" : "OTROS"}.zip`;
-  
+
       if (disposition && disposition.includes('filename=')) {
         fileName = disposition.split('filename=')[1].replace(/["']/g, "").trim();
       }
@@ -175,7 +174,6 @@ export const TablaBSS = () => {
       setLoading(false);
     }
   };
-
 
   const generarTXTBss = async (banco: string) => {
     const periodo = prompt("Ingresa el periodo a exportar:");
@@ -221,7 +219,6 @@ export const TablaBSS = () => {
       case 2:
         generarZipBss("011");
         break;
-
       default:
         console.warn("Opción no válida");
     }
@@ -233,10 +230,32 @@ export const TablaBSS = () => {
     setModalOpen(true);
   };
 
-  const handleGuardarEmpleado = () => {
-    // Aquí puedes hacer la petición para guardar los cambios
-    alert("Empleado actualizado:\n" + JSON.stringify(empleadoEdit, null, 2));
-    setModalOpen(false);
+  const handleGuardarEmpleado = async () => {
+    if (!empleadoEdit) return;
+    setLoading(true);
+    try {
+      const response = await fetch(
+        `${process.env.NEXT_PUBLIC_API_URL}bss/actualizar`,
+        {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(empleadoEdit),
+        }
+      );
+      if (!response.ok) {
+        const data = await response.json();
+        alert(data?.error || "Error al actualizar el empleado");
+        return;
+      }
+      alert("Empleado actualizado correctamente");
+      setModalOpen(false);
+      await fetchBSSData();
+    } catch (error) {
+      alert("No se pudo actualizar el empleado");
+      console.error(error);
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
@@ -290,6 +309,15 @@ export const TablaBSS = () => {
                   className="border rounded px-2 py-1 w-full mt-1"
                   value={empleadoEdit.banco}
                   onChange={e => setEmpleadoEdit({ ...empleadoEdit, banco: e.target.value })}
+                />
+              </label>
+              <label className="text-xs font-semibold text-gray-700">
+                Importe:
+                <input
+                  type="number"
+                  className="border rounded px-2 py-1 w-full mt-1"
+                  value={empleadoEdit.importe_new}
+                  onChange={e => setEmpleadoEdit({ ...empleadoEdit, importe_new: +e.target.value })}
                 />
               </label>
             </div>
