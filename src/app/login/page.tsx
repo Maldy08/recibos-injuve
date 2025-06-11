@@ -6,8 +6,9 @@ import { redirect } from "next/navigation";
 
 
 export const metadata = {
-    title: 'Login Page',
-    description: 'Login Page',
+  title: 'INJUVE - Sistema Integral de Recursos Humanos',
+  description: 'Inicio de sesión para el Sistema Integral de Recursos Humanos',
+  keywords: ['INJUVE', 'Recursos Humanos', 'Inicio de sesión', 'Sistema Integral'],
 };
 
 

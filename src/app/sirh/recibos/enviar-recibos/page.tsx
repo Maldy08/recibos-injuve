@@ -12,7 +12,7 @@ interface ResumenRecibo {
 export const metadata = {
   title: 'INJUVE - Sistema Integral de Recursos Humanos -  Enviar Recibos de Nómina',
   keywords: ['INJUVE', 'Recibos de Nómina', 'Enviar Recibos', 'Sistema Integral de Recursos Humanos'],
-  description: 'Eviar Recibos de Nómina',
+  description: 'Enviar Recibos de Nómina',
 };
 
 export default async function EnviarRecibosPage() {

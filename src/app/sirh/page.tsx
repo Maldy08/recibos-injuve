@@ -1,6 +1,6 @@
 export const metadata = {
   title: 'INJUVE - Sistema Integral de Recursos Humanos',
-  description: 'Consulta de Recibos de Nómina',
+  description: 'Consulta de Recibos de Nómina INJUVE',
 };
 
 export default async function OficiosPage() {
