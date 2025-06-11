@@ -142,6 +142,40 @@ export const TablaBSS = () => {
     }
   };
 
+    const generarZipBss = async (banco: string) => {
+    const periodo = prompt("Ingresa el periodo a exportar:");
+    if (!periodo) return;
+  
+    setLoading(true);
+    try {
+      const response = await fetch(
+        `${process.env.NEXT_PUBLIC_API_URL}bss/exportar-zip/${periodo}/${banco}`,
+        { method: "GET" }
+      );
+      if (!response.ok) throw new Error("No se pudo generar el ZIP");
+      const blob = await response.blob();
+      const url = window.URL.createObjectURL(blob);
+      const disposition = response.headers.get('Content-Disposition');
+      let fileName = `BSS_${periodo}_${banco === "012" ? "BBVA" : "OTROS"}.zip`;
+  
+      if (disposition && disposition.includes('filename=')) {
+        fileName = disposition.split('filename=')[1].replace(/["']/g, "").trim();
+      }
+      const link = document.createElement('a');
+      link.href = url;
+      link.setAttribute('download', fileName);
+      document.body.appendChild(link);
+      link.click();
+      link.remove();
+      window.URL.revokeObjectURL(url);
+    } catch (error) {
+      alert("No se pudo generar el archivo ZIP");
+      console.error(error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
 
   const generarTXTBss = async (banco: string) => {
     const periodo = prompt("Ingresa el periodo a exportar:");
@@ -182,17 +216,12 @@ export const TablaBSS = () => {
     setDropdownOpen(false);
     switch (option) {
       case 1:
-        generarXmlBss("012");
+        generarZipBss("012");
         break;
       case 2:
-        generarTXTBss("012");
+        generarZipBss("011");
         break;
-      case 3:
-        generarXmlBss("011");
-        break;
-      case 4:
-        generarTXTBss("011");
-        break;
+
       default:
         console.warn("Opción no válida");
     }
@@ -333,26 +362,16 @@ export const TablaBSS = () => {
                   className="block w-full text-left px-4 py-2 text-sm hover:bg-[#fdebed] text-[#6e1e2a] font-semibold transition"
                   onClick={() => handleDropdownOption(1)}
                 >
-                  Generar XML BBVA
+                  Generar Archivos BBVA
                 </button>
+
                 <button
                   className="block w-full text-left px-4 py-2 text-sm hover:bg-[#fdebed] text-[#6e1e2a] font-semibold transition"
                   onClick={() => handleDropdownOption(2)}
                 >
-                  Generar TXT BBVA
+                  Generar Archivos OTROS
                 </button>
-                <button
-                  className="block w-full text-left px-4 py-2 text-sm hover:bg-[#fdebed] text-[#6e1e2a] font-semibold transition"
-                  onClick={() => handleDropdownOption(3)}
-                >
-                  Generar XML OTROS
-                </button>
-                <button
-                  className="block w-full text-left px-4 py-2 text-sm hover:bg-[#fdebed] text-[#6e1e2a] font-semibold transition"
-                  onClick={() => handleDropdownOption(4)}
-                >
-                  Generar TXT OTROS
-                </button>
+
               </div>
             )}
           </div>
