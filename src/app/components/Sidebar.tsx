@@ -5,7 +5,7 @@ import Link from "next/link";
 import Image from "next/image";
 import { usePathname } from "next/navigation";
 import { LuReceipt, LuBellRing } from "react-icons/lu";
-import { IoMenuOutline, IoCloseOutline } from "react-icons/io5";
+import { IoMenuOutline, IoCloseOutline, IoPersonOutline } from "react-icons/io5";
 import { LuCalendarDays } from "react-icons/lu";
 
 interface SidebarProps {
@@ -70,10 +70,24 @@ export const Sidebar = ({ isAdmin }: SidebarProps) => {
           <nav className="flex-1 px-4 space-y-3">
             {isAdmin && (
               <Link
+                href="/sirh/admin/empleados"
+                className={`group flex items-center gap-4 p-3 rounded-xl transition-all duration-200 ${pathname === "/sirh/admin/empleados"
+                  ? "bg-white/10 text-white font-semibold"
+                  : "hover:bg-white/10 text-gray-300"
+                  }`}
+              >
+                <div className="p-2 rounded-full bg-white/10 group-hover:bg-white/20 transition">
+                  <IoPersonOutline className="w-5 h-5" />
+                </div>
+                <span className="text-base tracking-wide">Empleados</span>
+              </Link>
+            )}
+            {isAdmin && (
+              <Link
                 href="/sirh/admin/bss"
                 className={`group flex items-center gap-4 p-3 rounded-xl transition-all duration-200 ${pathname === "/sirh/admin/bss"
-                    ? "bg-white/10 text-white font-semibold"
-                    : "hover:bg-white/10 text-gray-300"
+                  ? "bg-white/10 text-white font-semibold"
+                  : "hover:bg-white/10 text-gray-300"
                   }`}
               >
                 <div className="p-2 rounded-full bg-white/10 group-hover:bg-white/20 transition">
@@ -87,8 +101,8 @@ export const Sidebar = ({ isAdmin }: SidebarProps) => {
               <Link
                 href="/sirh/admin/periodos"
                 className={`group flex items-center gap-4 p-3 rounded-xl transition-all duration-200 ${pathname === "/sirh/admin/periodos"
-                    ? "bg-white/10 text-white font-semibold"
-                    : "hover:bg-white/10 text-gray-300"
+                  ? "bg-white/10 text-white font-semibold"
+                  : "hover:bg-white/10 text-gray-300"
                   }`}
               >
                 <div className="p-2 rounded-full bg-white/10 group-hover:bg-white/20 transition">
@@ -117,8 +131,8 @@ export const Sidebar = ({ isAdmin }: SidebarProps) => {
                   <Link
                     href="/sirh/recibos"
                     className={`block px-3 py-2 rounded-md text-sm transition ${pathname === "/sirh/recibos"
-                        ? "bg-white/10 text-white font-semibold"
-                        : "text-gray-300 hover:bg-white/10"
+                      ? "bg-white/10 text-white font-semibold"
+                      : "text-gray-300 hover:bg-white/10"
                       }`}
                   >
                     Mis Recibos

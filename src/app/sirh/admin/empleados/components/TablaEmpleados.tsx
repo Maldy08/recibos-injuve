@@ -1,10 +1,11 @@
 'use client';
 
-import { useState } from "react";
+import { useState, useEffect, useRef } from "react";
 import { ImSpinner2 } from "react-icons/im";
-import { FaUser, FaRegFilePdf } from "react-icons/fa";
+import { FaRegFilePdf } from "react-icons/fa";
 import { MdOutlineEmail } from "react-icons/md";
 import { LuStickyNote } from "react-icons/lu";
+import { HiOutlineUpload } from "react-icons/hi";
 import usePdf from "@/app/hooks/usePdf";
 import useSendMail from "@/app/hooks/useSendMail";
 import { Table, Column } from "@/app/sirh/shared/Table";
@@ -29,11 +30,6 @@ interface Periodo {
   neto: string;
 }
 
-interface Props {
-  empleados: Empleado[];
-  tipo: number;
-}
-
 const columns: Column<Empleado>[] = [
   { key: "EMPLEADO", label: "Empleado" },
   { key: "NOMBRE", label: "Nombre", render: (v, row) => `${row.NOMBRE} ${row.APPAT} ${row.APMAT}` },
@@ -42,15 +38,40 @@ const columns: Column<Empleado>[] = [
   { key: "EMAIL", label: "Correo" },
 ];
 
-export const TablaEmpleados = ({ empleados, tipo }: Props) => {
+export const TablaEmpleados = ({ tipo: tipoProp = 1 }: { tipo?: number }) => {
   const [busqueda, setBusqueda] = useState<string>("");
   const [sortKey, setSortKey] = useState<keyof Empleado>("EMPLEADO");
   const [sortOrder, setSortOrder] = useState<"asc" | "desc">("asc");
   const [empleadoSeleccionado, setEmpleadoSeleccionado] = useState<Empleado | null>(null);
   const [periodos, setPeriodos] = useState<Periodo[]>([]);
   const [loadingPeriodos, setLoadingPeriodos] = useState<boolean>(false);
+  const [tipo, setTipo] = useState<number>(tipoProp);
+  const [empleados, setEmpleados] = useState<Empleado[]>([]);
+  const [loadingEmpleados, setLoadingEmpleados] = useState<boolean>(false);
+  const fileInputRef = useRef<HTMLInputElement>(null);
   const { abrirPDF } = usePdf();
   const { sendMail } = useSendMail();
+
+  // Fetch empleados cada vez que cambia el tipo
+
+  const fetchEmpleados = async (tipo: number) => {
+    setLoadingEmpleados(true);
+    try {
+      const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}empleados/${tipo}`, { cache: "no-store" });
+      const data = await res.json();
+      setEmpleados(Array.isArray(data) ? data : []);
+    } catch {
+      setEmpleados([]);
+    } finally {
+      setLoadingEmpleados(false);
+    }
+  };
+
+  useEffect(() => {
+    fetchEmpleados(tipo);
+    setEmpleadoSeleccionado(null);
+    setPeriodos([]);
+  }, [tipo]);
 
   const ordenar = (campo: keyof Empleado) => {
     if (campo === sortKey) {
@@ -110,26 +131,87 @@ export const TablaEmpleados = ({ empleados, tipo }: Props) => {
     }
   };
 
+  // Subir empleados
+  const handleSubirEmpleados = () => {
+    fileInputRef.current?.click();
+  };
+
+  const handleArchivoSeleccionado = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+    const formData = new FormData();
+    formData.append("archivo", file);
+
+    setLoadingEmpleados(true);
+    try {
+      // Selecciona el endpoint según el tipo
+      const endpoint =
+        tipo === 1
+          ? `${process.env.NEXT_PUBLIC_API_URL}upload/mnom01`
+          : `${process.env.NEXT_PUBLIC_API_URL}upload/mnom01h`;
+
+      const response = await fetch(endpoint, {
+        method: "POST",
+        body: formData,
+      });
+      if (!response.ok) throw new Error("Error al subir el archivo");
+      alert("Archivo subido correctamente");
+      fetchEmpleados(tipo); // Refrescar la lista de empleados
+      const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}empleados/${tipo}`, { cache: "no-store" });
+      const data = await res.json();
+      setEmpleados(Array.isArray(data) ? data : []);
+    } catch (error) {
+      alert("No se pudo subir el archivo");
+      console.error(error);
+    } finally {
+      setLoadingEmpleados(false);
+      if (fileInputRef.current) fileInputRef.current.value = "";
+    }
+  };
+
   return (
     <div className="max-w-6xl mx-auto px-4">
       <div className="flex justify-between items-center mt-6 mb-4">
         <div className="flex items-center gap-2">
-          <FaUser className="text-[#6e1e2a]" />
-          <h2 className="text-lg font-semibold text-[#6e1e2a]">Listado de Empleados</h2>
+          <input
+            type="text"
+            placeholder="Buscar empleado..."
+            value={busqueda}
+            onChange={(e) => setBusqueda(e.target.value)}
+            className="border border-gray-300 rounded px-3 py-1 text-sm focus:outline-none focus:ring-1 focus:ring-[#6e1e2a]"
+          />
+          <select
+            value={tipo}
+            onChange={e => setTipo(Number(e.target.value))}
+            className="border border-gray-300 rounded px-3 py-1 text-sm focus:outline-none focus:ring-1 focus:ring-[#6e1e2a] bg-white"
+          >
+            <option value={1}>Nómina</option>
+            <option value={2}>Honorarios</option>
+          </select>
         </div>
-        <input
-          type="text"
-          placeholder="Buscar empleado..."
-          value={busqueda}
-          onChange={(e) => setBusqueda(e.target.value)}
-          className="border border-gray-300 rounded px-3 py-1 text-sm focus:outline-none focus:ring-1 focus:ring-[#6e1e2a]"
-        />
+        <div>
+          <button
+            className="text-xs flex items-center gap-2 bg-gradient-to-r from-[#6e1e2a] to-[#a8324a] hover:from-[#5b1823] hover:to-[#a8324a] text-white px-4 py-2 rounded-lg shadow-md transition-all duration-200 hover:scale-105 focus:ring-2 focus:ring-[#a8324a] focus:outline-none"
+            onClick={handleSubirEmpleados}
+            type="button"
+          >
+            <HiOutlineUpload className="w-5 h-5" />
+            <span>Subir empleados</span>
+          </button>
+          <input
+            type="file"
+            ref={fileInputRef}
+            className="hidden"
+            onChange={handleArchivoSeleccionado}
+            accept=".csv,.xlsx,.xls"
+          />
+        </div>
       </div>
 
       <Table
         data={empleadosFiltrados}
         columns={columns}
-        loading={false}
+        loading={loadingEmpleados}
         acciones={(emp) => (
           <button
             onClick={() => abrirModalPeriodos(emp)}

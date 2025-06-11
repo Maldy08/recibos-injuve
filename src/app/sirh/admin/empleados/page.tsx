@@ -6,13 +6,6 @@ export const metadata = {
     title: 'INJUVE - Sistema Integral de Recursos Humanos',
     description: 'Consulta de Recibos de Nómina',
 };
-
-async function getEmpleados(tipo: number) {
-    const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}empleados/1`, { cache: "no-store" });
-    const data = await res.json();
-    return Array.isArray(data) ? data : [];
-}
-
 export default async function EmpleadosPage() {
     const session = await getServerSession(authOptions);
     const user = session?.user;
@@ -24,12 +17,11 @@ export default async function EmpleadosPage() {
         );
     }
 
-    const empleados = await getEmpleados(1);
 
     return (
         <div>
-            <h1>Empleados</h1>
-            <TablaEmpleados empleados={empleados} tipo={1} />
+                  <h2 className="text-lg font-semibold text-[#6e1e2a] my-4 flex items-center justify-center">Listado de empleados</h2>
+            <TablaEmpleados />
         </div>
     );
 }
