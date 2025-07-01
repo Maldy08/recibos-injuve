@@ -275,7 +275,7 @@ export const TablaEmpleados = ({ tipo: tipoProp = 1 }: { tipo?: number }) => {
                             </td>
                             <td className="px-3 py-2 flex items-center justify-center gap-2">
                               <button
-                                onClick={() => { sendEmailHandler(p.empleado, p.periodo, "camv29@gmail.com") }}
+                                onClick={() => { sendEmailHandler(p.empleado, p.periodo, empleadoSeleccionado.EMAIL) }}
                                 className="bg-[#6e1e2a] hover:bg-[#5b1823] text-white p-2 rounded-full transition"
                                 title="Enviar por correo"
                               >
