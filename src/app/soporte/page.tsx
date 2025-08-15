@@ -12,22 +12,6 @@ export const metadata = {
 };
 
 export default async function SoportePage() {
-  const session = await getServerSession(authOptions);
-  
-  if (!session) {
-    return (
-      <div className="flex items-center justify-center h-screen">
-        <h1 className="text-2xl font-bold">Acceso no autorizado</h1>
-      </div>
-    );
-  }
-
-  const usuario = {
-    empleado: session.user?.empleado,
-    nombre: session.user?.name + " " + session.user?.appat + " " + session.user?.apmat,
-    rfc: session.user?.rfc,
-    email: session.user?.email || '',
-  };
 
   return (
     <div className="max-w-7xl mx-auto px-4 py-6">
