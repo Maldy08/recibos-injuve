@@ -45,7 +45,7 @@ export default async function SoportePage() {
             </svg>
             Reportar Problema
           </h2>
-          <FormularioSoporte usuario={usuario} />
+          <FormularioSoporte/>
         </div>
 
         {/* Información de Contacto */}

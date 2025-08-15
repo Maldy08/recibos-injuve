@@ -4,24 +4,16 @@
 import { useState } from "react";
 import { ImSpinner2 } from "react-icons/im";
 
-interface Usuario {
-  empleado?: number;
-  nombre: string;
-  rfc?: string;
-  email: string;
-}
-
-interface Props {
-  usuario: Usuario;
-}
-
-export const FormularioSoporte = ({ usuario }: Props) => {
+export const FormularioSoporte = () => {
   const [formData, setFormData] = useState({
     tipoProblema: '',
     prioridad: 'media',
     asunto: '',
     descripcion: '',
-    email: usuario.email,
+    nombre: '',
+    email: '',
+    empleado: '',
+    rfc: '',
   });
   
   const [loading, setLoading] = useState(false);
@@ -65,11 +57,6 @@ export const FormularioSoporte = ({ usuario }: Props) => {
       
       const ticketData = {
         ...formData,
-        usuario: {
-          empleado: usuario.empleado,
-          nombre: usuario.nombre,
-          rfc: usuario.rfc,
-        },
         fechaCreacion: new Date().toISOString(),
         estado: 'abierto',
         ticketId: `TICK-${Date.now()}`,
@@ -89,7 +76,10 @@ export const FormularioSoporte = ({ usuario }: Props) => {
         prioridad: 'media',
         asunto: '',
         descripcion: '',
-        email: usuario.email,
+        nombre: '',
+        email: '',
+        empleado: '',
+        rfc: '',
       });
 
     } catch (error) {
@@ -106,12 +96,66 @@ export const FormularioSoporte = ({ usuario }: Props) => {
       <form onSubmit={handleSubmit} className="space-y-4">
         {/* Información del Usuario */}
         <div className="bg-gray-50 p-4 rounded-lg mb-4">
-          <h3 className="text-sm font-semibold text-gray-700 mb-2">Información del Usuario</h3>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-2 text-xs">
-            <p><span className="font-medium">Empleado:</span> {usuario.empleado}</p>
-            <p><span className="font-medium">Nombre:</span> {usuario.nombre}</p>
-            <p><span className="font-medium">RFC:</span> {usuario.rfc}</p>
-            <p><span className="font-medium">Email:</span> {usuario.email}</p>
+          <h3 className="text-sm font-semibold text-gray-700 mb-2">Información Personal</h3>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div>
+              <label htmlFor="nombre" className="block text-sm font-medium text-gray-700 mb-1">
+                Nombre Completo *
+              </label>
+              <input
+                type="text"
+                id="nombre"
+                name="nombre"
+                value={formData.nombre}
+                onChange={handleChange}
+                required
+                className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-[#6e1e2a] focus:border-transparent"
+                placeholder="Tu nombre completo"
+              />
+            </div>
+            <div>
+              <label htmlFor="empleado" className="block text-sm font-medium text-gray-700 mb-1">
+                Número de Empleado (opcional)
+              </label>
+              <input
+                type="text"
+                id="empleado"
+                name="empleado"
+                value={formData.empleado}
+                onChange={handleChange}
+                className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-[#6e1e2a] focus:border-transparent"
+                placeholder="Número de empleado"
+              />
+            </div>
+            <div>
+              <label htmlFor="rfc" className="block text-sm font-medium text-gray-700 mb-1">
+                RFC (opcional)
+              </label>
+              <input
+                type="text"
+                id="rfc"
+                name="rfc"
+                value={formData.rfc}
+                onChange={handleChange}
+                className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-[#6e1e2a] focus:border-transparent"
+                placeholder="RFC"
+              />
+            </div>
+            <div>
+              <label htmlFor="email" className="block text-sm font-medium text-gray-700 mb-1">
+                Email de Contacto *
+              </label>
+              <input
+                type="email"
+                id="email"
+                name="email"
+                value={formData.email}
+                onChange={handleChange}
+                required
+                className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-[#6e1e2a] focus:border-transparent"
+                placeholder="correo@ejemplo.com"
+              />
+            </div>
           </div>
         </div>
 
@@ -154,23 +198,6 @@ export const FormularioSoporte = ({ usuario }: Props) => {
               </option>
             ))}
           </select>
-        </div>
-
-        {/* Email de Contacto */}
-        <div>
-          <label htmlFor="email" className="block text-sm font-medium text-gray-700 mb-1">
-            Email de Contacto *
-          </label>
-          <input
-            type="email"
-            id="email"
-            name="email"
-            value={formData.email}
-            onChange={handleChange}
-            required
-            className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-[#6e1e2a] focus:border-transparent"
-            placeholder="correo@ejemplo.com"
-          />
         </div>
 
         {/* Asunto */}
