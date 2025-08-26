@@ -9,14 +9,17 @@ export const authOptions: NextAuthOptions = {
     CredentialsProvider({
       name: "Credentials",
       credentials: {
-        rfc: { label: "rfc", type: "string" },
+        usuario: { label: "Usuario", type: "text" },
+        password: { label: "Contraseña", type: "password" },
       },
 
       async authorize(credentials) {
         const { data } = await oficiosApi.post<LoginResponse>(
-          `${process.env.NEXT_PUBLIC_API_URL}auth/login`,
+          `${process.env.NEXT_PUBLIC_API_URL}auth/loginMobile`,
+
           {
-            rfc: credentials!.rfc, // Cambia "email" por "rfc" si es necesario
+            email: credentials!.usuario,
+            password: credentials!.password,
           }
         );
         if (data) {

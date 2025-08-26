@@ -13,7 +13,8 @@ export const FormLogin = ({ titulo }: Props) => {
     const router = useRouter();
     const [loading, setLoading] = useState(false);
     const [formValues, setFormValues] = useState({
-        rfc: ""
+        usuario: "",
+        password: ""
     });
     const [error, setError] = useState("");
     const [open, setOpen] = useState(false);
@@ -26,11 +27,12 @@ export const FormLogin = ({ titulo }: Props) => {
         e.preventDefault();
         try {
             setLoading(true);
-            setFormValues({ rfc: "" });
+            setFormValues({ usuario: "", password: "" });
 
             const res = await signIn("credentials", {
                 redirect: false,
-                rfc: formValues.rfc,
+                usuario: formValues.usuario,
+                password: formValues.password,
                 callbackUrl
             });
 
@@ -42,7 +44,7 @@ export const FormLogin = ({ titulo }: Props) => {
                 router.push(res.url);
                 router.refresh();
             } else {
-                setError("rfc incorrecto");
+                setError("Usuario o contraseña incorrectos");
                 setOpen(true)
             }
         } catch (error: any) {
@@ -66,17 +68,36 @@ export const FormLogin = ({ titulo }: Props) => {
                     </h1>
                     <form className="space-y-4 md:space-y-6" onSubmit={onSubmit}>
                         <div>
-                            <label htmlFor="rfc" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">RFC</label>
+                            <label htmlFor="usuario" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Usuario</label>
                             <input
-                                value={formValues.rfc}
+                                value={formValues.usuario}
                                 onChange={handleChange}
                                 type="text"
-                                name="rfc"
-                                id="rfc"
+                                name="usuario"
+                                id="usuario"
                                 className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg
                                     focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5
                                     dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white
-                                    dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder=""
+                                    dark:focus:ring-blue-500 dark:focus:border-blue-500" 
+                                placeholder="Ingresa tu usuario"
+                                required
+                            />
+                        </div>
+
+                        <div>
+                            <label htmlFor="password" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Contraseña</label>
+                            <input
+                                value={formValues.password}
+                                onChange={handleChange}
+                                type="password"
+                                name="password"
+                                id="password"
+                                className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg
+                                    focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5
+                                    dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white
+                                    dark:focus:ring-blue-500 dark:focus:border-blue-500" 
+                                placeholder="Ingresa tu contraseña"
+                                required
                             />
                         </div>
 
