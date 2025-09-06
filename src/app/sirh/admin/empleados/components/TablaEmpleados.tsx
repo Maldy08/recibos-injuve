@@ -225,80 +225,172 @@ export const TablaEmpleados = ({ tipo: tipoProp = 1 }: { tipo?: number }) => {
 
       {/* Modal de Periodos */}
       {empleadoSeleccionado && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-gradient-to-br from-black/70 to-black/60 backdrop-blur-sm px-4">
-          <div className="bg-white rounded-2xl shadow-2xl w-full max-w-4xl p-6 md:p-8 relative animate-fade-in overflow-hidden">
-            <button
-              onClick={() => { setEmpleadoSeleccionado(null); setPeriodos([]); }}
-              className="absolute top-4 right-4 bg-gray-100 hover:bg-gray-300 text-gray-800 rounded-full p-2 transition"
-            >
-              ✕
-            </button>
-            <h2 className="text-xl md:text-2xl font-bold text-center text-[#6e1e2a] mb-6">
-              Periodos de {empleadoSeleccionado.NOMBRE} {empleadoSeleccionado.APPAT}
-            </h2>
-            {loadingPeriodos ? (
-              <div className="flex justify-center items-center py-20">
-                <ImSpinner2 className="animate-spin text-5xl text-[#6e1e2a]" />
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-gradient-to-br from-black/70 to-black/60 backdrop-blur-sm p-2 sm:p-4">
+          <div className="bg-white rounded-2xl shadow-2xl w-full max-w-7xl max-h-[95vh] flex flex-col relative">
+            {/* Header del modal */}
+            <div className="flex items-center justify-between p-4 sm:p-6 border-b border-gray-200 flex-shrink-0">
+              <div className="flex-1">
+                <h2 className="text-lg sm:text-xl lg:text-2xl font-bold text-[#6e1e2a] truncate">
+                  Periodos de {empleadoSeleccionado.NOMBRE} {empleadoSeleccionado.APPAT}
+                </h2>
+                <p className="text-sm text-gray-600 mt-1">
+                  RFC: {empleadoSeleccionado.RFC} | Email: {empleadoSeleccionado.EMAIL}
+                </p>
               </div>
-            ) : (
-              <>
-                {periodos.length > 0 ? (
-                  <div className="overflow-x-auto scrollbar-thin scrollbar-thumb-gray-400 scrollbar-track-gray-200 rounded-md">
-                    <table className="min-w-[700px] divide-y divide-gray-300 text-sm md:text-base text-center">
-                      <thead className="bg-[#383838] text-white uppercase text-xs">
-                        <tr>
-                          <th className="px-3 py-2">Periodo</th>
-                          <th className="px-3 py-2">Fecha Pago</th>
-                          <th className="px-3 py-2">Percepciones</th>
-                          <th className="px-3 py-2">Prestaciones</th>
-                          <th className="px-3 py-2">Deducciones</th>
-                          <th className="px-3 py-2">Neto</th>
-                          <th className="px-3 py-2">Acciones</th>
-                        </tr>
-                      </thead>
-                      <tbody className="divide-y divide-gray-200">
-                        {periodos.map((p) => (
-                          <tr key={p.periodo} className="hover:bg-gray-50 transition">
-                            <td className="px-3 py-2 text-md">{p.periodo}</td>
-                            <td className="px-3 py-2 text-xs">{p.fechaPago}</td>
-                            <td className="px-3 py-2 font-medium text-xs">
-                              ${parseFloat(p.percepciones).toLocaleString('es-MX', { minimumFractionDigits: 2 })}
-                            </td>
-                            <td className="px-3 py-2 font-medium text-xs">
-                              ${parseFloat(p.prestaciones).toLocaleString('es-MX', { minimumFractionDigits: 2 })}
-                            </td>
-                            <td className="px-3 py-2 font-medium text-xs">
-                              ${parseFloat(p.deducciones).toLocaleString('es-MX', { minimumFractionDigits: 2 })}
-                            </td>
-                            <td className="px-3 py-2 font-semibold text-xs">
-                              ${parseFloat(p.neto).toLocaleString('es-MX', { minimumFractionDigits: 2 })}
-                            </td>
-                            <td className="px-3 py-2 flex items-center justify-center gap-2">
-                              <button
-                                onClick={() => { sendEmailHandler(p.empleado, p.periodo, empleadoSeleccionado.EMAIL) }}
-                                className="bg-[#6e1e2a] hover:bg-[#5b1823] text-white p-2 rounded-full transition"
-                                title="Enviar por correo"
-                              >
-                                <MdOutlineEmail className="text-base" />
-                              </button>
-                              <button
-                                onClick={() => { openPdfHandler(p.empleado, p.periodo) }}
-                                className="bg-[#6e1e2a] hover:bg-[#5b1823] text-white p-2 rounded-full transition"
-                                title="Descargar PDF"
-                              >
-                                <FaRegFilePdf className="text-base" />
-                              </button>
-                            </td>
-                          </tr>
-                        ))}
-                      </tbody>
-                    </table>
+              <button
+                onClick={() => { setEmpleadoSeleccionado(null); setPeriodos([]); }}
+                className="ml-4 bg-gray-100 hover:bg-gray-300 text-gray-800 rounded-full p-2 transition-colors flex-shrink-0"
+                aria-label="Cerrar modal"
+              >
+                <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                </svg>
+              </button>
+            </div>
+
+            {/* Contenido del modal */}
+            <div className="flex-1 overflow-y-auto min-h-0">
+              {loadingPeriodos ? (
+                <div className="flex justify-center items-center h-full min-h-[200px] p-4 sm:p-6">
+                  <div className="text-center">
+                    <ImSpinner2 className="animate-spin text-4xl sm:text-5xl text-[#6e1e2a] mx-auto mb-4" />
+                    <p className="text-gray-600">Cargando periodos...</p>
                   </div>
-                ) : (
-                  <p className="text-center text-gray-500 italic py-10">No se encontraron periodos.</p>
-                )}
-              </>
-            )}
+                </div>
+              ) : (
+                <>
+                  {periodos.length > 0 ? (
+                    <div className="p-4 sm:p-6">
+                      {/* Vista para pantallas grandes */}
+                      <div className="hidden lg:block">
+                        <div className="overflow-x-auto scrollbar-thin scrollbar-thumb-gray-400 scrollbar-track-gray-200">
+                          <table className="min-w-full divide-y divide-gray-300 text-sm">
+                            <thead className="bg-[#6e1e2a] text-white sticky top-0 z-10">
+                              <tr>
+                                <th className="px-4 py-3 text-left font-medium uppercase tracking-wider">Periodo</th>
+                                <th className="px-4 py-3 text-left font-medium uppercase tracking-wider">Fecha Pago</th>
+                                <th className="px-4 py-3 text-right font-medium uppercase tracking-wider">Percepciones</th>
+                                <th className="px-4 py-3 text-right font-medium uppercase tracking-wider">Prestaciones</th>
+                                <th className="px-4 py-3 text-right font-medium uppercase tracking-wider">Deducciones</th>
+                                <th className="px-4 py-3 text-right font-medium uppercase tracking-wider">Neto</th>
+                                <th className="px-4 py-3 text-center font-medium uppercase tracking-wider">Acciones</th>
+                              </tr>
+                            </thead>
+                            <tbody className="bg-white divide-y divide-gray-200">
+                              {periodos.map((p) => (
+                                <tr key={p.periodo} className="hover:bg-gray-50 transition-colors">
+                                  <td className="px-4 py-3 font-medium text-gray-900">{p.periodo}</td>
+                                  <td className="px-4 py-3 text-gray-700">{p.fechaPago}</td>
+                                  <td className="px-4 py-3 text-right font-medium text-green-600">
+                                    ${parseFloat(p.percepciones).toLocaleString('es-MX', { minimumFractionDigits: 2 })}
+                                  </td>
+                                  <td className="px-4 py-3 text-right font-medium text-blue-600">
+                                    ${parseFloat(p.prestaciones).toLocaleString('es-MX', { minimumFractionDigits: 2 })}
+                                  </td>
+                                  <td className="px-4 py-3 text-right font-medium text-red-600">
+                                    ${parseFloat(p.deducciones).toLocaleString('es-MX', { minimumFractionDigits: 2 })}
+                                  </td>
+                                  <td className="px-4 py-3 text-right font-bold text-gray-900">
+                                    ${parseFloat(p.neto).toLocaleString('es-MX', { minimumFractionDigits: 2 })}
+                                  </td>
+                                  <td className="px-4 py-3">
+                                    <div className="flex items-center justify-center gap-2">
+                                      <button
+                                        onClick={() => { sendEmailHandler(p.empleado, p.periodo, empleadoSeleccionado.EMAIL) }}
+                                        className="bg-[#6e1e2a] hover:bg-[#5b1823] text-white p-2 rounded-full transition-colors"
+                                        title="Enviar por correo"
+                                      >
+                                        <MdOutlineEmail className="w-4 h-4" />
+                                      </button>
+                                      <button
+                                        onClick={() => { openPdfHandler(p.empleado, p.periodo) }}
+                                        className="bg-blue-600 hover:bg-blue-700 text-white p-2 rounded-full transition-colors"
+                                        title="Descargar PDF"
+                                      >
+                                        <FaRegFilePdf className="w-4 h-4" />
+                                      </button>
+                                    </div>
+                                  </td>
+                                </tr>
+                              ))}
+                            </tbody>
+                          </table>
+                        </div>
+                      </div>
+
+                      {/* Vista para pantallas medianas y pequeñas (cards) */}
+                      <div className="lg:hidden space-y-4">
+                        {periodos.map((p) => (
+                          <div key={p.periodo} className="bg-white border border-gray-200 rounded-lg shadow-sm p-4">
+                            <div className="flex items-center justify-between mb-3">
+                              <div className="flex items-center gap-2">
+                                <span className="bg-[#6e1e2a] text-white px-3 py-1 rounded-full text-sm font-bold">
+                                  Periodo {p.periodo}
+                                </span>
+                                <span className="text-sm text-gray-600">{p.fechaPago}</span>
+                              </div>
+                              <div className="flex gap-2">
+                                <button
+                                  onClick={() => { sendEmailHandler(p.empleado, p.periodo, empleadoSeleccionado.EMAIL) }}
+                                  className="bg-[#6e1e2a] hover:bg-[#5b1823] text-white p-2 rounded-full transition-colors"
+                                  title="Enviar por correo"
+                                >
+                                  <MdOutlineEmail className="w-4 h-4" />
+                                </button>
+                                <button
+                                  onClick={() => { openPdfHandler(p.empleado, p.periodo) }}
+                                  className="bg-blue-600 hover:bg-blue-700 text-white p-2 rounded-full transition-colors"
+                                  title="Descargar PDF"
+                                >
+                                  <FaRegFilePdf className="w-4 h-4" />
+                                </button>
+                              </div>
+                            </div>
+                            
+                            <div className="grid grid-cols-2 gap-3 text-sm">
+                              <div className="bg-green-50 p-3 rounded-lg">
+                                <p className="text-green-800 font-medium mb-1">Percepciones</p>
+                                <p className="text-green-600 font-bold">
+                                  ${parseFloat(p.percepciones).toLocaleString('es-MX', { minimumFractionDigits: 2 })}
+                                </p>
+                              </div>
+                              <div className="bg-blue-50 p-3 rounded-lg">
+                                <p className="text-blue-800 font-medium mb-1">Prestaciones</p>
+                                <p className="text-blue-600 font-bold">
+                                  ${parseFloat(p.prestaciones).toLocaleString('es-MX', { minimumFractionDigits: 2 })}
+                                </p>
+                              </div>
+                              <div className="bg-red-50 p-3 rounded-lg">
+                                <p className="text-red-800 font-medium mb-1">Deducciones</p>
+                                <p className="text-red-600 font-bold">
+                                  ${parseFloat(p.deducciones).toLocaleString('es-MX', { minimumFractionDigits: 2 })}
+                                </p>
+                              </div>
+                              <div className="bg-gray-50 p-3 rounded-lg border-2 border-gray-300">
+                                <p className="text-gray-800 font-medium mb-1">Neto</p>
+                                <p className="text-gray-900 font-bold text-lg">
+                                  ${parseFloat(p.neto).toLocaleString('es-MX', { minimumFractionDigits: 2 })}
+                                </p>
+                              </div>
+                            </div>
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+                  ) : (
+                    <div className="flex items-center justify-center h-full min-h-[200px] p-4 sm:p-6">
+                      <div className="text-center">
+                        <svg className="w-16 h-16 text-gray-400 mx-auto mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                        </svg>
+                        <p className="text-gray-500 text-lg font-medium">No se encontraron periodos</p>
+                        <p className="text-gray-400 text-sm mt-1">Este empleado no tiene periodos registrados</p>
+                      </div>
+                    </div>
+                  )}
+                </>
+              )}
+            </div>
           </div>
         </div>
       )}

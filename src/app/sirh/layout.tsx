@@ -30,7 +30,7 @@ export default async function OficiosLayout({
           </main>
         </div>
       </div>
-      <Footer />
+      {/* <Footer /> */}
     </div>
   );
 }
