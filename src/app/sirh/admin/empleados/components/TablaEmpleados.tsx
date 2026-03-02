@@ -31,6 +31,16 @@ interface Periodo {
 }
 
 const columns: Column<Empleado>[] = [
+  { 
+    key: "EMPLEADO", 
+    label: "#", 
+    align: "center",
+    render: (v, row, index) => (
+      <span className="inline-flex items-center justify-center w-8 h-8 bg-[#6e1e2a] text-white rounded-full text-xs font-semibold">
+        {(index || 0) + 1}
+      </span>
+    )
+  },
   { key: "EMPLEADO", label: "Empleado" },
   { key: "NOMBRE", label: "Nombre", render: (v, row) => `${row.NOMBRE} ${row.APPAT} ${row.APMAT}` },
   { key: "RFC", label: "RFC" },

@@ -11,7 +11,7 @@ export interface Column<T> {
   key: keyof T;
   label: string;
   align?: "left" | "right" | "center";
-  render?: (value: any, row: T) => React.ReactNode;
+  render?: (value: any, row: T, index?: number) => React.ReactNode;
 }
 
 interface TableProps<T> {
@@ -36,9 +36,13 @@ export const Table = <T,>({
   const handlePrev = () => setPage((p) => Math.max(1, p - 1));
   const handleNext = () => setPage((p) => Math.min(totalPages, p + 1));
 
+  // Solo resetear la página cuando cambia la longitud de los datos
   useEffect(() => {
-    setPage(1);
-  }, [data]);
+    // Si la página actual es mayor que el total de páginas disponibles, ajustar
+    if (page > totalPages) {
+      setPage(Math.max(1, totalPages));
+    }
+  }, [data.length, page, totalPages]);
 
   return (
     <div className="relative rounded-2xl border border-gray-200 shadow-lg bg-white overflow-x-auto w-full">
@@ -105,7 +109,7 @@ export const Table = <T,>({
                     }`}
                   >
                     {col.render
-                      ? col.render(row[col.key], row)
+                      ? col.render(row[col.key], row, (page - 1) * rowsPerPage + idx)
                       : String(row[col.key] ?? "")}
                   </td>
                 ))}
