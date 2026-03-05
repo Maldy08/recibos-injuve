@@ -2,7 +2,7 @@
 
 import { useState, useEffect, useRef } from "react";
 import { ImSpinner2 } from "react-icons/im";
-import { FaRegFilePdf } from "react-icons/fa";
+import { FaRegFilePdf, FaEdit } from "react-icons/fa";
 import { MdOutlineEmail } from "react-icons/md";
 import { LuStickyNote } from "react-icons/lu";
 import { HiOutlineUpload } from "react-icons/hi";
@@ -58,6 +58,8 @@ export const TablaEmpleados = ({ tipo: tipoProp = 1 }: { tipo?: number }) => {
   const [tipo, setTipo] = useState<number>(tipoProp);
   const [empleados, setEmpleados] = useState<Empleado[]>([]);
   const [loadingEmpleados, setLoadingEmpleados] = useState<boolean>(false);
+  const [empleadoEditar, setEmpleadoEditar] = useState<Empleado | null>(null);
+  const [loadingEdit, setLoadingEdit] = useState<boolean>(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
   const { abrirPDF } = usePdf();
   const { sendMail } = useSendMail();
@@ -179,6 +181,46 @@ export const TablaEmpleados = ({ tipo: tipoProp = 1 }: { tipo?: number }) => {
     }
   };
 
+  // Abrir modal de edición
+  const abrirModalEdicion = (emp: Empleado) => {
+    setEmpleadoEditar(emp);
+  };
+
+  // Actualizar empleado
+  const handleActualizarEmpleado = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    if (!empleadoEditar) return;
+
+    setLoadingEdit(true);
+    try {
+      const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}empleados/${tipo}/${empleadoEditar.EMPLEADO}`, {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(empleadoEditar),
+      });
+      
+      if (!response.ok) throw new Error("Error al actualizar el empleado");
+      
+      alert("Empleado actualizado correctamente");
+      setEmpleadoEditar(null);
+      fetchEmpleados(tipo); // Refrescar la lista
+    } catch (error) {
+      alert("No se pudo actualizar el empleado");
+      console.error(error);
+    } finally {
+      setLoadingEdit(false);
+    }
+  };
+
+  // Manejar cambios en el formulario de edición
+  const handleCampoChange = (campo: keyof Empleado, valor: string | number) => {
+    if (empleadoEditar) {
+      setEmpleadoEditar({ ...empleadoEditar, [campo]: valor });
+    }
+  };
+
   return (
     <div className="max-w-6xl mx-auto px-4">
       <div className="flex justify-between items-center mt-6 mb-4">
@@ -223,13 +265,23 @@ export const TablaEmpleados = ({ tipo: tipoProp = 1 }: { tipo?: number }) => {
         columns={columns}
         loading={loadingEmpleados}
         acciones={(emp) => (
-          <button
-            onClick={() => abrirModalPeriodos(emp)}
-            className="text-white bg-primary-900 hover:bg-primary-800 rounded-lg flex items-center justify-center p-2 text-xs"
-          >
-            <LuStickyNote />
-            <span className="ml-2">Periodos</span>
-          </button>
+          <div className="flex items-center justify-center gap-2">
+            <button
+              onClick={() => abrirModalEdicion(emp)}
+              className="text-white bg-[#a8324a] hover:bg-[#8b2a3e] rounded-lg flex items-center justify-center p-2 text-xs"
+              title="Editar empleado"
+            >
+              <FaEdit />
+              <span className="ml-2">Editar</span>
+            </button>
+            <button
+              onClick={() => abrirModalPeriodos(emp)}
+              className="text-white bg-primary-900 hover:bg-primary-800 rounded-lg flex items-center justify-center p-2 text-xs"
+            >
+              <LuStickyNote />
+              <span className="ml-2">Periodos</span>
+            </button>
+          </div>
         )}
       />
 
@@ -400,6 +452,146 @@ export const TablaEmpleados = ({ tipo: tipoProp = 1 }: { tipo?: number }) => {
                   )}
                 </>
               )}
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Modal de Edición */}
+      {empleadoEditar && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-gradient-to-br from-black/70 to-black/60 backdrop-blur-sm p-2 sm:p-4">
+          <div className="bg-white rounded-2xl shadow-2xl w-full max-w-2xl max-h-[95vh] flex flex-col relative">
+            {/* Header del modal */}
+            <div className="flex items-center justify-between p-4 sm:p-6 border-b border-gray-200 flex-shrink-0">
+              <div className="flex-1">
+                <h2 className="text-lg sm:text-xl lg:text-2xl font-bold text-[#6e1e2a]">
+                  Editar Empleado
+                </h2>
+                <p className="text-sm text-gray-600 mt-1">
+                  #{empleadoEditar.EMPLEADO} - {empleadoEditar.NOMBRE} {empleadoEditar.APPAT}
+                </p>
+              </div>
+              <button
+                onClick={() => setEmpleadoEditar(null)}
+                className="ml-4 bg-gray-100 hover:bg-gray-300 text-gray-800 rounded-full p-2 transition-colors flex-shrink-0"
+                aria-label="Cerrar modal"
+              >
+                <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                </svg>
+              </button>
+            </div>
+
+            {/* Contenido del modal */}
+            <div className="flex-1 overflow-y-auto min-h-0 p-4 sm:p-6">
+              <form onSubmit={handleActualizarEmpleado} className="space-y-4">
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  {/* Nombre */}
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-1">
+                      Nombre
+                    </label>
+                    <input
+                      type="text"
+                      value={empleadoEditar.NOMBRE}
+                      onChange={(e) => handleCampoChange("NOMBRE", e.target.value)}
+                      className="w-full border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-[#6e1e2a]"
+                      required
+                    />
+                  </div>
+
+                  {/* Apellido Paterno */}
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-1">
+                      Apellido Paterno
+                    </label>
+                    <input
+                      type="text"
+                      value={empleadoEditar.APPAT}
+                      onChange={(e) => handleCampoChange("APPAT", e.target.value)}
+                      className="w-full border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-[#6e1e2a]"
+                      required
+                    />
+                  </div>
+
+                  {/* Apellido Materno */}
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-1">
+                      Apellido Materno
+                    </label>
+                    <input
+                      type="text"
+                      value={empleadoEditar.APMAT}
+                      onChange={(e) => handleCampoChange("APMAT", e.target.value)}
+                      className="w-full border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-[#6e1e2a]"
+                      required
+                    />
+                  </div>
+
+                  {/* RFC */}
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-1">
+                      RFC
+                    </label>
+                    <input
+                      type="text"
+                      value={empleadoEditar.RFC}
+                      onChange={(e) => handleCampoChange("RFC", e.target.value.toUpperCase())}
+                      className="w-full border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-[#6e1e2a]"
+                      maxLength={13}
+                      required
+                    />
+                  </div>
+
+                  {/* CURP */}
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-1">
+                      CURP
+                    </label>
+                    <input
+                      type="text"
+                      value={empleadoEditar.CURP}
+                      onChange={(e) => handleCampoChange("CURP", e.target.value.toUpperCase())}
+                      className="w-full border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-[#6e1e2a]"
+                      maxLength={18}
+                      required
+                    />
+                  </div>
+
+                  {/* Email */}
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-1">
+                      Correo Electrónico
+                    </label>
+                    <input
+                      type="email"
+                      value={empleadoEditar.EMAIL}
+                      onChange={(e) => handleCampoChange("EMAIL", e.target.value)}
+                      className="w-full border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-[#6e1e2a]"
+                      required
+                    />
+                  </div>
+                </div>
+
+                {/* Botones */}
+                <div className="flex justify-end gap-3 pt-4 border-t border-gray-200">
+                  <button
+                    type="button"
+                    onClick={() => setEmpleadoEditar(null)}
+                    className="px-4 py-2 bg-gray-200 hover:bg-gray-300 text-gray-800 rounded-lg transition-colors"
+                  >
+                    Cancelar
+                  </button>
+                  <button
+                    type="submit"
+                    disabled={loadingEdit}
+                    className="px-4 py-2 bg-[#6e1e2a] hover:bg-[#5b1823] text-white rounded-lg transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2"
+                  >
+                    {loadingEdit && <ImSpinner2 className="animate-spin" />}
+                    {loadingEdit ? "Guardando..." : "Guardar Cambios"}
+                  </button>
+                </div>
+              </form>
             </div>
           </div>
         </div>
