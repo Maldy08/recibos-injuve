@@ -135,9 +135,10 @@ export const TablaEmpleados = ({ tipo: tipoProp = 1 }: { tipo?: number }) => {
     setLoadingPeriodos(true);
     try {
       await sendMail(empleado, periodo, correo, tipo);
-      alert("Correo enviado exitosamente");
-    } catch {
-      alert("Error al enviar el correo");
+      // El hook useSendMail ya maneja los mensajes de éxito/error
+    } catch (error) {
+      // El hook ya maneja los errores, solo logueamos aquí
+      console.error("Error inesperado:", error);
     } finally {
       setLoadingPeriodos(false);
     }
