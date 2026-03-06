@@ -4,7 +4,7 @@ import { useState, useEffect } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { usePathname } from "next/navigation";
-import { LuReceipt, LuBellRing, LuUsers, LuCalendarDays } from "react-icons/lu";
+import { LuReceipt, LuBellRing, LuUsers, LuCalendarDays, LuBriefcase, LuLayers } from "react-icons/lu";
 import { IoMenuOutline, IoCloseOutline } from "react-icons/io5";
 
 interface SidebarProps {
@@ -137,6 +137,50 @@ export const Sidebar = ({ isAdmin }: SidebarProps) => {
                   <LuBellRing className="w-5 h-5" />
                 </div>
                 <span className="text-sm font-medium">BSS</span>
+              </Link>
+            )}
+
+            {/* Puestos */}
+            {isAdmin && (
+              <Link
+                href="/sirh/admin/puestos"
+                onClick={handleLinkClick}
+                className={`group flex items-center gap-3 p-3 rounded-xl transition-all duration-200 ${
+                  pathname === "/sirh/admin/puestos"
+                    ? "bg-white/15 text-white font-semibold shadow-lg"
+                    : "hover:bg-white/10 text-gray-300 hover:text-white"
+                }`}
+              >
+                <div className={`p-2 rounded-lg transition-colors duration-200 ${
+                  pathname === "/sirh/admin/puestos" 
+                    ? "bg-white/20" 
+                    : "bg-white/10 group-hover:bg-white/15"
+                }`}>
+                  <LuBriefcase className="w-5 h-5" />
+                </div>
+                <span className="text-sm font-medium">Puestos</span>
+              </Link>
+            )}
+
+            {/* Categorías */}
+            {isAdmin && (
+              <Link
+                href="/sirh/admin/categorias"
+                onClick={handleLinkClick}
+                className={`group flex items-center gap-3 p-3 rounded-xl transition-all duration-200 ${
+                  pathname === "/sirh/admin/categorias"
+                    ? "bg-white/15 text-white font-semibold shadow-lg"
+                    : "hover:bg-white/10 text-gray-300 hover:text-white"
+                }`}
+              >
+                <div className={`p-2 rounded-lg transition-colors duration-200 ${
+                  pathname === "/sirh/admin/categorias" 
+                    ? "bg-white/20" 
+                    : "bg-white/10 group-hover:bg-white/15"
+                }`}>
+                  <LuLayers className="w-5 h-5" />
+                </div>
+                <span className="text-sm font-medium">Categorías</span>
               </Link>
             )}
 
