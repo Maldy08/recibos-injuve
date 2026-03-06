@@ -33,36 +33,7 @@ export default async function DashboardPage() {
   return (
     <div className="min-h-screen bg-gray-50 p-4 lg:p-6">
       {/* Header de bienvenida */}
-      <div className="mb-8">
-        <div className="bg-white rounded-2xl shadow-sm border border-gray-200 overflow-hidden">
-          <div className="relative">
-            <div className="bg-gradient-to-r from-[#6e1e2a] to-[#8b2635] px-6 py-8 text-white">
-              <div className="flex flex-col lg:flex-row items-center justify-between gap-4">
-                <div className="text-center lg:text-left">
-                  <h1 className="text-2xl lg:text-3xl font-bold mb-2">
-                    ¡Bienvenido, {userName}!
-                  </h1>
-                  <p className="text-white/90 text-lg">
-                    Sistema Integral de Recursos Humanos
-                  </p>
-                  <p className="text-white/70 text-sm mt-1 capitalize">
-                    {currentDate}
-                  </p>
-                </div>
-                <div className="hidden lg:block">
-                  <Image
-                    src="/assets/logo.png"
-                    alt="Logo INJUVE"
-                    width={200}
-                    height={60}
-                    className="object-contain"
-                  />
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
+   
 
       {/* Accesos rápidos */}
       <div className="mb-8">

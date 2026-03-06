@@ -4,7 +4,7 @@ import { useState, useEffect } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { usePathname } from "next/navigation";
-import { LuReceipt, LuBellRing, LuUsers, LuCalendarDays, LuBriefcase, LuLayers } from "react-icons/lu";
+import { LuReceipt, LuBellRing, LuUsers, LuCalendarDays, LuBriefcase, LuLayers, LuFolderOpen, LuUserCog } from "react-icons/lu";
 import { IoMenuOutline, IoCloseOutline } from "react-icons/io5";
 
 interface SidebarProps {
@@ -14,12 +14,23 @@ interface SidebarProps {
 export const Sidebar = ({ isAdmin }: SidebarProps) => {
   const [isOpen, setIsOpen] = useState(false);
   const [submenuOpen, setSubmenuOpen] = useState(false);
+  const [catalogosSubmenuOpen, setCatalogosSubmenuOpen] = useState(false);
   const pathname = usePathname();
 
   // Auto-abrir submenu si estamos en una ruta de recibos
   useEffect(() => {
     if (pathname.includes('/sirh/recibos')) {
       setSubmenuOpen(true);
+    }
+  }, [pathname]);
+
+  // Auto-abrir submenu si estamos en una ruta de catálogos
+  useEffect(() => {
+    if (pathname.includes('/sirh/admin/empleados') || 
+        pathname.includes('/sirh/admin/puestos') || 
+        pathname.includes('/sirh/admin/categorias') ||
+        pathname.includes('/sirh/admin/usuarios')) {
+      setCatalogosSubmenuOpen(true);
     }
   }, [pathname]);
 
@@ -96,26 +107,103 @@ export const Sidebar = ({ isAdmin }: SidebarProps) => {
 
           {/* Navegación principal */}
           <nav className="flex-1 px-4 py-6 space-y-2 overflow-y-auto">
-            {/* Empleados */}
+            {/* Catálogos */}
             {isAdmin && (
-              <Link
-                href="/sirh/admin/empleados"
-                onClick={handleLinkClick}
-                className={`group flex items-center gap-3 p-3 rounded-xl transition-all duration-200 ${
-                  pathname === "/sirh/admin/empleados"
-                    ? "bg-white/15 text-white font-semibold shadow-lg"
-                    : "hover:bg-white/10 text-gray-300 hover:text-white"
-                }`}
-              >
-                <div className={`p-2 rounded-lg transition-colors duration-200 ${
-                  pathname === "/sirh/admin/empleados" 
-                    ? "bg-white/20" 
-                    : "bg-white/10 group-hover:bg-white/15"
-                }`}>
-                  <LuUsers className="w-5 h-5" />
-                </div>
-                <span className="text-sm font-medium">Empleados</span>
-              </Link>
+              <div>
+                <button
+                  onClick={() => setCatalogosSubmenuOpen(!catalogosSubmenuOpen)}
+                  className={`w-full flex items-center justify-between p-3 rounded-xl transition-all duration-200 ${
+                    pathname.includes('/sirh/admin/empleados') || 
+                    pathname.includes('/sirh/admin/puestos') || 
+                    pathname.includes('/sirh/admin/categorias') ||
+                    pathname.includes('/sirh/admin/usuarios')
+                      ? "bg-white/15 text-white" 
+                      : "text-gray-300 hover:bg-white/10 hover:text-white"
+                  }`}
+                >
+                  <span className="flex items-center gap-3">
+                    <div className={`p-2 rounded-lg transition-colors duration-200 ${
+                      pathname.includes('/sirh/admin/empleados') || 
+                      pathname.includes('/sirh/admin/puestos') || 
+                      pathname.includes('/sirh/admin/categorias') ||
+                      pathname.includes('/sirh/admin/usuarios')
+                        ? "bg-white/20" 
+                        : "bg-white/10 group-hover:bg-white/15"
+                    }`}>
+                      <LuFolderOpen className="w-5 h-5" />
+                    </div>
+                    <span className="text-sm font-medium">Catálogos</span>
+                  </span>
+                  <svg 
+                    className={`w-4 h-4 transition-transform duration-200 ${catalogosSubmenuOpen ? 'rotate-180' : ''}`}
+                    fill="none" 
+                    stroke="currentColor" 
+                    viewBox="0 0 24 24"
+                  >
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+                  </svg>
+                </button>
+
+                {catalogosSubmenuOpen && (
+                  <div className="ml-6 mt-2 space-y-1 border-l border-white/20 pl-4">
+                    {/* Empleados */}
+                    <Link
+                      href="/sirh/admin/empleados"
+                      onClick={handleLinkClick}
+                      className={`group flex items-center gap-3 p-3 rounded-xl transition-all duration-200 ${
+                        pathname === "/sirh/admin/empleados"
+                          ? "bg-white/15 text-white font-semibold shadow-lg"
+                          : "hover:bg-white/10 text-gray-300 hover:text-white"
+                      }`}
+                    >
+                      <LuUsers className="w-4 h-4" />
+                      <span className="text-sm font-medium">Empleados</span>
+                    </Link>
+
+                    {/* Puestos */}
+                    <Link
+                      href="/sirh/admin/puestos"
+                      onClick={handleLinkClick}
+                      className={`group flex items-center gap-3 p-3 rounded-xl transition-all duration-200 ${
+                        pathname === "/sirh/admin/puestos"
+                          ? "bg-white/15 text-white font-semibold shadow-lg"
+                          : "hover:bg-white/10 text-gray-300 hover:text-white"
+                      }`}
+                    >
+                      <LuBriefcase className="w-4 h-4" />
+                      <span className="text-sm font-medium">Puestos</span>
+                    </Link>
+
+                    {/* Categorías */}
+                    <Link
+                      href="/sirh/admin/categorias"
+                      onClick={handleLinkClick}
+                      className={`group flex items-center gap-3 p-3 rounded-xl transition-all duration-200 ${
+                        pathname === "/sirh/admin/categorias"
+                          ? "bg-white/15 text-white font-semibold shadow-lg"
+                          : "hover:bg-white/10 text-gray-300 hover:text-white"
+                      }`}
+                    >
+                      <LuLayers className="w-4 h-4" />
+                      <span className="text-sm font-medium">Categorías</span>
+                    </Link>
+
+                    {/* Usuarios */}
+                    <Link
+                      href="/sirh/admin/usuarios"
+                      onClick={handleLinkClick}
+                      className={`group flex items-center gap-3 p-3 rounded-xl transition-all duration-200 ${
+                        pathname === "/sirh/admin/usuarios"
+                          ? "bg-white/15 text-white font-semibold shadow-lg"
+                          : "hover:bg-white/10 text-gray-300 hover:text-white"
+                      }`}
+                    >
+                      <LuUserCog className="w-4 h-4" />
+                      <span className="text-sm font-medium">Usuarios</span>
+                    </Link>
+                  </div>
+                )}
+              </div>
             )}
 
             {/* BSS */}
@@ -137,50 +225,6 @@ export const Sidebar = ({ isAdmin }: SidebarProps) => {
                   <LuBellRing className="w-5 h-5" />
                 </div>
                 <span className="text-sm font-medium">BSS</span>
-              </Link>
-            )}
-
-            {/* Puestos */}
-            {isAdmin && (
-              <Link
-                href="/sirh/admin/puestos"
-                onClick={handleLinkClick}
-                className={`group flex items-center gap-3 p-3 rounded-xl transition-all duration-200 ${
-                  pathname === "/sirh/admin/puestos"
-                    ? "bg-white/15 text-white font-semibold shadow-lg"
-                    : "hover:bg-white/10 text-gray-300 hover:text-white"
-                }`}
-              >
-                <div className={`p-2 rounded-lg transition-colors duration-200 ${
-                  pathname === "/sirh/admin/puestos" 
-                    ? "bg-white/20" 
-                    : "bg-white/10 group-hover:bg-white/15"
-                }`}>
-                  <LuBriefcase className="w-5 h-5" />
-                </div>
-                <span className="text-sm font-medium">Puestos</span>
-              </Link>
-            )}
-
-            {/* Categorías */}
-            {isAdmin && (
-              <Link
-                href="/sirh/admin/categorias"
-                onClick={handleLinkClick}
-                className={`group flex items-center gap-3 p-3 rounded-xl transition-all duration-200 ${
-                  pathname === "/sirh/admin/categorias"
-                    ? "bg-white/15 text-white font-semibold shadow-lg"
-                    : "hover:bg-white/10 text-gray-300 hover:text-white"
-                }`}
-              >
-                <div className={`p-2 rounded-lg transition-colors duration-200 ${
-                  pathname === "/sirh/admin/categorias" 
-                    ? "bg-white/20" 
-                    : "bg-white/10 group-hover:bg-white/15"
-                }`}>
-                  <LuLayers className="w-5 h-5" />
-                </div>
-                <span className="text-sm font-medium">Categorías</span>
               </Link>
             )}
 
