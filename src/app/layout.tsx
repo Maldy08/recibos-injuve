@@ -2,6 +2,7 @@ import './globals.css'
 import type { Metadata } from 'next'
 import { Inter } from 'next/font/google'
 import { AuthProvider } from './auth/components/AuthProvider'
+import { GlobalToaster } from './components'
 
 const inter = Inter({ subsets: ['latin'] })
 
@@ -46,7 +47,10 @@ export default function RootLayout({
           <meta name="msapplication-TileColor" content="#6e1e2a" />
           <meta name="msapplication-TileImage" content="/icons/icon-144x144.png" />
         </head>
-        <body className={inter.className}>{children}</body>
+        <body className={inter.className}>
+          {children}
+          <GlobalToaster />
+        </body>
       </html>
     </AuthProvider>
   )

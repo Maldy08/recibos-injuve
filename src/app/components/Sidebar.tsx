@@ -24,12 +24,13 @@ export const Sidebar = ({ isAdmin }: SidebarProps) => {
     }
   }, [pathname]);
 
-  // Auto-abrir submenu si estamos en una ruta de catálogos
+  // Auto-abrir submenu si estamos en una ruta de catÃ¡logos
   useEffect(() => {
     if (pathname.includes('/sirh/admin/empleados') || 
         pathname.includes('/sirh/admin/puestos') || 
         pathname.includes('/sirh/admin/categorias') ||
-        pathname.includes('/sirh/admin/usuarios')) {
+        pathname.includes('/sirh/admin/usuarios') ||
+        pathname.includes('/sirh/admin/catalogos')) {
       setCatalogosSubmenuOpen(true);
     }
   }, [pathname]);
@@ -45,7 +46,7 @@ export const Sidebar = ({ isAdmin }: SidebarProps) => {
     return () => window.removeEventListener("resize", handleResize);
   }, []);
 
-  // Cerrar sidebar al hacer clic en un enlace (solo móvil)
+  // Cerrar sidebar al hacer clic en un enlace (solo mÃ³vil)
   const handleLinkClick = () => {
     if (window.innerWidth < 1024) {
       setIsOpen(false);
@@ -54,7 +55,7 @@ export const Sidebar = ({ isAdmin }: SidebarProps) => {
 
   return (
     <>
-      {/* Overlay para móviles */}
+      {/* Overlay para mÃ³viles */}
       {isOpen && (
         <div 
           className="fixed inset-0 bg-black/50 z-30 lg:hidden" 
@@ -62,12 +63,12 @@ export const Sidebar = ({ isAdmin }: SidebarProps) => {
         />
       )}
 
-      {/* Botón hamburguesa */}
+      {/* BotÃ³n hamburguesa */}
       {!isOpen && (
         <button
           onClick={() => setIsOpen(true)}
           className="lg:hidden fixed top-4 left-4 z-50 bg-[#2d3748] text-white p-3 rounded-xl shadow-lg hover:bg-[#4a5568] transition-colors duration-200"
-          aria-label="Abrir menú"
+          aria-label="Abrir menÃº"
         >
           <IoMenuOutline className="w-6 h-6" />
         </button>
@@ -91,12 +92,12 @@ export const Sidebar = ({ isAdmin }: SidebarProps) => {
                 priority
                 className="object-contain"
               />
-              {/* Botón cerrar en móviles */}
+              {/* BotÃ³n cerrar en mÃ³viles */}
               {isOpen && (
                 <button
                   onClick={() => setIsOpen(false)}
                   className="lg:hidden bg-white/10 hover:bg-white/20 text-white p-2 rounded-lg transition-colors duration-200"
-                  aria-label="Cerrar menú"
+                  aria-label="Cerrar menÃº"
                 >
                   <IoCloseOutline className="w-5 h-5" />
                 </button>
@@ -105,9 +106,9 @@ export const Sidebar = ({ isAdmin }: SidebarProps) => {
 
           </div>
 
-          {/* Navegación principal */}
+          {/* NavegaciÃ³n principal */}
           <nav className="flex-1 px-4 py-6 space-y-2 overflow-y-auto">
-            {/* Catálogos */}
+            {/* CatÃ¡logos */}
             {isAdmin && (
               <div>
                 <button
@@ -116,7 +117,8 @@ export const Sidebar = ({ isAdmin }: SidebarProps) => {
                     pathname.includes('/sirh/admin/empleados') || 
                     pathname.includes('/sirh/admin/puestos') || 
                     pathname.includes('/sirh/admin/categorias') ||
-                    pathname.includes('/sirh/admin/usuarios')
+                    pathname.includes('/sirh/admin/usuarios') ||
+                    pathname.includes('/sirh/admin/catalogos')
                       ? "bg-white/15 text-white" 
                       : "text-gray-300 hover:bg-white/10 hover:text-white"
                   }`}
@@ -126,13 +128,14 @@ export const Sidebar = ({ isAdmin }: SidebarProps) => {
                       pathname.includes('/sirh/admin/empleados') || 
                       pathname.includes('/sirh/admin/puestos') || 
                       pathname.includes('/sirh/admin/categorias') ||
-                      pathname.includes('/sirh/admin/usuarios')
+                      pathname.includes('/sirh/admin/usuarios') ||
+                      pathname.includes('/sirh/admin/catalogos')
                         ? "bg-white/20" 
                         : "bg-white/10 group-hover:bg-white/15"
                     }`}>
                       <LuFolderOpen className="w-5 h-5" />
                     </div>
-                    <span className="text-sm font-medium">Catálogos</span>
+                    <span className="text-sm font-medium">CatÃ¡logos</span>
                   </span>
                   <svg 
                     className={`w-4 h-4 transition-transform duration-200 ${catalogosSubmenuOpen ? 'rotate-180' : ''}`}
@@ -174,7 +177,7 @@ export const Sidebar = ({ isAdmin }: SidebarProps) => {
                       <span className="text-sm font-medium">Puestos</span>
                     </Link>
 
-                    {/* Categorías */}
+                    {/* CategorÃ­as */}
                     <Link
                       href="/sirh/admin/categorias"
                       onClick={handleLinkClick}
@@ -185,9 +188,23 @@ export const Sidebar = ({ isAdmin }: SidebarProps) => {
                       }`}
                     >
                       <LuLayers className="w-4 h-4" />
-                      <span className="text-sm font-medium">Categorías</span>
+                      <span className="text-sm font-medium">CategorÃ­as</span>
                     </Link>
 
+
+                    {/* Catalogos Nomina */}
+                    <Link
+                      href="/sirh/admin/catalogos"
+                      onClick={handleLinkClick}
+                      className={`group flex items-center gap-3 p-3 rounded-xl transition-all duration-200 ${
+                        pathname === "/sirh/admin/catalogos"
+                          ? "bg-white/15 text-white font-semibold shadow-lg"
+                          : "hover:bg-white/10 text-gray-300 hover:text-white"
+                      }`}
+                    >
+                      <LuFolderOpen className="w-4 h-4" />
+                      <span className="text-sm font-medium">Catalogos nomina</span>
+                    </Link>
                     {/* Usuarios */}
                     <Link
                       href="/sirh/admin/usuarios"
@@ -302,7 +319,7 @@ export const Sidebar = ({ isAdmin }: SidebarProps) => {
           <div className="p-4 border-t border-white/10">
             <div className="text-center">
               <p className="text-white/60 text-xs">
-                © {new Date().getFullYear()} INJUVE
+                Â© {new Date().getFullYear()} INJUVE
               </p>
               <p className="text-white/40 text-xs mt-1">
                 v2.0.0
@@ -314,3 +331,4 @@ export const Sidebar = ({ isAdmin }: SidebarProps) => {
     </>
   );
 };
+
