@@ -121,7 +121,8 @@ export const TablaBSS = () => {
       const blob = await response.blob();
       const url = window.URL.createObjectURL(blob);
       const disposition = response.headers.get('Content-Disposition');
-      let fileName = banco === "012" ? `BSS_${periodo}_BBVA.xml` : `BSS_${periodo}_OTROS.xml`;
+      const bancoLabel = banco === "012" ? "BBVA" : banco === "PENSION" ? "PENSION" : "OTROS";
+      let fileName = `BSS_${periodo}_${bancoLabel}.xml`;
 
       if (disposition && disposition.includes('filename=')) {
         fileName = disposition.split('filename=')[1].replace(/["']/g, "").trim();
@@ -155,7 +156,8 @@ export const TablaBSS = () => {
       const blob = await response.blob();
       const url = window.URL.createObjectURL(blob);
       const disposition = response.headers.get('Content-Disposition');
-      let fileName = `BSS_${periodo}_${banco === "012" ? "BBVA" : "OTROS"}.zip`;
+      const bancoLabel = banco === "012" ? "BBVA" : banco === "PENSION" ? "PENSION" : "OTROS";
+      let fileName = `BSS_${periodo}_${bancoLabel}.zip`;
 
       if (disposition && disposition.includes('filename=')) {
         fileName = disposition.split('filename=')[1].replace(/["']/g, "").trim();
@@ -189,7 +191,8 @@ export const TablaBSS = () => {
       const blob = await response.blob();
       const url = window.URL.createObjectURL(blob);
       const disposition = response.headers.get('Content-Disposition');
-      let fileName = banco === "012" ? `BSS_${periodo}_BBVA.txt` : `BSS_${periodo}_OTROS.txt`;
+      const bancoLabel = banco === "012" ? "BBVA" : banco === "PENSION" ? "PENSION" : "OTROS";
+      let fileName = `BSS_${periodo}_${bancoLabel}.txt`;
 
       if (disposition && disposition.includes('filename=')) {
         fileName = disposition.split('filename=')[1].replace(/["']/g, "").trim();
@@ -218,6 +221,9 @@ export const TablaBSS = () => {
         break;
       case 2:
         generarZipBss("011");
+        break;
+      case 3:
+        generarZipBss("PENSION");
         break;
       default:
         console.warn("Opción no válida");
@@ -398,6 +404,13 @@ export const TablaBSS = () => {
                   onClick={() => handleDropdownOption(2)}
                 >
                   Generar Archivos OTROS
+                </button>
+
+                <button
+                  className="block w-full text-left px-4 py-2 text-sm hover:bg-[#fdebed] text-[#6e1e2a] font-semibold transition"
+                  onClick={() => handleDropdownOption(3)}
+                >
+                  Pensión Alimenticia
                 </button>
 
               </div>
