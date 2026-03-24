@@ -9,7 +9,7 @@ export const sendEmailHandler = (
   setProgress(0);
   setProgressTotal(null);
 
-  const url = `${process.env.NEXT_PUBLIC_API_URL}send-email/enviar-recibos?periodo=${periodo}&tipo=${tipo}`;
+  const url = `/api/sse-proxy?periodo=${periodo}&tipo=${tipo}`;
   const eventSource = new EventSource(url);
   eventSource.onmessage = (event) => {
     const data = JSON.parse(event.data);

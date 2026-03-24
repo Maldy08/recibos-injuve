@@ -1,3 +1,5 @@
+import { fetchWithAuth } from "@/app/lib/api-fetch";
+
 /**
  * Convierte el paso técnico del proceso en un mensaje amigable para el usuario
  */
@@ -27,7 +29,7 @@ export default function useSendMail() {
         }
 
         try {
-            const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}send-email/enviar-recibo`, {
+            const response = await fetchWithAuth(`${process.env.NEXT_PUBLIC_API_URL}send-email/enviar-recibo`, {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",

@@ -1,14 +1,5 @@
-import axios from "axios";
+import api from "@/app/lib/api-axios";
 import { Puesto } from "@/app/domain/entities/puesto";
-
-const API_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:3001/api/backend/";
-
-const api = axios.create({
-  baseURL: API_URL,
-  headers: {
-    "Content-Type": "application/json",
-  },
-});
 
 export const PuestosRepository = {
   getAll: async (): Promise<Puesto[]> => {

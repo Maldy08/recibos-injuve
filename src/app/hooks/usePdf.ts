@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { fetchWithAuth } from "@/app/lib/api-fetch";
 
 
 export default function usePdf() {
@@ -6,7 +7,7 @@ export default function usePdf() {
     const abrirPDF = async (empleado: number, periodo: number, tipo: number) => {
 
         try {
-            const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}pdf/${empleado}/${periodo}/${tipo}`);
+            const response = await fetchWithAuth(`${process.env.NEXT_PUBLIC_API_URL}pdf/${empleado}/${periodo}/${tipo}`);
             if (!response.ok) throw new Error("No se pudo generar el PDF");
     
             const blob = await response.blob();

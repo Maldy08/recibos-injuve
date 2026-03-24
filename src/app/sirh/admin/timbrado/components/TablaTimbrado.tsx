@@ -7,6 +7,7 @@ import { MdOutlineEmail } from "react-icons/md";
 import { IoDocumentTextOutline } from "react-icons/io5";
 import { RiFileExcel2Fill } from "react-icons/ri";
 import { HiOutlineUpload } from "react-icons/hi";
+import { fetchWithAuth } from "@/app/lib/api-fetch";
 
 interface ResumenRecibo {
   PERIODO: number;
@@ -36,7 +37,7 @@ export default function TablaTimbrado() {
   const fetchResumen = async () => {
     setLoading(true);
     try {
-      const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}nomina/resumen/${tipo}`, {
+      const res = await fetchWithAuth(`${process.env.NEXT_PUBLIC_API_URL}nomina/resumen/${tipo}`, {
         cache: "no-store",
       });
       const data = await res.json();
@@ -56,7 +57,7 @@ export default function TablaTimbrado() {
   const generarTimbradoHandler = async (periodo: number) => {
     setLoading(true);
     try {
-      const response = await fetch(
+      const response = await fetchWithAuth(
         `${process.env.NEXT_PUBLIC_API_URL}timbrado//${periodo}/${tipo}`,
         { method: "GET", cache: "no-store" }
       );
@@ -86,7 +87,7 @@ export default function TablaTimbrado() {
   const generarExcelBSSHandler = async (periodo: number) => {
     setLoading(true);
     try {
-      const response = await fetch(
+      const response = await fetchWithAuth(
         `${process.env.NEXT_PUBLIC_API_URL}timbrado/percepciones/${periodo}`,
         { method: "GET", cache: "no-store" }
       );
@@ -132,7 +133,7 @@ export default function TablaTimbrado() {
           ? `${process.env.NEXT_PUBLIC_API_URL}upload/mnom12`
           : `${process.env.NEXT_PUBLIC_API_URL}upload/mnom12h`;
 
-      const response = await fetch(endpoint, {
+      const response = await fetchWithAuth(endpoint, {
         method: "POST",
         body: formData,
       });

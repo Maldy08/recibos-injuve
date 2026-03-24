@@ -9,6 +9,7 @@ import { HiOutlineUpload } from "react-icons/hi";
 import usePdf from "@/app/hooks/usePdf";
 import useSendMail from "@/app/hooks/useSendMail";
 import { Table, Column } from "@/app/sirh/shared/Table";
+import { fetchWithAuth } from "@/app/lib/api-fetch";
 
 interface Empleado {
   EMPLEADO: number;
@@ -69,7 +70,7 @@ export const TablaEmpleados = ({ tipo: tipoProp = 1 }: { tipo?: number }) => {
   const fetchEmpleados = async (tipo: number) => {
     setLoadingEmpleados(true);
     try {
-      const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}empleados/${tipo}`, { cache: "no-store" });
+      const res = await fetchWithAuth(`${process.env.NEXT_PUBLIC_API_URL}empleados/${tipo}`, { cache: "no-store" });
       const data = await res.json();
       setEmpleados(Array.isArray(data) ? data : []);
     } catch {
@@ -115,7 +116,7 @@ export const TablaEmpleados = ({ tipo: tipoProp = 1 }: { tipo?: number }) => {
     setEmpleadoSeleccionado(emp);
     setLoadingPeriodos(true);
     try {
-      const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}nomina/recibos/${emp.EMPLEADO}/${tipo}`);
+      const res = await fetchWithAuth(`${process.env.NEXT_PUBLIC_API_URL}nomina/recibos/${emp.EMPLEADO}/${tipo}`);
       const data = await res.json();
       setPeriodos(Array.isArray(data) ? data : []);
     } catch (error) {
@@ -163,14 +164,14 @@ export const TablaEmpleados = ({ tipo: tipoProp = 1 }: { tipo?: number }) => {
           ? `${process.env.NEXT_PUBLIC_API_URL}upload/mnom01`
           : `${process.env.NEXT_PUBLIC_API_URL}upload/mnom01h`;
 
-      const response = await fetch(endpoint, {
+      const response = await fetchWithAuth(endpoint, {
         method: "POST",
         body: formData,
       });
       if (!response.ok) throw new Error("Error al subir el archivo");
       alert("Archivo subido correctamente");
       fetchEmpleados(tipo); // Refrescar la lista de empleados
-      const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}empleados/${tipo}`, { cache: "no-store" });
+      const res = await fetchWithAuth(`${process.env.NEXT_PUBLIC_API_URL}empleados/${tipo}`, { cache: "no-store" });
       const data = await res.json();
       setEmpleados(Array.isArray(data) ? data : []);
     } catch (error) {
@@ -194,7 +195,7 @@ export const TablaEmpleados = ({ tipo: tipoProp = 1 }: { tipo?: number }) => {
 
     setLoadingEdit(true);
     try {
-      const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}empleados/${tipo}/${empleadoEditar.EMPLEADO}`, {
+      const response = await fetchWithAuth(`${process.env.NEXT_PUBLIC_API_URL}empleados/${tipo}/${empleadoEditar.EMPLEADO}`, {
         method: "PUT",
         headers: {
           "Content-Type": "application/json",

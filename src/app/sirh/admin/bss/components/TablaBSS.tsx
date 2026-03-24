@@ -3,6 +3,7 @@ import { Column, Table } from '@/app/sirh/shared/Table';
 import React, { useEffect, useRef, useState } from 'react';
 import { HiOutlineUpload, HiChevronDown } from "react-icons/hi";
 import { MdEdit } from 'react-icons/md';
+import { fetchWithAuth } from '@/app/lib/api-fetch';
 
 interface TablaBSS {
   empleado: string;
@@ -52,7 +53,7 @@ export const TablaBSS = () => {
   const fetchBSSData = async () => {
     setLoading(true);
     try {
-      const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}bss/get-datos-bss`, {
+      const response = await fetchWithAuth(`${process.env.NEXT_PUBLIC_API_URL}bss/get-datos-bss`, {
         cache: "no-store",
       });
       const data = await response.json();
@@ -90,7 +91,7 @@ export const TablaBSS = () => {
 
     setLoading(true);
     try {
-      const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}bss/upload`, {
+      const response = await fetchWithAuth(`${process.env.NEXT_PUBLIC_API_URL}bss/upload`, {
         method: "POST",
         body: formData,
       });
@@ -113,7 +114,7 @@ export const TablaBSS = () => {
 
     setLoading(true);
     try {
-      const response = await fetch(
+      const response = await fetchWithAuth(
         `${process.env.NEXT_PUBLIC_API_URL}bss/exportar-xml/${periodo}/${banco}`,
         { method: "GET" }
       );
@@ -148,7 +149,7 @@ export const TablaBSS = () => {
 
     setLoading(true);
     try {
-      const response = await fetch(
+      const response = await fetchWithAuth(
         `${process.env.NEXT_PUBLIC_API_URL}bss/exportar-zip/${periodo}/${banco}`,
         { method: "GET" }
       );
@@ -183,7 +184,7 @@ export const TablaBSS = () => {
 
     setLoading(true);
     try {
-      const response = await fetch(
+      const response = await fetchWithAuth(
         `${process.env.NEXT_PUBLIC_API_URL}bss/exportar-txt/${periodo}/${banco}`,
         { method: "GET" }
       );
@@ -240,7 +241,7 @@ export const TablaBSS = () => {
     if (!empleadoEdit) return;
     setLoading(true);
     try {
-      const response = await fetch(
+      const response = await fetchWithAuth(
         `${process.env.NEXT_PUBLIC_API_URL}bss/actualizar`,
         {
           method: "POST",

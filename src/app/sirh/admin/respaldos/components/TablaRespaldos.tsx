@@ -4,6 +4,7 @@ import { useState, useEffect } from "react";
 import { Table, Column } from "@/app/sirh/shared/Table";
 import { LuRefreshCw } from "react-icons/lu";
 import { HiOutlineDownload } from "react-icons/hi";
+import { fetchWithAuth } from "@/app/lib/api-fetch";
 
 interface Respaldo {
   nombre: string;
@@ -51,7 +52,7 @@ export default function TablaRespaldos() {
     setLoading(true);
     setError(null);
     try {
-      const res = await fetch(
+      const res = await fetchWithAuth(
         `${process.env.NEXT_PUBLIC_API_URL}upload/backup-mdb`,
         { cache: "no-store" }
       );

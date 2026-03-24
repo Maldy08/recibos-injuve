@@ -7,8 +7,11 @@ export const metadata = {
   description: 'Consulta de Recibos de Nómina',
 };
 
-async function getRecibos(empleado: number, tipo: number, anio: string) {
-  const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}nomina/recibos/${empleado}/${tipo}`, { cache: "no-store" });
+async function getRecibos(empleado: number, tipo: number, anio: string, token: string) {
+  const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}nomina/recibos/${empleado}/${tipo}`, {
+    cache: "no-store",
+    headers: { Authorization: `Bearer ${token}` },
+  });
   const data = await res.json();
   if (Array.isArray(data)) {
     return data
@@ -35,7 +38,7 @@ export default async function RecibosPage() {
   const tipo = session.user?.tipo;
   const anio = "2025"; // Puedes obtenerlo de query params o dejarlo fijo
 
-  const recibos = await getRecibos(empleado!, tipo!, anio);
+  const recibos = await getRecibos(empleado!, tipo!, anio, session.user?.token as string);
 
   return (
     <div>
