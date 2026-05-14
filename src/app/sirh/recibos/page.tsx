@@ -18,7 +18,11 @@ async function getRecibos(empleado: number, tipo: number, anio: string) {
   return [];
 }
 
-export default async function RecibosPage() {
+export default async function RecibosPage({
+  searchParams,
+}: {
+  searchParams?: { anio?: string };
+}) {
   const session = await getServerSession(authOptions);
   if (!session) {
     return (
@@ -33,7 +37,7 @@ export default async function RecibosPage() {
   const rfc = session.user?.rfc;
   const curp = session.user?.curp;
   const tipo = session.user?.tipo;
-  const anio = "2025"; // Puedes obtenerlo de query params o dejarlo fijo
+  const anio = searchParams?.anio ?? String(new Date().getFullYear());
 
   const recibos = await getRecibos(empleado!, tipo!, anio);
 
