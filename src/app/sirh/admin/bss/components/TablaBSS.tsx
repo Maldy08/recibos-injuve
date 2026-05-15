@@ -1,7 +1,7 @@
 'use client';
 import { Column, Table } from '@/app/sirh/shared/Table';
 import React, { useEffect, useRef, useState } from 'react';
-import { HiOutlineUpload, HiChevronDown } from "react-icons/hi";
+import { HiOutlineUpload, HiChevronDown, HiOutlineDocumentReport } from "react-icons/hi";
 import { MdEdit } from 'react-icons/md';
 
 interface TablaBSS {
@@ -212,6 +212,40 @@ export const TablaBSS = () => {
     }
   };
 
+  // Reporte PDF de revisión (BBVA + OTROS con totales)
+  const generarReportePdfBss = async () => {
+    const periodo = prompt("Ingresa el periodo para el reporte de revisión BSS:");
+    if (!periodo) return;
+
+    setLoading(true);
+    try {
+      const response = await fetch(
+        `${process.env.NEXT_PUBLIC_API_URL}bss/reporte-pdf/${periodo}`,
+        { method: "GET" }
+      );
+      if (!response.ok) throw new Error("No se pudo generar el PDF");
+      const blob = await response.blob();
+      const url = window.URL.createObjectURL(blob);
+      const disposition = response.headers.get('Content-Disposition');
+      let fileName = `BSS_REVISION_${periodo}.pdf`;
+      if (disposition && disposition.includes('filename=')) {
+        fileName = disposition.split('filename=')[1].replace(/["']/g, "").trim();
+      }
+      const link = document.createElement('a');
+      link.href = url;
+      link.setAttribute('download', fileName);
+      document.body.appendChild(link);
+      link.click();
+      link.remove();
+      window.URL.revokeObjectURL(url);
+    } catch (error) {
+      alert("No se pudo generar el reporte PDF");
+      console.error(error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
   // Dropdown handler
   const handleDropdownOption = (option: number) => {
     setDropdownOpen(false);
@@ -378,6 +412,17 @@ export const TablaBSS = () => {
             onChange={handleArchivoSeleccionado}
             accept=".csv,.xlsx,.xls"
           />
+          {/* Botón Reporte PDF de revisión */}
+          <button
+            className="text-xs flex items-center gap-2 bg-gradient-to-r from-[#6e1e2a] to-[#a8324a] hover:from-[#5b1823] hover:to-[#a8324a] text-white px-4 py-2 rounded-lg shadow-md transition-all duration-200 hover:scale-105 focus:ring-2 focus:ring-[#a8324a] focus:outline-none h-10"
+            onClick={generarReportePdfBss}
+            type="button"
+            style={{ minWidth: 130 }}
+            title="Reporte PDF con totales por banco (revisión)"
+          >
+            <HiOutlineDocumentReport className="w-5 h-5" />
+            <span>Reporte PDF</span>
+          </button>
           {/* Botón Generar archivos con dropdown */}
           <div className="relative">
             <button
