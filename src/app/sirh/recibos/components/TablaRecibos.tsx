@@ -42,13 +42,18 @@ export const TablaRecibos = ({
     recibos,
     anioInicial
 }: Props) => {
-    const [generandoRecibo, setGenerandoRecibo] = useState<boolean>(false);
+    const [generandoPeriodo, setGenerandoPeriodo] = useState<number | null>(null);
     const { abrirPDF } = usePdf();
 
     const openPdfHandler = async (empleado: number, periodo: number) => {
-        setGenerandoRecibo(true);
-        await abrirPDF(empleado, periodo, tipo);
-        setGenerandoRecibo(false);
+        setGenerandoPeriodo(periodo);
+        try {
+            await abrirPDF(empleado, periodo, tipo);
+        } catch (err) {
+            console.error("Error generating PDF:", err);
+        } finally {
+            setGenerandoPeriodo(null);
+        }
     };
 
     // Si quieres cambiar de año, deberías hacerlo en el page y volver a pasar los props
@@ -59,30 +64,34 @@ export const TablaRecibos = ({
                 <FichaEmpleado empleado={
                     { nombre, numero: empleado, rfc, curp }
                 }/>
-                {/* <div className="flex flex-col items-end">
-                    <label htmlFor="anio" className="mb-1 text-sm text-gray-600">Año:</label>
-                    <input
-                        id="anio"
-                        className="border border-gray-300 rounded px-3 py-1 text-sm bg-gray-50 font-semibold text-center w-24"
-                        value={anioInicial}
-                        readOnly
-                    />
-                </div> */}
             </div>
 
             <Table
                 data={recibos}
                 columns={columns}
-                loading={generandoRecibo}
-                acciones={(row) => (
-                    <button
-                        onClick={() => openPdfHandler(row.empleado, row.periodo)}
-                        className="text-blue-600 hover:text-blue-800"
-                        aria-label={`Ver PDF del periodo ${row.periodo}`}
-                    >
-                        <FaRegFilePdf className="w-5 h-5" />
-                    </button>
-                )}
+                loading={false}
+                acciones={(row) => {
+                    const estaCargando = generandoPeriodo === row.periodo;
+                    const algunOtroCargando = generandoPeriodo !== null && generandoPeriodo !== row.periodo;
+                    return (
+                        <button
+                            onClick={() => openPdfHandler(row.empleado, row.periodo)}
+                            className="text-[#6e1e2a] hover:text-[#5b1823] disabled:opacity-40 disabled:cursor-not-allowed transition-colors p-1"
+                            aria-label={`Ver PDF del periodo ${row.periodo}`}
+                            disabled={generandoPeriodo !== null}
+                            title={estaCargando ? "Generando PDF..." : "Descargar PDF"}
+                        >
+                            {estaCargando ? (
+                                <svg className="animate-spin h-5 w-5 text-[#6e1e2a]" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                                    <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+                                    <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v4a4 4 0 00-4 4H4z"></path>
+                                </svg>
+                            ) : (
+                                <FaRegFilePdf className="w-5 h-5" />
+                            )}
+                        </button>
+                    );
+                }}
             />
         </div>
     );

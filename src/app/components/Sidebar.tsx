@@ -63,19 +63,19 @@ export const Sidebar = ({ isAdmin }: SidebarProps) => {
         />
       )}
 
-      {/* BotÃ³n hamburguesa */}
+      {/* Botón hamburguesa */}
       {!isOpen && (
         <button
           onClick={() => setIsOpen(true)}
-          className="lg:hidden fixed top-4 left-4 z-50 bg-[#2d3748] text-white p-3 rounded-xl shadow-lg hover:bg-[#4a5568] transition-colors duration-200"
-          aria-label="Abrir menÃº"
+          className="lg:hidden fixed top-2.5 left-3 z-50 text-white p-2 rounded-lg hover:bg-white/10 transition-colors duration-200"
+          aria-label="Abrir menú"
         >
           <IoMenuOutline className="w-6 h-6" />
         </button>
       )}
 
       <aside
-        className={`fixed top-0 left-0 w-64 h-full bg-gradient-to-b from-[#2d3748] to-[#1a202c] text-white shadow-2xl transform transition-transform duration-300 ease-in-out ${
+        className={`fixed top-0 left-0 w-64 h-full bg-gradient-to-b from-[#281519] to-[#0f0709] text-white shadow-2xl transform transition-transform duration-300 ease-in-out ${
           isOpen ? "translate-x-0" : "-translate-x-full"
         } lg:translate-x-0 lg:relative z-40`}
         aria-label="Sidebar"
@@ -92,12 +92,12 @@ export const Sidebar = ({ isAdmin }: SidebarProps) => {
                 priority
                 className="object-contain"
               />
-              {/* BotÃ³n cerrar en mÃ³viles */}
+              {/* Botón cerrar en móviles */}
               {isOpen && (
                 <button
                   onClick={() => setIsOpen(false)}
                   className="lg:hidden bg-white/10 hover:bg-white/20 text-white p-2 rounded-lg transition-colors duration-200"
-                  aria-label="Cerrar menÃº"
+                  aria-label="Cerrar menú"
                 >
                   <IoCloseOutline className="w-5 h-5" />
                 </button>
@@ -106,9 +106,9 @@ export const Sidebar = ({ isAdmin }: SidebarProps) => {
 
           </div>
 
-          {/* NavegaciÃ³n principal */}
+          {/* Navegación principal */}
           <nav className="flex-1 px-4 py-6 space-y-2 overflow-y-auto">
-            {/* CatÃ¡logos */}
+            {/* Catálogos */}
             {isAdmin && (
               <div>
                 <button
@@ -135,7 +135,7 @@ export const Sidebar = ({ isAdmin }: SidebarProps) => {
                     }`}>
                       <LuFolderOpen className="w-5 h-5" />
                     </div>
-                    <span className="text-sm font-medium">CatÃ¡logos</span>
+                    <span className="text-sm font-medium">Catálogos</span>
                   </span>
                   <svg 
                     className={`w-4 h-4 transition-transform duration-200 ${catalogosSubmenuOpen ? 'rotate-180' : ''}`}
@@ -177,7 +177,7 @@ export const Sidebar = ({ isAdmin }: SidebarProps) => {
                       <span className="text-sm font-medium">Puestos</span>
                     </Link>
 
-                    {/* CategorÃ­as */}
+                    {/* Categorías */}
                     <Link
                       href="/sirh/admin/categorias"
                       onClick={handleLinkClick}
@@ -188,7 +188,7 @@ export const Sidebar = ({ isAdmin }: SidebarProps) => {
                       }`}
                     >
                       <LuLayers className="w-4 h-4" />
-                      <span className="text-sm font-medium">CategorÃ­as</span>
+                      <span className="text-sm font-medium">Categorías</span>
                     </Link>
 
 

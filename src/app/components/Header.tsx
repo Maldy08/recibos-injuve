@@ -13,7 +13,7 @@ export const Header = async () => {
 
   return (
     <header className="fixed top-0 left-0 lg:left-64 w-full lg:w-[calc(100%-16rem)] bg-[#6e1e2a] backdrop-blur-md border-b border-white/10 px-4 py-3 z-40 shadow-lg">
-      <div className="flex justify-between items-center gap-3">
+      <div className="flex justify-between items-center gap-3 pl-12 lg:pl-0">
         
         {/* Título del sistema - visible en pantallas medianas y grandes */}
         <div className="hidden md:block flex-1">

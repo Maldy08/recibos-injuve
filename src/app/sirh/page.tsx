@@ -33,7 +33,21 @@ export default async function DashboardPage() {
   return (
     <div className="min-h-screen bg-gray-50 p-4 lg:p-6">
       {/* Header de bienvenida */}
-   
+      <div className="bg-gradient-to-r from-[#6e1e2a] to-[#8c2a38] rounded-2xl p-6 text-white mb-8 shadow-lg relative overflow-hidden">
+        {/* Elementos decorativos de fondo */}
+        <div className="absolute right-0 top-0 w-48 h-48 bg-white/5 rounded-full translate-x-12 -translate-y-12" />
+        <div className="absolute right-16 bottom-0 w-32 h-32 bg-white/5 rounded-full translate-y-16" />
+        
+        <div className="relative z-10">
+          <p className="text-white/80 text-xs font-semibold uppercase tracking-wider mb-1.5">{currentDate}</p>
+          <h1 className="text-2xl lg:text-3xl font-bold mb-2">¡Bienvenido(a), {userName}!</h1>
+          <p className="text-white/90 text-sm lg:text-base max-w-xl">
+            {isAdmin 
+              ? "Panel del Administrador de Recursos Humanos. Gestiona el personal, los recibos y controla los periodos vigentes."
+              : "Consulta tus recibos de nómina, descarga tus comprobantes en PDF y mantente al día con tu información laboral."}
+          </p>
+        </div>
+      </div>
 
       {/* Accesos rápidos */}
       <div className="mb-8">
